@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AutoTrack</string>
+    <string name="email_username">Email/Username</string>
+    <string name="password">Password</string>
 </resources>
