@@ -4,26 +4,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import android.util.Log;
+
 import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
-public class employeeAdapter extends FirebaseRecyclerAdapter<
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.Query;
+
+
+public class employeeAdapter extends FirestoreRecyclerAdapter<
         Employee, employeeAdapter.employeesViewHolder> {
+
     public employeeAdapter(
-            @NonNull FirebaseRecyclerOptions<Employee> options)
+
+            @NonNull FirestoreRecyclerOptions<Employee> options)
     {
         super(options);
     }
 
-    // Function to bind the view in Card view(here
-    // "person.xml") iwth data in
-    // model class(here "person.class")
+
     @Override
     protected void
     onBindViewHolder(@NonNull employeesViewHolder holder,
                      int position, @NonNull Employee model)
     {
+        Log.d("EmployeeAdapter", "onBindViewHolder: " + model.getFirstname());
+
+        try{
 
         // Add firstname from model class (here
         // "person.class")to appropriate view in Card
@@ -50,6 +60,10 @@ public class employeeAdapter extends FirebaseRecyclerAdapter<
         // view (here "person.xml")
         holder.manager_ID.setText(model.getManager_ID());
     }
+    catch (Exception e) {
+        Log.e("EmployeeAdapter", "Error onBindViewHolder", e);
+    }
+    }
 
     // Function to tell the class about the Card view (here
     // "person.xml")in
@@ -65,6 +79,7 @@ public class employeeAdapter extends FirebaseRecyclerAdapter<
                 .inflate(R.layout.employee, parent, false);
         return new employeeAdapter.employeesViewHolder(view);
     }
+
 
     // Sub Class to create references of the views in Crad
     // view (here "person.xml")
@@ -83,4 +98,4 @@ public class employeeAdapter extends FirebaseRecyclerAdapter<
         }
     }
 }
-}
+

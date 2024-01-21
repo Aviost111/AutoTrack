@@ -1,37 +1,30 @@
 package com.example.autotrack;
-
-public class Employee {
-    // Variable to store data corresponding
-    // to firstname keyword in database
-    private String firstname;
-
-    // Variable to store data corresponding
-    // to lastname keyword in database
-    private String lastname;
-
-    // Variable to store data corresponding
-    // to phone keyword in database
-    private String phone;
-
-    // Variable to store data corresponding
-    // to e-mail keyword in database
-    private String email;
-
-    // Variable to store data corresponding
-    // to ID keyword in database
-    private String ID;
-
-    // Variable to store data corresponding
-    // to ID keyword in database
-    private String company_ID;
-
-    // Variable to store data corresponding
-    // to ID keyword in database
-    private String manager_ID;
-
+import com.google.firebase.firestore.PropertyName;
+class Employee {
     // Mandatory empty constructor
     // for use of FirebaseUI
-    public Employee() {}
+    public Employee() {
+
+    }
+
+    @PropertyName("firstname")
+    private String firstname;
+
+    @PropertyName("lastname")
+    private String lastname;
+
+    @PropertyName("phone")
+    private String phone;
+
+    @PropertyName("company_ID")
+    private String company_ID;
+
+    @PropertyName("manager_ID")
+    private String manager_ID;
+    @PropertyName("email")
+    private String email;
+
+
 
     // Getter and setter method
     public String getFirstname()
@@ -65,15 +58,6 @@ public class Employee {
     public void setPhone(String phone)
     {
         this.phone = phone;
-    }
-
-    public String getID()
-    {
-        return ID;
-    }
-    public void setID(String ID)
-    {
-        this.ID = ID;
     }
 
     public String getCompany_ID()
