@@ -2,4 +2,19 @@
     <string name="app_name">AutoTrack</string>
     <string name="email_username">Email/Username</string>
     <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">forgot password?</string>
+    <string name="don_t_have_a_user">Don\'t have a user?</string>
+    <string name="sign_up">Sign up!</string>
+    <string name="autotrack">AutoTrack</string>
+    <string name="logo">logo</string>
+    <string name="email">Email:</string>
+    <string name="confirm_email">Confirm email:</string>
+    <string name="passwordR">Password:</string>
+    <string name="confirm_password">Confirm password:</string>
+    <string name="register">Register</string>
+    <string name="please_sign_up">Please sign-up</string>
+    <string name="first_name">First name:</string>
+    <string name="phone_number">Phone number:</string>
+    <string name="last_name">Last name:</string>
 </resources>
