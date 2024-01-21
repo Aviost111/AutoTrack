@@ -6,25 +6,61 @@
     android:layout_height="match_parent"
     tools:context=".EmployeesList">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler1"
-        android:layout_width="348dp"
-        android:layout_height="377dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="176dp"
-        android:background="#65E4A6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/recycler1"-->
+<!--        android:layout_width="348dp"-->
+<!--        android:layout_height="377dp"-->
+<!--        android:layout_marginStart="28dp"-->
+<!--        android:layout_marginTop="176dp"-->
+<!--        android:background="#65E4A6"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="108dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="108dp"
         android:text="employees list"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewEmployeeList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Employee textList"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- ListView -->
+
+    <!-- Logout Button -->
+
+    <ListView
+        android:id="@+id/listviewEmployees"
+        android:layout_width="301dp"
+        android:layout_height="574dp"
+        android:layout_above="@+id/btnLogout"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="200dp"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Logout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,4 +1,5 @@
 package com.example.autotrack;
+import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.PropertyName;
 class Employee {
     // Mandatory empty constructor
@@ -6,12 +7,16 @@ class Employee {
     public Employee() {
 
     }
+    @DocumentId
+    private String documentId;
 
-    @PropertyName("firstname")
-    private String firstname;
 
-    @PropertyName("lastname")
-    private String lastname;
+
+    @PropertyName("first_name")
+    private String first_name;
+
+    @PropertyName("last_name")
+    private String last_name;
 
     @PropertyName("phone")
     private String phone;
@@ -29,19 +34,19 @@ class Employee {
     // Getter and setter method
     public String getFirstname()
     {
-        return firstname;
+        return first_name;
     }
     public void setFirstname(String firstname)
     {
-        this.firstname = firstname;
+        this.first_name = firstname;
     }
     public String getLastname()
     {
-        return lastname;
+        return last_name;
     }
     public void setLastname(String lastname)
     {
-        this.lastname = lastname;
+        this.last_name = lastname;
     }
     public String getEmail()
     {

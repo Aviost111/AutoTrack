@@ -50,7 +50,7 @@ dependencies {
     implementation (platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation ("com.google.android.material:material:1.11.0")
-
+    implementation("com.google.firebase:firebase-firestore:24.0.1")
     implementation("com.firebaseui:firebase-ui-firestore:8.0.0")
         // Other dependencies
     implementation ("com.firebaseui:firebase-ui-database:8.0.0")
@@ -62,4 +62,6 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation ("com.squareup.picasso:picasso:2.5.2")
     implementation ("com.firebaseui:firebase-ui-database:8.0.0")
+
+
 }

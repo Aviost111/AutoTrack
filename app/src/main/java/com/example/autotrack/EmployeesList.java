@@ -1,66 +1,91 @@
 package com.example.autotrack;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import android.os.Bundle;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import android.os.Bundle;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import org.checkerframework.common.subtyping.qual.Bottom;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeesList extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private employeeAdapter adapter;
-    private FirebaseFirestore db;
+private TextView textViewEmployeeList;
+private ListView listviewEmployees;
+private Button btnLogout;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_employees_list);
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_employees_list);
 
-        // Get a reference to the Firestore database
-        db = FirebaseFirestore.getInstance();
+    textViewEmployeeList = findViewById(R.id.textViewEmployeeList);
+    listviewEmployees = findViewById(R.id.listviewEmployees);
+    btnLogout = findViewById(R.id.btnLogout);
 
-        recyclerView = findViewById(R.id.recycler1);
-        recyclerView.setHasFixedSize(true);
-        // To display the Recycler view linearly
-        recyclerView.setLayoutManager(
-                new LinearLayoutManager(this));
+    // Get a reference to the Firestore database
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    db.collection("Employees")
+            .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<Employee> employeelist = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String documentID = document.getId();
 
-        // Use a query to get data from Firestore
-        CollectionReference query = db.collection("Employees");
+                            //convert document to Employee class
+                            Employee employee = document.toObject(Employee.class);
 
-        // Configure the adapter options
-        FirestoreRecyclerOptions<Employee> options = new FirestoreRecyclerOptions.Builder<Employee>()
-                .setQuery(query, Employee.class)
-                .build();
+                            //setters for this employee
+                            employee.setEmail(document.get("email").toString());
+                            employee.setFirstname(document.get("first_name").toString());
+                            employee.setLastname(document.get("last_name").toString());
+                            employee.setPhone(document.getLong("phone").toString());
+                            employee.setCompany_ID(document.get("company_ID").toString());
+                            employee.setManager_ID(document.get("manager_ID").toString());
 
-        // Create the adapter
-        adapter = new employeeAdapter(options);
+                            //add employee object to list
+                            employeelist.add(employee);
+                        }
+                    updatListView(employeelist);
+                    }
+                });
 
-        // Set the adapter to the RecyclerView
-        recyclerView.setAdapter(adapter);
+}
+
+    private void updatListView(List<Employee> employeelist) {
+        ArrayAdapter<Employee> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, employeelist);
+
+        listviewEmployees.setAdapter((adapter));
+
+        //set the item click listener:
+
+        listviewEmployees.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // get the clicked employee object
+                Employee clickedEmployee = (Employee)  parent.getItemAtPosition(position);
+
+                //Access information from clicked Employee
+                String employeeId = clickedEmployee.getEmail();
+
+                //create an intent to start the EmployeeActivity
+                Intent intent = new Intent(EmployeesList.this , Employee.class);
+
+                //pass necessary information as extras to the the employee activity.
+//                intent.putExtra("EmployeeId" , EmployeeId);
+                startActivity(intent);            }
+        });
     }
 
-        @Override
-        protected void onStart () {
-            super.onStart();
-            // Start listening for changes in the Firestore database
-            adapter.startListening();
-        }
-
-        @Override
-        protected void onStop () {
-            super.onStop();
-            // Stop listening when the activity is stopped
-            adapter.stopListening();
-        }
-    }
+}
