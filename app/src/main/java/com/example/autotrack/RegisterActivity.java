@@ -19,14 +19,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.ktx.Firebase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -118,6 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void registerUser(String textFirstName, String textLastName, String textPhoneNumber,
                               String textEmail, String textPwd){
         FirebaseAuth auth =FirebaseAuth.getInstance();
+        //create user
         auth.createUserWithEmailAndPassword(textEmail,textPwd).addOnCompleteListener(RegisterActivity.this,
                 new OnCompleteListener<AuthResult>() {
                     @Override
@@ -126,14 +129,41 @@ public class RegisterActivity extends AppCompatActivity {
                             Toast.makeText(RegisterActivity.this, "User Registered", Toast.LENGTH_SHORT).show();
                             FirebaseUser firebaseUser = auth.getCurrentUser();
 
-//                            ReadWriteUserDetails writeUserDetails = new ReadWriteUserDetails(textFirstName,textLastName,textPhoneNumber);
+                            //what if firebaseuser is null
+
+//                            ReadWriteUserDetails writeUserDetails = new ReadWriteUserDetails(textFirstName,textLastName,textPhoneNumber,textEmail);
+//                            DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("Managers");
+//                            Toast.makeText(RegisterActivity.this, firebaseUser.getUid(), Toast.LENGTH_SHORT).show();
+//                            referenceProfile.child(firebaseUser.getUid()).setValue(writeUserDetails);
+//
+//                            referenceProfile.child(firebaseUser.getUid()).setValue(writeUserDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<Void> task) {
+//                                    if(task.isSuccessful()) {
+//                                        firebaseUser.sendEmailVerification();
+//
+//                                        Toast.makeText(RegisterActivity.this, "User saved", Toast.LENGTH_SHORT).show();
+//
+//
+//                                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+//                                        //clear stack so you cant go back via backspace button
+//                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                        startActivity(intent);
+//                                        finish();
+//                                    }else{
+//                                        Toast.makeText(RegisterActivity.this, "Error", Toast.LENGTH_SHORT).show();
+//                                    }
+//
+//                                }
+//                            });
                             Map<String,Object> user = new HashMap<>();
                             user.put("email",textEmail);
                             user.put("first_name",textFirstName);
                             user.put("last_name",textLastName);
                             user.put("phone",textPhoneNumber);
 
-                            db.collection("Managers").document("my first doc").set(user)
+                            assert firebaseUser != null;
+                            db.collection("Managers").document(firebaseUser.getUid()).set(user)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
@@ -149,7 +179,6 @@ public class RegisterActivity extends AppCompatActivity {
                                         }
                                     });
 
-                            assert firebaseUser != null;
                             firebaseUser.sendEmailVerification();
 
                             Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
