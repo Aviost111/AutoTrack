@@ -1,13 +1,25 @@
 package com.example.autotrack;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -70,7 +82,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         }
 
         // Create a Map to store the employee data
-        Map<String, Object> employeeData = createEmployeeDataMap(firstName, lastName, email, phone, managerId, companyId);
+        Map<String, String> employeeData = createEmployeeDataMap(firstName, lastName, email, phone, managerId, companyId);
 
         // Upload data to Firebase
         uploadDataToFirebase(email, employeeData);
@@ -87,8 +99,8 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
     }
 
     // Helper method to create a Map with employee data
-    private Map<String, Object> createEmployeeDataMap(String firstName, String lastName, String email, String phone, String managerId, String companyId) {
-        Map<String, Object> employeeData = new HashMap<>();
+    private Map<String, String> createEmployeeDataMap(String firstName, String lastName, String email, String phone, String managerId, String companyId) {
+        Map<String, String> employeeData = new HashMap<>();
         employeeData.put("first_name", firstName);
         employeeData.put("last_name", lastName);
         employeeData.put("email", email);
@@ -100,22 +112,57 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
     }
 
     // Helper method to upload data to Firebase
-    private void uploadDataToFirebase(String documentID, Map<String, Object> data) {
-        firestore.collection("Employees")
-                .document(documentID)
-                .set(data)
-                .addOnSuccessListener(aVoid -> {
-                    // Data successfully uploaded
-                    // Show a success message
-                    Toast.makeText(RegisterEmployeeActivity.this, "Employee registration was successful", Toast.LENGTH_LONG).show();
+    private void uploadDataToFirebase(String documentID, Map<String, String> data) {
+        FirebaseAuth auth =FirebaseAuth.getInstance();
+        auth.createUserWithEmailAndPassword(data.get("email"),data.get("password")).addOnCompleteListener(RegisterEmployeeActivity.this,
+                new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(RegisterEmployeeActivity.this, "User Registered", Toast.LENGTH_SHORT).show();
+                            FirebaseUser firebaseUser = auth.getCurrentUser();
 
-                    // Finish the activity to go back to the manager homepage
-                    finish();
-                })
-                .addOnFailureListener(e -> {
-                    // Error uploading data
-                    // Show an error message
-                    Toast.makeText(RegisterEmployeeActivity.this, "Employee registration failed", Toast.LENGTH_SHORT).show();
+
+                            assert firebaseUser != null;
+                            firestore.collection("Employees")
+                            .document(firebaseUser.getUid())
+                            .set(data)
+                            .addOnSuccessListener(aVoid -> {
+                                // Data successfully uploaded
+                                // Show a success message
+                                Toast.makeText(RegisterEmployeeActivity.this, "Employee registration was successful", Toast.LENGTH_LONG).show();
+
+                                Intent intent = new Intent(RegisterEmployeeActivity.this,ManagerActivity.class);
+                                //clear stack so you cant go back via backspace button
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                            })
+                            .addOnFailureListener(e -> {
+                                // Error uploading data
+                                // Show an error message
+                                Toast.makeText(RegisterEmployeeActivity.this, "Employee registration failed", Toast.LENGTH_SHORT).show();
+                            });
+                        }else{
+                            try {
+                                throw task.getException();
+                            }catch (FirebaseAuthWeakPasswordException e) {
+                                etPhone.setError("Your password is too weak");
+                                etPhone.requestFocus();
+                            }catch (FirebaseAuthInvalidCredentialsException e){
+                                etEmail.setError("Your email is invalid or already in use. Please re-enter.");
+                                etEmail.requestFocus();
+                            }catch(FirebaseAuthUserCollisionException e ) {
+                                etEmail.setError("User is already registered with this email.");
+                                etEmail.requestFocus();
+                            }catch (Exception e){
+                                Log.e(TAG,e.getMessage());
+                                Toast.makeText(RegisterEmployeeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                            }
+                        }
+                    }
                 });
     }
 
