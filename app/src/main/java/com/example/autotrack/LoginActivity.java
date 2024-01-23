@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         if (task.getResult().exists()) {
                                             Toast.makeText(LoginActivity.this, "manager", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                            Intent intent = new Intent(LoginActivity.this, ManagerActivity.class);
                                             editTextemail.setText("");
                                             editTextpwd.setText("");
                                             startActivity(intent);

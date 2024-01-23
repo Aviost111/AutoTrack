@@ -30,6 +30,7 @@ public class ManagerActivity extends AppCompatActivity {
         setupClickListener(R.id.btnRegisterEmployee, RegisterEmployeeActivity.class);
         setupClickListener(R.id.btnLogout, LoginActivity.class);
         setupClickListener(R.id.btnToolsList, VehicleActivity.class);
+        // setupClickListener(R.id.btnEmployeesList, EmployeeList.class) ; //TODO change when merge with avia code
 
         // Initialize Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
@@ -48,7 +49,7 @@ public class ManagerActivity extends AppCompatActivity {
             String uid = user.getUid();
 
             // Retrieve first and last name from Firebase
-            db.collection("Manger")  // Replace with the actual collection name
+            db.collection("Manger")
                     .document(uid)
                     .get()
                     .addOnCompleteListener(task -> {
