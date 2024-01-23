@@ -1,5 +1,7 @@
 package com.example.autotrack;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +10,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +23,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -45,34 +52,64 @@ public class LoginActivity extends AppCompatActivity {
             //log into app
             @Override
             public void onClick(View v) {
+
                 String email = editTextemail.getText().toString();
                 String pwd = editTextpwd.getText().toString();
+                if (TextUtils.isEmpty(email)) {
+                    // Display error message for first name
+                    Toast.makeText(LoginActivity.this, "Please enter an email", Toast.LENGTH_SHORT).show();
+                    editTextemail.setError("Email required");
+                    editTextemail.requestFocus();
+                    return;
+                }else if(TextUtils.isEmpty(pwd)) {
+                    Toast.makeText(LoginActivity.this, "Please enter your Password", Toast.LENGTH_SHORT).show();
+                    editTextpwd.setError("Password required");
+                    editTextpwd.requestFocus();
+                    return;
+                }
                 FirebaseAuth auth = FirebaseAuth.getInstance();
                 auth.signInWithEmailAndPassword(email, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        FirebaseUser firebaseUser = auth.getCurrentUser();
-                        assert firebaseUser != null;
-                        db.collection("Managers").document(firebaseUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    if (task.getResult().exists()) {
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        editTextemail.setText("");
-                                        editTextpwd.setText("");
-                                        startActivity(intent);
+                        if (task.isSuccessful()) {
+                            FirebaseUser firebaseUser = auth.getCurrentUser();
+                            assert firebaseUser != null;
+                            db.collection("Managers").document(firebaseUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        if (task.getResult().exists()) {
+                                            Toast.makeText(LoginActivity.this, "manager", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                            editTextemail.setText("");
+                                            editTextpwd.setText("");
+                                            startActivity(intent);
+                                        } else {
+                                            //TODO goes to register if its an employee
+                                            Toast.makeText(LoginActivity.this, "employee", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(LoginActivity.this, EmployeeActivity.class);
+                                            startActivity(intent);
+                                        }
                                     } else {
-                                        //TODO goes to register if its an employee
-                                        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                                        startActivity(intent);
+                                        Toast.makeText(LoginActivity.this, "User doesn't exist", Toast.LENGTH_SHORT).show();
                                     }
-                                } else {
-                                    Toast.makeText(LoginActivity.this, "User doesn't exist", Toast.LENGTH_SHORT).show();
                                 }
-                            }
-                        });
+                            });
 
+                        } else {
+                            try {
+                                throw task.getException();
+                            } catch (FirebaseAuthInvalidCredentialsException e) {
+                                editTextpwd.setError("Incorrect Email or Password");
+                                editTextpwd.requestFocus();
+                            }catch (Exception e) {
+                                Log.e(TAG, e.getMessage());
+                                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                            }
+
+                        }
                     }
                 });
             }
