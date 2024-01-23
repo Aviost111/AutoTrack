@@ -13,13 +13,32 @@
         android:theme="@style/Theme.AutoTrack"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".RegisterEmployeeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterToolActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManagerActivity"
             android:exported="true">
+
+            <!-- TODO delet before commit!!!! -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
     </application>
 

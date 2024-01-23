@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterEmployeeActivity">
+
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+    <!-- Back Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="@color/red"
+        android:padding="10dp"
+        android:text="Back"
+        app:cornerRadius="30dp"
+        app:strokeColor="@color/white"
+        app:strokeWidth="2dp" />
+
+    <!-- Employee Registration Form -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+
+        <!-- First Name -->
+        <EditText
+            android:id="@+id/etFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="name"
+            android:hint="@string/first_name"
+            android:inputType="text" />
+
+        <!-- Last Name -->
+        <EditText
+            android:id="@+id/etLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="name"
+            android:hint="@string/last_name"
+            android:inputType="text" />
+
+
+        <!-- Email -->
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="emailAddress"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
+
+
+        <!-- Phone -->
+        <EditText
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="phone"
+            android:hint="@string/phone"
+            android:inputType="phone" /> <!-- TODO check! Autofill Hints for Phone Number -->
+
+
+        <!-- Manager ID -->
+        <EditText
+            android:id="@+id/etManagerId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="identification"
+            android:hint="@string/manager_id"
+            android:inputType="number" />
+
+        <!-- Company ID -->
+        <EditText
+            android:id="@+id/etCompanyId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="identification"
+            android:hint="@string/company_id"
+            android:inputType="number" />
+
+
+        <!-- Button to Perform Registration -->
+        <Button
+            android:id="@+id/btnRegisterEmployee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
+            android:text="@string/register_employee" />
+
+    </LinearLayout>
+</RelativeLayout>
