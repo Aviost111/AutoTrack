@@ -159,7 +159,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:hint="@string/confirm_password"
-                        android:inputType="text"
+                        android:inputType="textPassword"
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="2dp" />
 
