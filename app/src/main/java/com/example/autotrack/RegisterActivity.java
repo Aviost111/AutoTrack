@@ -201,7 +201,7 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
         for (int i = 0; i < number.length(); i++) {
-            if (number.charAt(i) > '0' || number.charAt(i) < '1') {
+            if (number.charAt(i) < '0' || number.charAt(i) > '9') {
                 return false;
             }
         }

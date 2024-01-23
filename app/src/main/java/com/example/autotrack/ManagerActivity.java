@@ -29,8 +29,8 @@ public class ManagerActivity extends AppCompatActivity {
         setupClickListener(R.id.btnRegisterTool, RegisterToolActivity.class);
         setupClickListener(R.id.btnRegisterEmployee, RegisterEmployeeActivity.class);
         setupClickListener(R.id.btnLogout, LoginActivity.class);
-        setupClickListener(R.id.btnToolsList, VehicleActivity.class);
-        // setupClickListener(R.id.btnEmployeesList, EmployeeList.class) ; //TODO change when merge with avia code
+        setupClickListener(R.id.btnToolsList, EmployeeActivity.class);
+        // setupClickListener(R.id.btnEmployeesList, .class) ; //TODO change when merge with avia code
 
         // Initialize Firebase Authentication
         mAuth = FirebaseAuth.getInstance();

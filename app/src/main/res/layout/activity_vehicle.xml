@@ -70,9 +70,9 @@
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btnReportCarCare"
-        android:layout_marginTop="69dp"
-        android:layout_marginLeft="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="29dp"
+        android:layout_marginBottom="31dp"
         android:text="Back" />
 
 </RelativeLayout>

@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -74,18 +75,16 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         String lastName = etLastName.getText().toString();
         String phone = etPhone.getText().toString();
 
-        // Validate that all fields are filled
-        if (areFieldsEmpty(companyId, managerId, email, firstName, lastName, phone)) {
-            // Show an error message using a Toast
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-            return; // Exit the method if any field is empty
+        // Validate all input fields
+        if (validateInput(companyId, managerId, email, firstName, lastName, phone)) {
+            // Continue with the registration process if all validations pass
+
+            // Create a Map to store the employee data
+            Map<String, String> employeeData = createEmployeeDataMap(firstName, lastName, email, phone, managerId, companyId);
+
+            // Upload data to Firebase
+            uploadDataToFirebase(email, employeeData);
         }
-
-        // Create a Map to store the employee data
-        Map<String, String> employeeData = createEmployeeDataMap(firstName, lastName, email, phone, managerId, companyId);
-
-        // Upload data to Firebase
-        uploadDataToFirebase(email, employeeData);
     }
 
     // Helper method to check if any of the provided fields are empty
@@ -173,5 +172,84 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
             Intent intent = new Intent(RegisterEmployeeActivity.this, destinationClass);
             startActivity(intent);
         });
+    }
+
+    // Validate all input fields
+    private boolean validateInput(String companyId, String managerId, String email,
+                                  String firstName, String lastName, String phone) {
+        // Validate that all fields are filled
+        if (areFieldsEmpty(companyId, managerId, email, firstName, lastName, phone)) {
+            // Show an error message using a Toast
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return false; // Exit the method if any field is empty
+        }
+
+        // Validate phone number
+        if (!PhoneNumberValidation(phone)) {
+            // Show an error message using a Toast
+            Toast.makeText(this, "Invalid phone number", Toast.LENGTH_SHORT).show();
+            return false; // Exit the method if the phone number is invalid
+        }
+
+        // Validate email
+        if (!isValidEmail(email)) {
+            // Show an error message using a Toast
+            Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show();
+            return false; // Exit the method if the email is invalid
+        }
+
+        // Validate company ID and manager ID (assuming they should be numeric)
+        if (!isValidNumericId(companyId) || !isValidNumericId(managerId)) {
+            // Show an error message using a Toast
+            Toast.makeText(this, "Invalid company ID or manager ID", Toast.LENGTH_SHORT).show();
+            return false; // Exit the method if company ID or manager ID is invalid
+        }
+
+        // Validate first name and last name
+        if (!isValidName(firstName) || !isValidName(lastName)) {
+            // Show an error message using a Toast
+            Toast.makeText(this, "Invalid first name or last name", Toast.LENGTH_SHORT).show();
+            return false; // Exit the method if first name or last name is invalid
+        }
+
+        // If all validations pass, return true
+        return true;
+    }
+
+
+    // Validate phone number format
+    private boolean PhoneNumberValidation(String number) {
+        if (number.length() != 10) {
+            return false;
+        }
+        for (int i = 0; i < number.length(); i++) {
+            if (number.charAt(i) < '0' || number.charAt(i) > '9') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Validate email address
+    private boolean isValidEmail(String email) {
+       //use android.util.Patterns.EMAIL_ADDRESS
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    // Validate numeric ID
+    private boolean isValidNumericId(String id) {
+        //use Integer.parseInt() and catch NumberFormatException
+        try {
+            Integer.parseInt(id);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    // Validate first name and last name
+    private boolean isValidName(String name) {
+        //check if the name contains only letters
+        return name.matches("[a-zA-Z]+");
     }
 }
