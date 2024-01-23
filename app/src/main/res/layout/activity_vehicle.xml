@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Employee Name and ID -->
+    <TextView
+        android:id="@+id/textViewEmployeeDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:text="Employee: John Doe (ID: 12345)"
+        android:textSize="20sp" />
+
+    <!-- Vehicle Name and Document ID -->
+    <TextView
+        android:id="@+id/textViewVehicleDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewEmployeeDetails"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:text="Vehicle: Forklift (ID: ABC123)"
+        android:textSize="20sp" />
+
+    <!-- Vehicle Availability -->
+    <TextView
+        android:id="@+id/textViewAvailability"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewVehicleDetails"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:text="Available"
+        android:textSize="40sp" />
+
+    <!-- Start/Stop Button -->
+    <Button
+        android:id="@+id/btnStartStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewAvailability"
+        android:layout_marginTop="70dp"
+        android:layout_centerHorizontal="true"
+        android:text="Start / Stop" />
+
+    <!-- Vehicle History Button -->
+    <Button
+        android:id="@+id/btnVehicleHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnStartStop"
+        android:layout_marginTop="37dp"
+        android:layout_centerHorizontal="true"
+        android:text="Vehicle History" />
+
+    <!-- Report Car Care / Refueling Button -->
+    <Button
+        android:id="@+id/btnReportCarCare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnVehicleHistory"
+        android:layout_marginTop="37dp"
+        android:layout_centerHorizontal="true"
+        android:text="Report Car Care / Refueling" />
+
+    <!-- Back Button -->
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnReportCarCare"
+        android:layout_marginTop="69dp"
+        android:layout_marginLeft="50dp"
+        android:text="Back" />
+
+</RelativeLayout>

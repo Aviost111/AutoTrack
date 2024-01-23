@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- activity_employee.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Top section with employee name and ID -->
+
+    <!-- Middle section with factory vehicles -->
+
+    <!-- Logout button at the bottom left -->
+
+    <TextView
+        android:id="@+id/textViewEmployeeDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Employee Name: John Doe\nEmployee ID: 123456"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"/>
+
+
+    <ListView
+        android:id="@+id/listViewFactoryVehicles"
+        android:layout_width="343dp"
+        android:layout_height="489dp"
+        android:layout_below="@id/textViewEmployeeDetails"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:scrollbars="vertical"/>
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Logout" />
+
+</RelativeLayout>
