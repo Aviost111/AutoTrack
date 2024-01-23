@@ -1,7 +1,5 @@
 package com.example.autotrack;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -106,75 +103,79 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         employeeData.put("phone", phone);
         employeeData.put("manager_ID", managerId);
         employeeData.put("company_ID", companyId);
-        employeeData.put("password", phone); // Set the password to the employee's phone number
         return employeeData;
     }
 
     // Helper method to upload data to Firebase
     private void uploadDataToFirebase(String documentID, Map<String, String> data) {
-        FirebaseAuth auth =FirebaseAuth.getInstance();
-        auth.createUserWithEmailAndPassword(data.get("email"),data.get("password")).addOnCompleteListener(RegisterEmployeeActivity.this,
-                new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(RegisterEmployeeActivity.this, "User Registered", Toast.LENGTH_SHORT).show();
-                            FirebaseUser firebaseUser = auth.getCurrentUser();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.createUserWithEmailAndPassword(data.get("email"), data.get("password")).addOnCompleteListener(this,
+                task -> {
+                    if (task.isSuccessful()) {
+                        // User registration successful
+                        Toast.makeText(RegisterEmployeeActivity.this, "User Registered", Toast.LENGTH_SHORT).show();
+                        FirebaseUser firebaseUser = auth.getCurrentUser();
 
+                        assert firebaseUser != null;
+                        firestore.collection("Employees")
+                                .document(firebaseUser.getUid())
+                                .set(data)
+                                .addOnSuccessListener(aVoid -> {
+                                    // Data successfully uploaded
+                                    // Show a success message
+                                    Toast.makeText(RegisterEmployeeActivity.this, "Employee registration was successful", Toast.LENGTH_LONG).show();
 
-                            assert firebaseUser != null;
-                            firestore.collection("Employees")
-                            .document(firebaseUser.getUid())
-                            .set(data)
-                            .addOnSuccessListener(aVoid -> {
-                                // Data successfully uploaded
-                                // Show a success message
-                                Toast.makeText(RegisterEmployeeActivity.this, "Employee registration was successful", Toast.LENGTH_LONG).show();
-
-                                Intent intent = new Intent(RegisterEmployeeActivity.this,ManagerActivity.class);
-                                //clear stack so you cant go back via backspace button
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                                finish();
-                            })
-                            .addOnFailureListener(e -> {
-                                // Error uploading data
-                                // Show an error message
-                                Toast.makeText(RegisterEmployeeActivity.this, "Employee registration failed", Toast.LENGTH_SHORT).show();
-                            });
-                        }else{
-                            try {
-                                throw task.getException();
-                            }catch (FirebaseAuthWeakPasswordException e) {
-                                etPhone.setError("Your password is too weak");
-                                etPhone.requestFocus();
-                            }catch (FirebaseAuthInvalidCredentialsException e){
-                                etEmail.setError("Your email is invalid or already in use. Please re-enter.");
-                                etEmail.requestFocus();
-                            }catch(FirebaseAuthUserCollisionException e ) {
-                                etEmail.setError("User is already registered with this email.");
-                                etEmail.requestFocus();
-                            }catch (Exception e){
-                                Log.e(TAG,e.getMessage());
-                                Toast.makeText(RegisterEmployeeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-
-
-                            }
-                        }
+                                    // Navigate to ManagerActivity
+                                    navigateToActivity(ManagerActivity.class);
+                                })
+                                .addOnFailureListener(e -> {
+                                    // Error uploading data
+                                    // Show an error message
+                                    Toast.makeText(RegisterEmployeeActivity.this, "Employee registration failed", Toast.LENGTH_SHORT).show();
+                                });
+                    } else {
+                        // User registration failed
+                        handleRegistrationFailure(task.getException());
                     }
                 });
+    }
+
+    // Helper method to handle user registration failure
+    private void handleRegistrationFailure(Exception exception) {
+        try {
+            throw exception;
+        } catch (FirebaseAuthWeakPasswordException e) {
+            setErrorAndRequestFocus(etPhone, "Your password is too weak");
+        } catch (FirebaseAuthInvalidCredentialsException e) {
+            setErrorAndRequestFocus(etEmail, "Your email is invalid or already in use. Please re-enter.");
+        } catch (FirebaseAuthUserCollisionException e) {
+            setErrorAndRequestFocus(etEmail, "User is already registered with this email.");
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+            Toast.makeText(RegisterEmployeeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Helper method to set error message for EditText and request focus
+    private void setErrorAndRequestFocus(EditText editText, String errorMessage) {
+        editText.setError(errorMessage);
+        editText.requestFocus();
     }
 
     // Helper method to set up click listeners for buttons
     private void setupClickListener(int buttonId, Class<?> destinationClass) {
         Button button = findViewById(buttonId);
-        button.setOnClickListener(v -> {
-            Intent intent = new Intent(RegisterEmployeeActivity.this, destinationClass);
-            startActivity(intent);
-        });
+        button.setOnClickListener(v -> navigateToActivity(destinationClass));
     }
 
-    // Validate all input fields
+    // Helper method to navigate to another activity and finish the current activity
+    private void navigateToActivity(Class<?> destinationClass) {
+        Intent intent = new Intent(RegisterEmployeeActivity.this, destinationClass);
+        startActivity(intent);
+        finish(); // Finish the current activity to prevent going back via backspace button
+    }
+
+    // Function to validate all input fields and show error messages if needed (using Toast)
     private boolean validateInput(String companyId, String managerId, String email,
                                   String firstName, String lastName, String phone) {
         // Validate that all fields are filled
@@ -216,7 +217,6 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         return true;
     }
 
-
     // Validate phone number format
     private boolean PhoneNumberValidation(String number) {
         if (number.length() != 10) {
@@ -232,13 +232,13 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
 
     // Validate email address
     private boolean isValidEmail(String email) {
-       //use android.util.Patterns.EMAIL_ADDRESS
+        // Use android.util.Patterns.EMAIL_ADDRESS
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     // Validate numeric ID
     private boolean isValidNumericId(String id) {
-        //use Integer.parseInt() and catch NumberFormatException
+        // Use Integer.parseInt() and catch NumberFormatException
         try {
             Integer.parseInt(id);
             return true;
@@ -249,7 +249,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
 
     // Validate first name and last name
     private boolean isValidName(String name) {
-        //check if the name contains only letters
+        // Check if the name contains only letters
         return name.matches("[a-zA-Z]+");
     }
 }
