@@ -58,13 +58,13 @@ public class LoginActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
                                     if (task.getResult().exists()) {
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        Intent intent = new Intent(LoginActivity.this, ManagerActivity.class);
                                         editTextemail.setText("");
                                         editTextpwd.setText("");
                                         startActivity(intent);
                                     } else {
                                         //TODO goes to register if its an employee
-                                        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                                        Intent intent = new Intent(LoginActivity.this, EmployeeActivity.class);
                                         startActivity(intent);
                                     }
                                 } else {

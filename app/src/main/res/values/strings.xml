@@ -17,4 +17,14 @@
     <string name="first_name">First name:</string>
     <string name="phone_number">Phone number:</string>
     <string name="last_name">Last name:</string>
+    <string name="add_tool">Add Tool</string>
+    <string name="add_employee">Add Employee</string>
+    <string name="logout">Logout</string>
+    <string name="employee_name">Employee Name</string>
+    <string name="employee_id">Employee ID</string>
+    <string name="company_id">Company ID</string>
+    <string name="manager_id">Manager ID</string>
+    <string name="phone">Phone</string>
+    <string name="register_employee">Register Employee</string>
+    <string name="employees_list">Employees List</string>
 </resources>
