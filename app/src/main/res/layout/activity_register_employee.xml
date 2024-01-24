@@ -75,26 +75,26 @@
             android:layout_height="wrap_content"
             android:autofillHints="phone"
             android:hint="@string/phone"
-            android:inputType="phone" /> <!-- TODO check! Autofill Hints for Phone Number -->
+            android:inputType="phone" />
 
 
-        <!-- Manager ID -->
-        <EditText
-            android:id="@+id/etManagerId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="identification"
-            android:hint="@string/manager_id"
-            android:inputType="number" />
+<!--        &lt;!&ndash; Manager ID &ndash;&gt;-->
+<!--        <EditText-->
+<!--            android:id="@+id/etManagerId"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:autofillHints="identification"-->
+<!--            android:hint="@string/manager_id"-->
+<!--            android:inputType="number" />-->
 
-        <!-- Company ID -->
-        <EditText
-            android:id="@+id/etCompanyId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="identification"
-            android:hint="@string/company_id"
-            android:inputType="number" />
+<!--        &lt;!&ndash; Company ID &ndash;&gt;-->
+<!--        <EditText-->
+<!--            android:id="@+id/etCompanyId"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:autofillHints="identification"-->
+<!--            android:hint="@string/company_id"-->
+<!--            android:inputType="number" />-->
 
 
         <!-- Button to Perform Registration -->

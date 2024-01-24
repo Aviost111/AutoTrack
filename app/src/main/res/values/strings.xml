@@ -14,9 +14,9 @@
     <string name="confirm_password">Confirm password:</string>
     <string name="register">Register</string>
     <string name="please_sign_up">Please sign-up</string>
-    <string name="first_name">First name:</string>
-    <string name="phone_number">Phone number:</string>
-    <string name="last_name">Last name:</string>
+    <string name="first_name">First name</string>
+    <string name="phone_number">Phone number</string>
+    <string name="last_name">Last name</string>
     <string name="add_tool">Add Tool</string>
     <string name="add_employee">Add Employee</string>
     <string name="logout">Logout</string>

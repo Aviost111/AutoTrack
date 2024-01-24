@@ -30,8 +30,9 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
 
     // UI elements
-    private EditText etCompanyId, etManagerId, etEmail, etFirstName, etLastName, etPhone;
+    private EditText etEmail, etFirstName, etLastName, etPhone;
     private Button btnRegisterEmployee;
+    private String managerId, companyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,17 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         // Initialize Firebase Firestore
         firestore = FirebaseFirestore.getInstance();
 
+        // Get the currently authenticated user (manager)
+        FirebaseUser managerUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Check if the managerUser is not null before accessing the UID
+        if (managerUser != null) {
+            managerId = managerUser.getUid();
+            companyId = "TODO";  //TODO add code to get company ID from the manager's document
+        }
+        //TODO add else to handle null
+
+
         // Initialize UI elements
         initializeViews();
 
@@ -53,8 +65,6 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
 
     // Helper method to initialize UI elements
     private void initializeViews() {
-        etCompanyId = findViewById(R.id.etCompanyId);
-        etManagerId = findViewById(R.id.etManagerId);
         etEmail = findViewById(R.id.etEmail);
         etFirstName = findViewById(R.id.etFirstName);
         etLastName = findViewById(R.id.etLastName);
@@ -65,15 +75,14 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
     // Helper method to handle the registration of an employee
     private void registerEmployee() {
         // Get data from EditText fields
-        String companyId = etCompanyId.getText().toString();
-        String managerId = etManagerId.getText().toString();
         String email = etEmail.getText().toString();
         String firstName = etFirstName.getText().toString();
         String lastName = etLastName.getText().toString();
         String phone = etPhone.getText().toString();
 
+
         // Validate all input fields
-        if (validateInput(companyId, managerId, email, firstName, lastName, phone)) {
+        if (validateInput(email, firstName, lastName, phone)) {
             // Continue with the registration process if all validations pass
 
             // Create a Map to store the employee data
@@ -176,10 +185,9 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
     }
 
     // Function to validate all input fields and show error messages if needed (using Toast)
-    private boolean validateInput(String companyId, String managerId, String email,
-                                  String firstName, String lastName, String phone) {
+    private boolean validateInput(String email, String firstName, String lastName, String phone) {
         // Validate that all fields are filled
-        if (areFieldsEmpty(companyId, managerId, email, firstName, lastName, phone)) {
+        if (areFieldsEmpty(email, firstName, lastName, phone)) {
             // Show an error message using a Toast
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return false; // Exit the method if any field is empty
@@ -199,18 +207,18 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
             return false; // Exit the method if the email is invalid
         }
 
-        // Validate company ID and manager ID (assuming they should be numeric)
-        if (!isValidNumericId(companyId) || !isValidNumericId(managerId)) {
+        // Validate first name
+        if (!isValidName(firstName)) {
             // Show an error message using a Toast
-            Toast.makeText(this, "Invalid company ID or manager ID", Toast.LENGTH_SHORT).show();
-            return false; // Exit the method if company ID or manager ID is invalid
+            Toast.makeText(this, "Invalid first name ", Toast.LENGTH_SHORT).show();
+            return false; // Exit the method if first name is invalid
         }
 
-        // Validate first name and last name
-        if (!isValidName(firstName) || !isValidName(lastName)) {
+        // Validate last name
+        if (!isValidName(lastName)) {
             // Show an error message using a Toast
-            Toast.makeText(this, "Invalid first name or last name", Toast.LENGTH_SHORT).show();
-            return false; // Exit the method if first name or last name is invalid
+            Toast.makeText(this, "Invalid last name", Toast.LENGTH_SHORT).show();
+            return false; // Exit the method if last name is invalid
         }
 
         // If all validations pass, return true
@@ -234,17 +242,6 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
     private boolean isValidEmail(String email) {
         // Use android.util.Patterns.EMAIL_ADDRESS
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
-    // Validate numeric ID
-    private boolean isValidNumericId(String id) {
-        // Use Integer.parseInt() and catch NumberFormatException
-        try {
-            Integer.parseInt(id);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
     }
 
     // Validate first name and last name
