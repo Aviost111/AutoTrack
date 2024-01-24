@@ -159,9 +159,12 @@ public class RegisterToolActivity extends AppCompatActivity {
         CollectionReference historySubCollectionRef = firestore.collection("Vehicles").document(documentID).collection("history");
 
         // Create an empty document for "refueling" in the "history" subCollection
-        historySubCollectionRef.document("refueling").set(new HashMap<>());
+        historySubCollectionRef.document("refuels").set(new HashMap<>());
 
         // Create an empty document for "vehicle_care" in the "history" subCollection
-        historySubCollectionRef.document("vehicle_care").set(new HashMap<>());
+        historySubCollectionRef.document("treatments").set(new HashMap<>());
+
+        // Create an empty document for "start-stop" in the "history" subCollection
+        historySubCollectionRef.document("start-stop").set(new HashMap<>());
     }
 }
