@@ -73,14 +73,17 @@ public class ManagerActivity extends AppCompatActivity {
         }
     }
 
-
     // Helper method to set up click listeners for buttons
     private void setupClickListener(int buttonId, Class<?> destinationClass) {
         Button button = findViewById(buttonId);
-        button.setOnClickListener(v -> {
-            Intent intent = new Intent(ManagerActivity.this, destinationClass);
-            startActivity(intent);
-        });
+        button.setOnClickListener(v -> navigateToActivity(destinationClass));
+    }
+
+    // Helper method to navigate to another activity and finish the current activity
+    private void navigateToActivity(Class<?> destinationClass) {
+        Intent intent = new Intent(ManagerActivity.this, destinationClass);
+        startActivity(intent);
+        finish(); // Finish the current activity to prevent going back via backspace button
     }
 
 }
