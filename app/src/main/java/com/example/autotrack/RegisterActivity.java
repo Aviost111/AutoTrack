@@ -154,9 +154,13 @@ public class RegisterActivity extends AppCompatActivity {
                             user.put("phone", textPhoneNumber);
                             user.put("company_id",companyID);
 
+                            ReadWriteUserDetails trying = new ReadWriteUserDetails(textFirstName,textLastName,
+                            textPhoneNumber,textEmail,companyID);
+
+
                             assert firebaseUser != null;
                             // Save user data to Firestore
-                            db.collection("Managers").document(firebaseUser.getUid()).set(user)
+                            db.collection("Managers").document(firebaseUser.getUid()).set(trying)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
@@ -209,7 +213,7 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
         for (int i = 0; i < number.length(); i++) {
-            if (number.charAt(i) >= '0' || number.charAt(i) <= '1') {
+            if (number.charAt(i) <= '0' || number.charAt(i) >= '1') {
                 return false;
             }
         }
