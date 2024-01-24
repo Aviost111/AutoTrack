@@ -27,6 +27,21 @@
         app:strokeColor="@color/white"
         app:strokeWidth="2dp" />
 
+    <!-- Page Title -->
+    <TextView
+        android:id="@+id/tvPageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="25dp"
+        android:padding="10dp"
+        android:text="Register Your Tool"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+
 
     <!-- Tool Registration Form -->
     <LinearLayout
@@ -92,13 +107,16 @@
             android:hint="Version"
             android:inputType="text" />
 
+
         <!-- Button to Perform Registration -->
         <Button
             android:id="@+id/btnRegisterTool"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:backgroundTint="@color/red"
-            android:text="Register Tool" />
+            android:text="Register Tool"
+            />
 
     </LinearLayout>
 
