@@ -80,7 +80,7 @@ public class RegisterToolActivity extends AppCompatActivity {
 
         // Convert ManufactureYear, HoursForTreatment to integers
         int manufactureYear = Integer.parseInt(manufactureYearStr);
-        int treatmentHours = Integer.parseInt(treatmentHoursStr);
+        double treatmentHours = Double.parseDouble(treatmentHoursStr);
 
         // Create a Map to store the data
         Map<String, Object> toolData = createToolDataMap(type, ID, companyID, engineSize, manufactureYear, treatmentHours, version);
@@ -101,7 +101,7 @@ public class RegisterToolActivity extends AppCompatActivity {
 
     // Helper method to create a Map with tool data
     private Map<String, Object> createToolDataMap(String type, String ID, String companyID, String engineSize,
-                                                  int manufactureYear, int treatmentHours, String version) {
+                                                  int manufactureYear, double treatmentHours, String version) {
         Map<String, Object> toolData = new HashMap<>();
         toolData.put("type", type);
         toolData.put("ID", ID);
