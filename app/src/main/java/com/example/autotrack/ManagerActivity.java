@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,51 +27,66 @@ public class ManagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_manager);
 
         // Set up click listeners
-        setupClickListener(R.id.btnRegisterTool, RegisterToolActivity.class);
-        setupClickListener(R.id.btnRegisterEmployee, RegisterEmployeeActivity.class);
-        setupClickListener(R.id.btnLogout, LoginActivity.class);
-        setupClickListener(R.id.btnToolsList, EmployeeActivity.class);
-        // setupClickListener(R.id.btnEmployeesList, .class) ; //TODO change when merge with avia code
+        setupClickListeners();
 
-        // Initialize Firebase Authentication
+        // Initialize Firebase Authentication and Firestore
         mAuth = FirebaseAuth.getInstance();
-
-        // Initialize Firebase
         db = FirebaseFirestore.getInstance();
 
-        // Initialize TextView
+        // Initialize UI components
         tvProfileInfo = findViewById(R.id.tvProfileInfo);
 
         // Retrieve the currently signed-in user
         FirebaseUser user = mAuth.getCurrentUser();
 
         if (user != null) {
-            // Get the user's UID
-            String uid = user.getUid();
-
-            // Retrieve first and last name from Firebase
-            db.collection("Managers")
-                    .document(uid)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                // Document found, retrieve first and last name
-                                String firstName = document.getString("first_name");
-                                String lastName = document.getString("last_name");
-
-                                // Display welcome message with the user's name
-                                String welcomeMessage = "Welcome, " + firstName + " " + lastName;
-                                tvProfileInfo.setText(welcomeMessage);
-                            } else {
-                                // Document does not exist
-                            }
-                        } else {
-                            // Task failed with an exception
-                        }
-                    });
+            retrieveManagerInfo(user.getUid());
+        } else {
+            // If the user is not signed in, navigate to the login screen
+            navigateToLoginScreen("User not signed in");
         }
+    }
+
+    private void setupClickListeners() {
+        setupClickListener(R.id.btnRegisterTool, RegisterToolActivity.class);
+        setupClickListener(R.id.btnRegisterEmployee, RegisterEmployeeActivity.class);
+        setupClickListener(R.id.btnLogout, LoginActivity.class);
+        setupClickListener(R.id.btnToolsList, EmployeeActivity.class);
+        // setupClickListener(R.id.btnEmployeesList, .class) ; //TODO change when merge with avia code
+    }
+
+    private void retrieveManagerInfo(String uid) {
+        db.collection("Managers")
+                .document(uid)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            // Document found, retrieve first and last name
+                            String firstName = document.getString("first_name");
+                            String lastName = document.getString("last_name");
+
+                            // Display welcome message with the user's name
+                            String welcomeMessage = "Welcome, " + firstName + " " + lastName;
+                            tvProfileInfo.setText(welcomeMessage);
+                        } else {
+                            // Document does not exist
+//                            navigateToLoginScreen("Error finding document");
+                        }
+                    } else if (task.getException() != null) {
+                        // Task failed with an exception
+//                        navigateToLoginScreen("Error: " + task.getException().getMessage());
+                    }
+                });
+    }
+
+    private void navigateToLoginScreen(String errorMessage) {
+        // Pop an error message using toast and go back to the login screen
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(ManagerActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     // Helper method to set up click listeners for buttons

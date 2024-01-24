@@ -22,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RegisterEmployeeActivity extends AppCompatActivity {
 
@@ -118,7 +119,9 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
     // Helper method to upload data to Firebase
     private void uploadDataToFirebase(String documentID, Map<String, String> data) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.createUserWithEmailAndPassword(data.get("email"), data.get("password")).addOnCompleteListener(this,
+        // Create a new user with the provided email and password
+        // As defult, the new user's password is set to "password"
+        auth.createUserWithEmailAndPassword(Objects.requireNonNull(data.get("email")), Objects.requireNonNull(data.get("phone"))).addOnCompleteListener(this,
                 task -> {
                     if (task.isSuccessful()) {
                         // User registration successful
@@ -131,8 +134,6 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
                                 .set(data)
                                 .addOnSuccessListener(aVoid -> {
                                     // Data successfully uploaded
-                                    // Show a success message
-                                    Toast.makeText(RegisterEmployeeActivity.this, "Employee registration was successful", Toast.LENGTH_LONG).show();
 
                                     // Navigate to ManagerActivity
                                     navigateToActivity(ManagerActivity.class);
