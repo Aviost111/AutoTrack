@@ -18,28 +18,27 @@
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
         android:backgroundTint="@color/red"
-        android:padding="10dp"
-        android:text="Back"
-        app:cornerRadius="30dp"
-        app:strokeColor="@color/white"
-        app:strokeWidth="2dp" />
+        app:icon="@drawable/ic_action_name"
+        app:iconSize="28dp"
+        app:iconTint="@color/white" />
 
     <!-- Page Title -->
     <TextView
         android:id="@+id/tvPageTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         android:padding="10dp"
-        android:text="Register Your Tool"
+        android:text="Register New Vehicle"
         android:textColor="@color/black"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        />
 
     <!-- Tool Registration Form -->
     <LinearLayout
@@ -47,63 +46,114 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:orientation="vertical"
-        android:padding="15dp">
+        android:padding="25dp"
+        android:layout_below="@id/tvPageTitle"
+        >
 
         <!-- Type -->
-        <EditText
-            android:id="@+id/etType"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Type"
-            android:inputType="text" />
+            android:hint="Type">
+
+            <EditText
+                android:id="@+id/etType"
+                style="@style/Widget.AppCompat.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:padding="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <!-- ID -->
-        <EditText
-            android:id="@+id/etID"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="ID"
-            android:inputType="number" />
+            android:hint="ID">
+
+            <EditText
+                android:id="@+id/etID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="ID"
+                android:inputType="number"
+                android:padding="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Company ID -->
-        <EditText
-            android:id="@+id/etCompanyID"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Company ID"
-            android:inputType="number" />
+            android:hint="Company ID">
+
+            <EditText
+                android:id="@+id/etCompanyID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:padding="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <!-- Engine Size -->
-        <EditText
-            android:id="@+id/etEngineSize"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Engine Size"
-            android:inputType="text" />
+            android:hint="Engine Size">
 
-        <!-- Manufacturer Year -->
-        <EditText
-            android:id="@+id/etManufactureYear"
+            <EditText
+                android:id="@+id/etEngineSize"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:padding="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Manufacture Year -->
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Manufacture Year"
-            android:inputType="number" />
+            android:hint="Manufacture Year">
+
+            <EditText
+                android:id="@+id/etManufactureYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:padding="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <!-- Treatment Hours -->
-        <EditText
-            android:id="@+id/etTreatmentHours"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Treatment Hours"
-            android:inputType="number" />
+            android:hint="Treatment Hours">
+
+            <EditText
+                android:id="@+id/etTreatmentHours"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:padding="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <!-- Version -->
-        <EditText
-            android:id="@+id/etVersion"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Version"
-            android:inputType="text" />
+            android:hint="Version">
+
+            <EditText
+                android:id="@+id/etVersion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:padding="10dp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
         <!-- Button to Perform Registration -->
@@ -113,7 +163,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:backgroundTint="@color/red"
-            android:text="Register Tool"
+            android:text="Register vehicle"
+            android:layout_marginTop="20dp"
+
             />
 
     </LinearLayout>

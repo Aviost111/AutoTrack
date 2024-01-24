@@ -27,4 +27,6 @@
     <string name="phone">Phone</string>
     <string name="register_employee">Register Employee</string>
     <string name="employees_list">Employees List</string>
+    <string name="vehicles">Add Vehicle</string>
+    <string name="add_vehicle">Add Vehicle</string>
 </resources>

@@ -49,7 +49,7 @@ public class ManagerActivity extends AppCompatActivity {
             String uid = user.getUid();
 
             // Retrieve first and last name from Firebase
-            db.collection("Manger")
+            db.collection("Managers")
                     .document(uid)
                     .get()
                     .addOnCompleteListener(task -> {
