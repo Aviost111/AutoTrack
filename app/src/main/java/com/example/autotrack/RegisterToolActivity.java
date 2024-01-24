@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -63,7 +65,7 @@ public class RegisterToolActivity extends AppCompatActivity {
         // Get data from EditText fields
         String type = etType.getText().toString();
         String ID = etID.getText().toString();
-        String companyID = etCompanyID.getText().toString();
+        String companyID = etCompanyID.getText().toString(); //TODO change it to manager's companyID
         String engineSize = etEngineSize.getText().toString();
         String manufactureYearStr = etManufactureYear.getText().toString();
         String treatmentHoursStr = etTreatmentHours.getText().toString();
@@ -120,6 +122,10 @@ public class RegisterToolActivity extends AppCompatActivity {
                 .set(data)
                 .addOnSuccessListener(aVoid -> {
                     // Data successfully uploaded
+
+                    // Create the "history" subCollection
+                    createHistorySubCollection(documentID);
+
                     // Show a success message
                     Toast.makeText(RegisterToolActivity.this, "Tool registration was successful", Toast.LENGTH_LONG).show();
 
@@ -145,5 +151,17 @@ public class RegisterToolActivity extends AppCompatActivity {
         Intent intent = new Intent(RegisterToolActivity.this, destinationClass);
         startActivity(intent);
         finish(); // Finish the current activity to prevent going back via backspace button
+    }
+
+    // Helper method to create a subCollection for "history"
+    private void createHistorySubCollection(String documentID) {
+        // Create a subCollection reference for "history"
+        CollectionReference historySubCollectionRef = firestore.collection("Vehicles").document(documentID).collection("history");
+
+        // Create an empty document for "refueling" in the "history" subCollection
+        historySubCollectionRef.document("refueling").set(new HashMap<>());
+
+        // Create an empty document for "vehicle_care" in the "history" subCollection
+        historySubCollectionRef.document("vehicle_care").set(new HashMap<>());
     }
 }
