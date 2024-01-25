@@ -89,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
                     editTextRegisterLastName.setError("Last name required");
                     editTextRegisterLastName.requestFocus();
                 } else if (TextUtils.isEmpty(textCompanyID)) {
-                    // Display error message for last name
+                    // Display error message for company id
                     Toast.makeText(RegisterActivity.this, "Please enter your CompanyID", Toast.LENGTH_SHORT).show();
                     editTextRegisterLastName.setError("CompanyID required");
                     editTextRegisterLastName.requestFocus();
@@ -153,7 +153,6 @@ public class RegisterActivity extends AppCompatActivity {
                             user.put("last_name", textLastName);
                             user.put("phone", textPhoneNumber);
                             user.put("company_id",companyID);
-
 
 
 
