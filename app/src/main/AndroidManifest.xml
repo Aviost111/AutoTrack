@@ -18,7 +18,7 @@
         android:theme="@style/Theme.AutoTrack"
         tools:targetApi="31">
         <activity
-            android:name=".EmployeesList"
+            android:name=".EmployeesListActivity"
             android:exported="true"
             android:label="@string/title_activity_employees_list"
             android:theme="@style/Theme.AutoTrack.NoActionBar">
