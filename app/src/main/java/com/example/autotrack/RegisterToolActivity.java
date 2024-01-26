@@ -127,15 +127,21 @@ public class RegisterToolActivity extends AppCompatActivity {
                     createHistorySubCollection(documentID);
 
                     // Show a success message
-                    Toast.makeText(RegisterToolActivity.this, "Tool registration was successful", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterToolActivity.this, "Vehicle registered successfully", Toast.LENGTH_LONG).show();
 
-                    // Finish the activity to go back to the manager homepage
-                    finish();
+                    //wait before going back to manager activity
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    // Navigate to ManagerActivity
+                    navigateToActivity(ManagerActivity.class);
                 })
                 .addOnFailureListener(e -> {
                     // Error uploading data
                     // Show an error message
-                    Toast.makeText(RegisterToolActivity.this, "Tool registration failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterToolActivity.this, "Vehicle registration failed", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, e.toString());
                 });
     }
