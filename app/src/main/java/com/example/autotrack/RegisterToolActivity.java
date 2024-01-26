@@ -16,13 +16,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.autotrack.InputValidator;
+
 
 public class RegisterToolActivity extends AppCompatActivity {
 
     // Tag for logging purposes
     private static final String TAG = "RegisterToolActivity";
 
-    // Firebase Firestore instance
+    // Firebase instance
     private FirebaseFirestore firestore;
 
 
@@ -71,22 +73,20 @@ public class RegisterToolActivity extends AppCompatActivity {
         String treatmentHoursStr = etTreatmentHours.getText().toString();
         String version = etVersion.getText().toString();
 
-        // Validate that all fields are filled
-        if (areFieldsEmpty(type, ID, companyID, engineSize, manufactureYearStr, treatmentHoursStr, version)) {
-            // Show an error message using a Toast
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-            return; // Exit the method if any field is empty
+        // Validate all input fields
+        if (validateInput(type, ID, engineSize, manufactureYearStr, treatmentHoursStr, version)) {
+            // Continue with the registration process if all validations pass
+
+            // Convert ManufactureYear, HoursForTreatment to integers
+            int manufactureYear = Integer.parseInt(manufactureYearStr);
+            double treatmentHours = Double.parseDouble(treatmentHoursStr);
+
+            // Create a Map to store the data
+            Map<String, Object> toolData = createToolDataMap(type, ID, companyID, engineSize, manufactureYear, treatmentHours, version);
+
+            // Upload data to Firebase
+            uploadDataToFirebase(ID, toolData);
         }
-
-        // Convert ManufactureYear, HoursForTreatment to integers
-        int manufactureYear = Integer.parseInt(manufactureYearStr);
-        double treatmentHours = Double.parseDouble(treatmentHoursStr);
-
-        // Create a Map to store the data
-        Map<String, Object> toolData = createToolDataMap(type, ID, companyID, engineSize, manufactureYear, treatmentHours, version);
-
-        // Upload data to Firebase
-        uploadDataToFirebase(ID, toolData);
     }
 
     // Helper method to check if any of the provided fields are empty
@@ -166,5 +166,44 @@ public class RegisterToolActivity extends AppCompatActivity {
 
         // Create an empty document for "start-stop" in the "history" subCollection
         historySubCollectionRef.document("start-stop").set(new HashMap<>());
+    }
+
+    // Validate input fields
+    private boolean validateInput(String type, String ID, String engineSize, String manufactureYearStr, String treatmentHoursStr, String version) {
+        if (InputValidator.areFieldsEmpty(type, ID, engineSize, manufactureYearStr, treatmentHoursStr, version)) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!InputValidator.isValidType(type)) {
+            Toast.makeText(this, "Invalid type", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!InputValidator.containsOnlyNumbers(ID)) {
+            Toast.makeText(this, "ID should contain only numbers", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!InputValidator.isValidEngineSize(engineSize)) {
+            Toast.makeText(this, "Invalid engine size", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!InputValidator.isValidVersion(version)) {
+            Toast.makeText(this, "Invalid version", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!InputValidator.isValidManufactureYear(manufactureYearStr)) {
+            Toast.makeText(this, "Invalid manufacture year", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!InputValidator.isValidTreatmentHours(treatmentHoursStr)) {
+            Toast.makeText(this, "Invalid treatment hours", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 }

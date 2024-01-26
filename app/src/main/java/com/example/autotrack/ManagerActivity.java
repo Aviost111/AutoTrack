@@ -33,7 +33,7 @@ public class ManagerActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Initialize UI components
+        // Initialize UI element for displaying welcome message
         tvProfileInfo = findViewById(R.id.tvProfileInfo);
 
         // Retrieve the currently signed-in user
@@ -43,7 +43,9 @@ public class ManagerActivity extends AppCompatActivity {
             retrieveManagerInfo(user.getUid());
         } else {
             // If the user is not signed in, navigate to the login screen
-            navigateToLoginScreen("User not signed in");
+            // Pop an error message using toast and go back to the login screen
+            Toast.makeText(this, "User not signed in", Toast.LENGTH_SHORT).show();
+            navigateToActivity(LoginActivity.class);
         }
     }
 
@@ -79,14 +81,6 @@ public class ManagerActivity extends AppCompatActivity {
 //                        navigateToLoginScreen("Error: " + task.getException().getMessage());
                     }
                 });
-    }
-
-    private void navigateToLoginScreen(String errorMessage) {
-        // Pop an error message using toast and go back to the login screen
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(ManagerActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     // Helper method to set up click listeners for buttons

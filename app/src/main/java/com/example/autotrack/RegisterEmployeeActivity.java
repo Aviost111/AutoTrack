@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.example.autotrack.InputValidator;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -94,16 +96,6 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         }
     }
 
-    // Helper method to check if any of the provided fields are empty
-    private boolean areFieldsEmpty(String... fields) {
-        for (String field : fields) {
-            if (field.isEmpty()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     // Helper method to create a Map with employee data
     private Map<String, String> createEmployeeDataMap(String firstName, String lastName, String email, String phone, String managerId, String companyId) {
         Map<String, String> employeeData = new HashMap<>();
@@ -161,7 +153,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         } catch (FirebaseAuthUserCollisionException e) {
             setErrorAndRequestFocus(etEmail, "User is already registered with this email.");
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getMessage()));
             Toast.makeText(RegisterEmployeeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -185,69 +177,30 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         finish(); // Finish the current activity to prevent going back via backspace button
     }
 
-    // Function to validate all input fields and show error messages if needed (using Toast)
+
+    // Helper method to validate all input fields and display error messages
     private boolean validateInput(String email, String firstName, String lastName, String phone) {
-        // Validate that all fields are filled
-        if (areFieldsEmpty(email, firstName, lastName, phone)) {
-            // Show an error message using a Toast
+        if (InputValidator.areFieldsEmpty(email, firstName, lastName, phone)) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-            return false; // Exit the method if any field is empty
-        }
-
-        // Validate phone number
-        if (!PhoneNumberValidation(phone)) {
-            // Show an error message using a Toast
-            Toast.makeText(this, "Invalid phone number", Toast.LENGTH_SHORT).show();
-            return false; // Exit the method if the phone number is invalid
-        }
-
-        // Validate email
-        if (!isValidEmail(email)) {
-            // Show an error message using a Toast
-            Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show();
-            return false; // Exit the method if the email is invalid
-        }
-
-        // Validate first name
-        if (!isValidName(firstName)) {
-            // Show an error message using a Toast
-            Toast.makeText(this, "Invalid first name ", Toast.LENGTH_SHORT).show();
-            return false; // Exit the method if first name is invalid
-        }
-
-        // Validate last name
-        if (!isValidName(lastName)) {
-            // Show an error message using a Toast
-            Toast.makeText(this, "Invalid last name", Toast.LENGTH_SHORT).show();
-            return false; // Exit the method if last name is invalid
-        }
-
-        // If all validations pass, return true
-        return true;
-    }
-
-    // Validate phone number format
-    private boolean PhoneNumberValidation(String number) {
-        if (number.length() != 10) {
             return false;
         }
-        for (int i = 0; i < number.length(); i++) {
-            if (number.charAt(i) < '0' || number.charAt(i) > '9') {
-                return false;
-            }
+        if (!InputValidator.isValidPhoneNumber(phone)) {
+            Toast.makeText(this, "Invalid phone number", Toast.LENGTH_SHORT).show();
+            return false;
         }
+        if (!InputValidator.isValidEmail(email)) {
+            Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!InputValidator.isValidName(firstName)) {
+            Toast.makeText(this, "Invalid first name ", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!InputValidator.isValidName(lastName)) {
+            Toast.makeText(this, "Invalid last name", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        // All validations passed
         return true;
-    }
-
-    // Validate email address
-    private boolean isValidEmail(String email) {
-        // Use android.util.Patterns.EMAIL_ADDRESS
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
-    // Validate first name and last name
-    private boolean isValidName(String name) {
-        // Check if the name contains only letters
-        return name.matches("[a-zA-Z]+");
     }
 }
