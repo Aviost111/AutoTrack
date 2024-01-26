@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
 public class ManagerActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -68,19 +69,31 @@ public class ManagerActivity extends AppCompatActivity {
                             // Document found, retrieve first and last name
                             String firstName = document.getString("first_name");
                             String lastName = document.getString("last_name");
-
-                            // Display welcome message with the user's name
-                            String welcomeMessage = "Welcome, " + firstName + " " + lastName;
-                            tvProfileInfo.setText(welcomeMessage);
+                            displayManagerInfo(firstName, lastName);
                         } else {
                             // Document does not exist
-//                            navigateToLoginScreen("Error finding document");
+                            handleManagerNotFound();
                         }
-                    } else if (task.getException() != null) {
+                    } else {
                         // Task failed with an exception
-//                        navigateToLoginScreen("Error: " + task.getException().getMessage());
+                        handleTaskFailure(task.getException());
                     }
                 });
+    }
+
+    private void displayManagerInfo(String firstName, String lastName) {
+        String welcomeMessage = "Welcome, " + firstName + " " + lastName;
+        tvProfileInfo.setText(welcomeMessage);
+    }
+
+    private void handleManagerNotFound() {
+        // Display an error message
+        Toast.makeText(this, "Manager not found", Toast.LENGTH_SHORT).show();
+    }
+
+    private void handleTaskFailure(Exception exception) {
+        // Display an error message
+        Toast.makeText(this, "Task failed with exception: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     // Helper method to set up click listeners for buttons
@@ -93,7 +106,8 @@ public class ManagerActivity extends AppCompatActivity {
     private void navigateToActivity(Class<?> destinationClass) {
         Intent intent = new Intent(ManagerActivity.this, destinationClass);
         startActivity(intent);
-        finish(); // Finish the current activity to prevent going back via backspace button
+        //TODO check if this is needed or if it causes problems
+       finish(); // Finish the current activity to prevent going back via backspace button
     }
 
 }

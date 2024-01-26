@@ -117,7 +117,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
                 task -> {
                     if (task.isSuccessful()) {
                         // User registration successful
-                        Toast.makeText(RegisterEmployeeActivity.this, "User Registered", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterEmployeeActivity.this, "Employee registered successfully", Toast.LENGTH_SHORT).show();
                         FirebaseUser firebaseUser = auth.getCurrentUser();
 
                         assert firebaseUser != null;
@@ -126,8 +126,6 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
                                 .set(data)
                                 .addOnSuccessListener(aVoid -> {
                                     // Data successfully uploaded
-
-                                    // Navigate to ManagerActivity
                                     navigateToActivity(ManagerActivity.class);
                                 })
                                 .addOnFailureListener(e -> {
@@ -140,6 +138,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
                         handleRegistrationFailure(task.getException());
                     }
                 });
+
     }
 
     // Helper method to handle user registration failure
