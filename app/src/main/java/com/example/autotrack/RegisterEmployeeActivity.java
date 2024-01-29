@@ -51,18 +51,39 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         // Get the currently authenticated user (manager)
         FirebaseUser managerUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Check if the managerUser is not null before accessing the UID
-        if (managerUser != null) {
-            managerId = managerUser.getUid();
-            //companyId = managerUser.getCompanyId();
-            companyId = "TODO";  //TODO add code to get company ID from the manager's document
-        }
+        //Get the company ID from the manager's document and assign it to the companyId variable
+        assert managerUser != null;
+        managerId = managerUser.getUid();
+        getCompanyIdFromManager(managerUser.getUid());
 
         // Initialize UI elements
         initializeViews();
 
         // Set click listener for the "Register Employee" button
         btnRegisterEmployee.setOnClickListener(view -> registerEmployee());
+    }
+
+    private void getCompanyIdFromManager(String managerUid) {
+        // Retrieve the manager's document from Firestore
+        firestore.collection("Managers")
+                .document(managerUid)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Manager document found
+                        // Extract the companyId from the document and assign it to the companyId variable
+                        companyId = documentSnapshot.getString("company_id");
+                    } else {
+                        // Manager document does not exist
+                        // Handle the case where the manager's document is not found
+                        Toast.makeText(RegisterEmployeeActivity.this, "Manager document not found", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Error occurred while fetching manager document
+                    // Handle the failure scenario
+                    Toast.makeText(RegisterEmployeeActivity.this, "Failed to fetch manager document: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     // Helper method to initialize UI elements

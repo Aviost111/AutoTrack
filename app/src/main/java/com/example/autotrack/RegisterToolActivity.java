@@ -12,13 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import com.example.autotrack.InputValidator;
 
 
 public class RegisterToolActivity extends AppCompatActivity {
@@ -52,15 +49,37 @@ public class RegisterToolActivity extends AppCompatActivity {
         // Get the currently authenticated user (manager)
         FirebaseUser managerUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Check if the managerUser is not null before accessing the UID
-        if (managerUser != null) {
-            //companyId = managerUser.getCompanyId();
-            companyId = "TODO";  //TODO add code to get company ID from the manager's document
-        }
+        //Get the company ID from the manager's document and assign it to the companyId variable
+        assert managerUser != null;
+        getCompanyIdFromManager(managerUser.getUid());
 
         // Set click listener for the "Register Tool" button
         btnRegisterTool.setOnClickListener(view -> registerTool());
     }
+
+    private void getCompanyIdFromManager(String managerUid) {
+        // Retrieve the manager's document from Firestore
+        firestore.collection("Managers")
+                .document(managerUid)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Manager document found
+                        // Extract the companyId from the document and assign it to the companyId variable
+                        companyId = documentSnapshot.getString("company_id");
+                    } else {
+                        // Manager document does not exist
+                        // Handle the case where the manager's document is not found
+                        Toast.makeText(RegisterToolActivity.this, "Manager document not found", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Error occurred while fetching manager document
+                    // Handle the failure scenario
+                    Toast.makeText(RegisterToolActivity.this, "Failed to fetch manager document: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
 
     // Helper method to initialize UI elements
     private void initializeViews() {

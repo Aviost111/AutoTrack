@@ -55,7 +55,7 @@ public class ManagerActivity extends AppCompatActivity {
         setupClickListener(R.id.btnRegisterEmployee, RegisterEmployeeActivity.class);
         setupClickListener(R.id.btnLogout, LoginActivity.class);
         setupClickListener(R.id.btnToolsList, EmployeeActivity.class);
-        // setupClickListener(R.id.btnEmployeesList, .class) ; //TODO change when merge with avia code
+        setupClickListener(R.id.btnEmployeesList, EmployeesListActivity.class);
     }
 
     private void retrieveManagerInfo(String uid) {
@@ -107,7 +107,7 @@ public class ManagerActivity extends AppCompatActivity {
         Intent intent = new Intent(ManagerActivity.this, destinationClass);
         startActivity(intent);
         //TODO check if this is needed or if it causes problems
-       finish(); // Finish the current activity to prevent going back via backspace button
+        finish(); // Finish the current activity to prevent going back via backspace button
     }
 
 }
