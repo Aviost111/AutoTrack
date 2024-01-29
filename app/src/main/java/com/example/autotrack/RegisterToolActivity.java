@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,8 +31,9 @@ public class RegisterToolActivity extends AppCompatActivity {
 
 
     // UI elements
-    private EditText etType, etCompanyID, etEngineSize, etManufactureYear, etTreatmentHours, etVersion, etID;
+    private EditText etType, etEngineSize, etManufactureYear, etTreatmentHours, etVersion, etID;
     private Button btnRegisterTool;
+    private String companyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,15 @@ public class RegisterToolActivity extends AppCompatActivity {
         // Initialize Firebase Firestore
         firestore = FirebaseFirestore.getInstance();
 
+        // Get the currently authenticated user (manager)
+        FirebaseUser managerUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Check if the managerUser is not null before accessing the UID
+        if (managerUser != null) {
+            //companyId = managerUser.getCompanyId();
+            companyId = "TODO";  //TODO add code to get company ID from the manager's document
+        }
+
         // Set click listener for the "Register Tool" button
         btnRegisterTool.setOnClickListener(view -> registerTool());
     }
@@ -54,7 +66,6 @@ public class RegisterToolActivity extends AppCompatActivity {
     private void initializeViews() {
         etType = findViewById(R.id.etType);
         etID = findViewById(R.id.etID);
-        etCompanyID = findViewById(R.id.etCompanyID);
         etEngineSize = findViewById(R.id.etEngineSize);
         etManufactureYear = findViewById(R.id.etManufactureYear);
         etTreatmentHours = findViewById(R.id.etTreatmentHours);
@@ -67,7 +78,6 @@ public class RegisterToolActivity extends AppCompatActivity {
         // Get data from EditText fields
         String type = etType.getText().toString();
         String ID = etID.getText().toString();
-        String companyID = etCompanyID.getText().toString(); //TODO change it to manager's companyID
         String engineSize = etEngineSize.getText().toString();
         String manufactureYearStr = etManufactureYear.getText().toString();
         String treatmentHoursStr = etTreatmentHours.getText().toString();
@@ -82,7 +92,7 @@ public class RegisterToolActivity extends AppCompatActivity {
             double treatmentHours = Double.parseDouble(treatmentHoursStr);
 
             // Create a Map to store the data
-            Map<String, Object> toolData = createToolDataMap(type, ID, companyID, engineSize, manufactureYear, treatmentHours, version);
+            Map<String, Object> toolData = createToolDataMap(type, ID, companyId, engineSize, manufactureYear, treatmentHours, version);
 
             // Upload data to Firebase
             uploadDataToFirebase(ID, toolData);
@@ -100,12 +110,12 @@ public class RegisterToolActivity extends AppCompatActivity {
     }
 
     // Helper method to create a Map with tool data
-    private Map<String, Object> createToolDataMap(String type, String ID, String companyID, String engineSize,
+    private Map<String, Object> createToolDataMap(String type, String ID, String companyId, String engineSize,
                                                   int manufactureYear, double treatmentHours, String version) {
         Map<String, Object> toolData = new HashMap<>();
         toolData.put("type", type);
         toolData.put("ID", ID);
-        toolData.put("company_ID", companyID);
+        toolData.put("company_ID", companyId);
         toolData.put("engine_size", engineSize);
         toolData.put("manufacture_year", manufactureYear);
         toolData.put("treatment_hours", treatmentHours);

@@ -54,10 +54,9 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         // Check if the managerUser is not null before accessing the UID
         if (managerUser != null) {
             managerId = managerUser.getUid();
+            //companyId = managerUser.getCompanyId();
             companyId = "TODO";  //TODO add code to get company ID from the manager's document
         }
-        //TODO add else to handle null
-
 
         // Initialize UI elements
         initializeViews();
@@ -82,7 +81,6 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         String firstName = etFirstName.getText().toString();
         String lastName = etLastName.getText().toString();
         String phone = etPhone.getText().toString();
-
 
         // Validate all input fields
         if (validateInput(email, firstName, lastName, phone)) {
@@ -112,7 +110,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
     private void uploadDataToFirebase(String documentID, Map<String, String> data) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         // Create a new user with the provided email and password
-        // As defult, the new user's password is set to "password"
+        // As default, the new user's password is set to "password"
         auth.createUserWithEmailAndPassword(Objects.requireNonNull(data.get("email")), Objects.requireNonNull(data.get("phone"))).addOnCompleteListener(this,
                 task -> {
                     if (task.isSuccessful()) {

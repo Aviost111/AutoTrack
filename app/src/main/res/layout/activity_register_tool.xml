@@ -81,21 +81,6 @@
                 android:padding="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Company ID -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Company ID">
-
-            <EditText
-                android:id="@+id/etCompanyID"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:padding="10dp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
         <!-- Engine Size -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
