@@ -6,10 +6,13 @@ public class ReadWriteUserDetails {
     String phoneNumber;
     String email;
 
-    public ReadWriteUserDetails(String firstName,String lastName,String phoneNumber,String email){
+    String companyID;
+
+    public ReadWriteUserDetails(String firstName,String lastName,String phoneNumber,String email, String companyID){
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email=email;
+        this.companyID=companyID;
     }
 }

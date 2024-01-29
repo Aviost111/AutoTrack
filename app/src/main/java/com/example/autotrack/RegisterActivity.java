@@ -37,7 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText editTextRegisterEmail, editTextRegisterConfirmEmail, editTextRegisterPwd,
             editTextRegisterConfirmPwd, editTextRegisterPhoneNumber, editTextRegisterFirstName,
-            editTextRegisterLastName;
+            editTextRegisterLastName, editTextRegisterCompanyID;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -61,6 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
         editTextRegisterPhoneNumber = findViewById(R.id.registerPhone);
         editTextRegisterFirstName = findViewById(R.id.registerFirstName);
         editTextRegisterLastName = findViewById(R.id.registerLastName);
+        editTextRegisterCompanyID = findViewById(R.id.registerCompanyID);
 
         Button buttonRegister = findViewById(R.id.RegisterButton);
         buttonRegister.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +75,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String textEmail = editTextRegisterEmail.getText().toString();
                 String textConfirmEmail = editTextRegisterConfirmEmail.getText().toString();
                 String textPhoneNumber = editTextRegisterPhoneNumber.getText().toString();
+                String textCompanyID = editTextRegisterCompanyID.getText().toString();
 
                 // Input validation checks
                 if (TextUtils.isEmpty(textFirstname)) {
@@ -85,6 +87,11 @@ public class RegisterActivity extends AppCompatActivity {
                     // Display error message for last name
                     Toast.makeText(RegisterActivity.this, "Please enter your last name", Toast.LENGTH_SHORT).show();
                     editTextRegisterLastName.setError("Last name required");
+                    editTextRegisterLastName.requestFocus();
+                } else if (TextUtils.isEmpty(textCompanyID)) {
+                    // Display error message for last name
+                    Toast.makeText(RegisterActivity.this, "Please enter your CompanyID", Toast.LENGTH_SHORT).show();
+                    editTextRegisterLastName.setError("CompanyID required");
                     editTextRegisterLastName.requestFocus();
                 } else if (TextUtils.isEmpty(textEmail)) {
                     // Display error message for email
@@ -120,14 +127,14 @@ public class RegisterActivity extends AppCompatActivity {
                     editTextRegisterPwd.clearComposingText();
                 } else {
                     // If all checks pass, register the user
-                    registerUser(textFirstname, textLastname, textPhoneNumber, textEmail, textPwd);
+                    registerUser(textFirstname, textLastname, textPhoneNumber, textEmail, textPwd,textCompanyID);
                 }
             }
         });
     }
 
     private void registerUser(String textFirstName, String textLastName, String textPhoneNumber,
-                              String textEmail, String textPwd) {
+                              String textEmail, String textPwd, String companyID) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         // Create user
         auth.createUserWithEmailAndPassword(textEmail, textPwd).addOnCompleteListener(RegisterActivity.this,
@@ -145,6 +152,10 @@ public class RegisterActivity extends AppCompatActivity {
                             user.put("first_name", textFirstName);
                             user.put("last_name", textLastName);
                             user.put("phone", textPhoneNumber);
+                            user.put("company_id",companyID);
+
+
+
 
                             assert firebaseUser != null;
                             // Save user data to Firestore
