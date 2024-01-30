@@ -52,7 +52,6 @@ public class EmployeeActivity extends AppCompatActivity {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.d("HHHHHHHHHHHHHHH", "hekkooko");
                         List<Vehicle> vehicleList = new ArrayList<>();
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Log.d("Firestore Data", document.getData().toString());
@@ -102,14 +101,13 @@ public class EmployeeActivity extends AppCompatActivity {
                 // Get the clicked Vehicle object
                 Vehicle clickedVehicle = (Vehicle) parent.getItemAtPosition(position);
 
-                // Access information from the clicked Vehicle
-                String vehicleId = clickedVehicle.getID();
-
                 // Create an Intent to start the VehicleActivity
                 Intent intent = new Intent(EmployeeActivity.this, VehicleActivity.class);
 
                 // Pass necessary information as extras to the VehicleActivity
-                intent.putExtra("vehicleId", vehicleId);
+                intent.putExtra("vehicleId", clickedVehicle.getID());
+                intent.putExtra("vehicleType", clickedVehicle.getType());
+                intent.putExtra("hoursTillTreatment",clickedVehicle.getHours_till_treatment());
 
                 // Start the VehicleActivity
                 startActivity(intent);
