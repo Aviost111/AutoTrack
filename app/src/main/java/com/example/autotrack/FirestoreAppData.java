@@ -19,35 +19,36 @@ public class FirestoreAppData {
     }
 
     // Write Manager data to Firestore
-    public void writeManager(Manager manager) {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            String uid = currentUser.getUid();
-            DocumentReference managerDocument = managersCollection.document(uid);
-            managerDocument.set(manager);
-        }
-    }
-
-    // Read Manager data from Firestore
-    public void readManager(final OnGetDataListener<Manager> listener) {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            String uid = currentUser.getUid();
-            DocumentReference managerDocument = managersCollection.document(uid);
-            managerDocument.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Manager manager = task.getResult().toObject(Manager.class);
-                    if (listener != null) {
-                        listener.onSuccess(manager);
-                    }
-                } else {
-                    if (listener != null) {
-                        listener.onFailure(task.getException());
-                    }
-                }
-            });
-        }
-    }
+    // waiting for the manager class
+//    public void writeManager(Manager manager) {
+//        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+//        if (currentUser != null) {
+//            String uid = currentUser.getUid();
+//            DocumentReference managerDocument = managersCollection.document(uid);
+//            managerDocument.set(manager);
+//        }
+//    }
+//
+//    // Read Manager data from Firestore
+//    public void readManager(final OnGetDataListener<Manager> listener) {
+//        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+//        if (currentUser != null) {
+//            String uid = currentUser.getUid();
+//            DocumentReference managerDocument = managersCollection.document(uid);
+//            managerDocument.get().addOnCompleteListener(task -> {
+//                if (task.isSuccessful()) {
+//                    Manager manager = task.getResult().toObject(Manager.class);
+//                    if (listener != null) {
+//                        listener.onSuccess(manager);
+//                    }
+//                } else {
+//                    if (listener != null) {
+//                        listener.onFailure(task.getException());
+//                    }
+//                }
+//            });
+//        }
+//    }
 
     // Write Employee data to Firestore
     public void writeEmployee(EmployeeObj employee) {
