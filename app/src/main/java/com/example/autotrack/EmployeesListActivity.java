@@ -21,6 +21,8 @@ public class EmployeesListActivity extends AppCompatActivity {
 
 
 private ListView listviewEmployees;
+
+private TextView textName;
 private Button btnLogout;
 
 protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,9 @@ protected void onCreate(Bundle savedInstanceState) {
     setContentView(R.layout.activity_employees_list);
 
     listviewEmployees = findViewById(R.id.listviewEmployees);
+
+    textName = findViewById(R.id.userName);
+    textName.setText("hello");
 
     Button backButton = findViewById(R.id.btnBack);
 

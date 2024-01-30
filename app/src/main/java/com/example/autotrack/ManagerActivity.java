@@ -30,6 +30,7 @@ public class ManagerActivity extends AppCompatActivity {
         setupClickListener(R.id.btnRegisterEmployee, RegisterEmployeeActivity.class);
         setupClickListener(R.id.btnLogout, LoginActivity.class);
         setupClickListener(R.id.btnToolsList, VehicleActivity.class);
+        setupClickListener(R.id.btnEmployeesList, EmployeesListActivity.class);
 
         // Initialize Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
