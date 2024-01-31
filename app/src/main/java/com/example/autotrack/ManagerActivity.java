@@ -1,12 +1,15 @@
 package com.example.autotrack;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,6 +59,9 @@ public class ManagerActivity extends AppCompatActivity {
         setupClickListener(R.id.btnLogout, LoginActivity.class);
         setupClickListener(R.id.btnToolsList, EmployeeActivity.class);
         setupClickListener(R.id.btnEmployeesList, EmployeesListActivity.class);
+
+        Button btnDeleteEmployee = findViewById(R.id.btnDeleteEmployee);
+        btnDeleteEmployee.setOnClickListener(v -> showDeleteEmployeeDialog());
     }
 
     private void retrieveManagerInfo(String uid) {
@@ -108,6 +114,44 @@ public class ManagerActivity extends AppCompatActivity {
         startActivity(intent);
         //TODO check if this is needed or if it causes problems
         finish(); // Finish the current activity to prevent going back via backspace button
+    }
+
+    // Method to show the delete employee dialog
+    private void showDeleteEmployeeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete Employee");
+        builder.setMessage("Enter the ID of the employee to delete:");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String employeeId = input.getText().toString();
+                // Call a method to delete the employee with the provided ID
+                deleteEmployee(employeeId);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    // Method to delete the employee from the database
+    private void deleteEmployee(String employeeId) {
+        // Implement the logic to delete the employee with the provided ID from the database
+        // You can use Firestore delete operation or update operation to remove the employee data
+        // Example: db.collection("Employees").document(employeeId).delete()
+        // After deleting the employee, you can show a toast message to indicate success or failure
+        Toast.makeText(this, "Employee deleted successfully", Toast.LENGTH_SHORT).show();
     }
 
 }
