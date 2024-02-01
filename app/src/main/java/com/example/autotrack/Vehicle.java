@@ -1,11 +1,14 @@
 package com.example.autotrack;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class Vehicle {
     private String ID;
     private String company_ID;
     private String engine_size;
     private int treatment_hours;
-    private int hours_till_treatment;
+    private double hours_till_treatment;
     private int manufacture_year;
     private String type;
     private String version;
@@ -46,11 +49,11 @@ public class Vehicle {
         this.treatment_hours = treatment_hours;
     }
 
-    public int getHours_till_treatment() {
+    public double getHours_till_treatment() {
         return hours_till_treatment;
     }
 
-    public void setHours_till_treatment(int hours_till_treatment) {
+    public void setHours_till_treatment(double hours_till_treatment) {
         this.hours_till_treatment = hours_till_treatment;
     }
 
@@ -80,12 +83,13 @@ public class Vehicle {
 
     @Override
     public String toString() {
-        return "VehicleType: " + type + ",VehicleId " + ID +
+        return "\nVehicleType: " + type + ",VehicleId " + ID +
                 "\nversion: " + version +
                 "\nCompany ID: " + company_ID +
                 "\nManufacturing Year: " + manufacture_year +
-                "\nHours left for treatment" + hours_till_treatment +
-                "\n------------------------";
+                "\nHours left for treatment: " + BigDecimal.valueOf(hours_till_treatment)
+                .setScale(2, RoundingMode.HALF_UP).doubleValue() +
+                "\n";
     }
 }
 
