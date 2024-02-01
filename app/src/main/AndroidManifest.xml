@@ -31,10 +31,7 @@
             android:name=".VehicleActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".RegisterCompanyActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
