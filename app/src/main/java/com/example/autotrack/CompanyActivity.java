@@ -1,15 +1,12 @@
 package com.example.autotrack;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,7 +15,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
-public class ManagerActivity extends AppCompatActivity {
+public class CompanyActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private TextView tvProfileInfo;
@@ -28,7 +25,7 @@ public class ManagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manager);
+        setContentView(R.layout.activity_company);
 
         // Set up click listeners
         setupClickListeners();
@@ -70,7 +67,7 @@ public class ManagerActivity extends AppCompatActivity {
     }
 
     private void retrieveManagerInfo(String uid) {
-        db.collection("Managers")
+        db.collection("Companies")
                 .document(uid)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -115,7 +112,7 @@ public class ManagerActivity extends AppCompatActivity {
 
     // Helper method to navigate to another activity and finish the current activity
     private void navigateToActivity(Class<?> destinationClass) {
-        Intent intent = new Intent(ManagerActivity.this, destinationClass);
+        Intent intent = new Intent(CompanyActivity.this, destinationClass);
         startActivity(intent);
         //TODO check if this is needed or if it causes problems
         finish(); // Finish the current activity to prevent going back via backspace button

@@ -3,24 +3,19 @@ package com.example.autotrack;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import com.example.autotrack.InputValidator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +30,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
     // UI elements
     private EditText etEmail, etFirstName, etLastName, etPhone;
     private Button btnRegisterEmployee;
-    private String managerId, companyId;
+    private String companyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +38,18 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register_employee);
 
         // Set up click listener for the "Back" button
-        setupClickListener(R.id.btnBack, ManagerActivity.class);
+        setupClickListener(R.id.btnBack, CompanyActivity.class);
 
         // Initialize Firebase Firestore
         firestore = FirebaseFirestore.getInstance();
 
-        // Get the currently authenticated user (manager)
-        FirebaseUser managerUser = FirebaseAuth.getInstance().getCurrentUser();
+        // Get the currently authenticated user (company manager)
+        FirebaseUser companyUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //Get the company ID from the manager's document and assign it to the companyId variable
-        assert managerUser != null;
-        managerId = managerUser.getUid();
-        getCompanyIdFromManager(managerUser.getUid());
+        assert companyUser != null;
+        companyId = companyUser.getUid();
+//        getCompanyIdFromManager(managerUser.getUid());
 
         // Initialize UI elements
         initializeViews();
@@ -63,28 +58,28 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         btnRegisterEmployee.setOnClickListener(view -> registerEmployee());
     }
 
-    private void getCompanyIdFromManager(String managerUid) {
-        // Retrieve the manager's document from Firestore
-        firestore.collection("Managers")
-                .document(managerUid)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        // Manager document found
-                        // Extract the companyId from the document and assign it to the companyId variable
-                        companyId = documentSnapshot.getString("company_id");
-                    } else {
-                        // Manager document does not exist
-                        // Handle the case where the manager's document is not found
-                        Toast.makeText(RegisterEmployeeActivity.this, "Manager document not found", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    // Error occurred while fetching manager document
-                    // Handle the failure scenario
-                    Toast.makeText(RegisterEmployeeActivity.this, "Failed to fetch manager document: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
-    }
+//    private void getCompanyIdFromManager(String managerUid) {
+//        // Retrieve the manager's document from Firestore
+//        firestore.collection("Companies")
+//                .document(managerUid)
+//                .get()
+//                .addOnSuccessListener(documentSnapshot -> {
+//                    if (documentSnapshot.exists()) {
+//                        // Manager document found
+//                        // Extract the companyId from the document and assign it to the companyId variable
+//                        companyId = documentSnapshot.getString("company_id");
+//                    } else {
+//                        // Manager document does not exist
+//                        // Handle the case where the manager's document is not found
+//                        Toast.makeText(RegisterEmployeeActivity.this, "Manager document not found", Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .addOnFailureListener(e -> {
+//                    // Error occurred while fetching manager document
+//                    // Handle the failure scenario
+//                    Toast.makeText(RegisterEmployeeActivity.this, "Failed to fetch manager document: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                });
+//    }
 
     // Helper method to initialize UI elements
     private void initializeViews() {
@@ -108,27 +103,26 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
             // Continue with the registration process if all validations pass
 
             // Create a Map to store the employee data
-            Map<String, String> employeeData = createEmployeeDataMap(firstName, lastName, email, phone, managerId, companyId);
+            Map<String, String> employeeData = createEmployeeDataMap(firstName, lastName, email, phone, companyId);
 
             // Upload data to Firebase
-            uploadDataToFirebase(email, employeeData);
+            uploadDataToFirebase(employeeData);
         }
     }
 
     // Helper method to create a Map with employee data
-    private Map<String, String> createEmployeeDataMap(String firstName, String lastName, String email, String phone, String managerId, String companyId) {
+    private Map<String, String> createEmployeeDataMap(String firstName, String lastName, String email, String phone, String companyId) {
         Map<String, String> employeeData = new HashMap<>();
         employeeData.put("first_name", firstName);
         employeeData.put("last_name", lastName);
         employeeData.put("email", email);
         employeeData.put("phone", phone);
-        employeeData.put("manager_ID", managerId);
         employeeData.put("company_ID", companyId);
         return employeeData;
     }
 
     // Helper method to upload data to Firebase
-    private void uploadDataToFirebase(String documentID, Map<String, String> data) {
+    private void uploadDataToFirebase(Map<String, String> data) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         // Create a new user with the provided email and password
         // As default, the new user's password is set to "password"
@@ -140,16 +134,20 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
                         FirebaseUser firebaseUser = auth.getCurrentUser();
 
                         assert firebaseUser != null;
-                        firestore.collection("Employees")
+                        firestore.collection("Companies")
+                                .document(companyId).collection("Employees")
                                 .document(firebaseUser.getUid())
                                 .set(data)
                                 .addOnSuccessListener(aVoid -> {
                                     // Data successfully uploaded
-                                    navigateToActivity(ManagerActivity.class);
+                                    // Create the "history" subCollection
+                                    createHistorySubCollection(firebaseUser.getUid());
+
+                                    // Navigate to the ManagerActivity
+                                    navigateToActivity(CompanyActivity.class);
                                 })
                                 .addOnFailureListener(e -> {
                                     // Error uploading data
-                                    // Show an error message
                                     Toast.makeText(RegisterEmployeeActivity.this, "Employee registration failed", Toast.LENGTH_SHORT).show();
                                 });
                     } else {
@@ -221,4 +219,24 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         // All validations passed
         return true;
     }
+
+
+
+    // Helper method to create a subCollection for "history"
+    private void createHistorySubCollection(String documentID) {
+        // Create a subCollection reference for "history"
+        CollectionReference historySubCollectionRef = firestore.collection("Companies")
+                .document(companyId).collection("Employees").document(documentID).collection("history");
+
+        // Create an empty document for "refueling" in the "history" subCollection
+        historySubCollectionRef.document("refuels").set(new HashMap<>());
+
+        // Create an empty document for "vehicle_care" in the "history" subCollection
+        historySubCollectionRef.document("treatments").set(new HashMap<>());
+
+        // Create an empty document for "start-stop" in the "history" subCollection
+        historySubCollectionRef.document("start-stop").set(new HashMap<>());
+    }
+
+
 }

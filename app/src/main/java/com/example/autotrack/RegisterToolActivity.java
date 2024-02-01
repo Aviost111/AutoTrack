@@ -41,44 +41,46 @@ public class RegisterToolActivity extends AppCompatActivity {
         initializeViews();
 
         // Set up click listener for the "Back" button
-        setupClickListener(R.id.btnBack, ManagerActivity.class);
+        setupClickListener(R.id.btnBack, CompanyActivity.class);
 
         // Initialize Firebase Firestore
         firestore = FirebaseFirestore.getInstance();
 
         // Get the currently authenticated user (manager)
-        FirebaseUser managerUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser companyUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert companyUser != null;
+        companyId = companyUser.getUid();
 
         //Get the company ID from the manager's document and assign it to the companyId variable
-        assert managerUser != null;
-        getCompanyIdFromManager(managerUser.getUid());
+
+//        getCompanyIdFromManager(managerUser.getUid());
 
         // Set click listener for the "Register Tool" button
         btnRegisterTool.setOnClickListener(view -> registerTool());
     }
 
-    private void getCompanyIdFromManager(String managerUid) {
-        // Retrieve the manager's document from Firestore
-        firestore.collection("Managers")
-                .document(managerUid)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        // Manager document found
-                        // Extract the companyId from the document and assign it to the companyId variable
-                        companyId = documentSnapshot.getString("company_id");
-                    } else {
-                        // Manager document does not exist
-                        // Handle the case where the manager's document is not found
-                        Toast.makeText(RegisterToolActivity.this, "Manager document not found", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    // Error occurred while fetching manager document
-                    // Handle the failure scenario
-                    Toast.makeText(RegisterToolActivity.this, "Failed to fetch manager document: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
-    }
+//    private void getCompanyIdFromManager(String managerUid) {
+//        // Retrieve the manager's document from Firestore
+//        firestore.collection("Managers")
+//                .document(managerUid)
+//                .get()
+//                .addOnSuccessListener(documentSnapshot -> {
+//                    if (documentSnapshot.exists()) {
+//                        // Manager document found
+//                        // Extract the companyId from the document and assign it to the companyId variable
+//                        companyId = documentSnapshot.getString("company_id");
+//                    } else {
+//                        // Manager document does not exist
+//                        // Handle the case where the manager's document is not found
+//                        Toast.makeText(RegisterToolActivity.this, "Manager document not found", Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .addOnFailureListener(e -> {
+//                    // Error occurred while fetching manager document
+//                    // Handle the failure scenario
+//                    Toast.makeText(RegisterToolActivity.this, "Failed to fetch manager document: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                });
+//    }
 
 
     // Helper method to initialize UI elements
@@ -111,7 +113,7 @@ public class RegisterToolActivity extends AppCompatActivity {
             double treatmentHours = Double.parseDouble(treatmentHoursStr);
 
             // Create a Map to store the data
-            Map<String, Object> toolData = createToolDataMap(type, ID, companyId, engineSize, manufactureYear, treatmentHours, version);
+            Map<String, Object> toolData = createToolDataMap(type, ID, engineSize, manufactureYear, treatmentHours, version);
 
             // Upload data to Firebase
             uploadDataToFirebase(ID, toolData);
@@ -129,24 +131,25 @@ public class RegisterToolActivity extends AppCompatActivity {
     }
 
     // Helper method to create a Map with tool data
-    private Map<String, Object> createToolDataMap(String type, String ID, String companyId, String engineSize,
+    private Map<String, Object> createToolDataMap(String type, String ID, String engineSize,
                                                   int manufactureYear, double treatmentHours, String version) {
         Map<String, Object> toolData = new HashMap<>();
         toolData.put("type", type);
         toolData.put("ID", ID);
-        toolData.put("company_ID", companyId);
         toolData.put("engine_size", engineSize);
         toolData.put("manufacture_year", manufactureYear);
         toolData.put("treatment_hours", treatmentHours);
         // At the beginning, the hours till treatment is the same as the treatment hours.
         toolData.put("hours_till_treatment", treatmentHours);
         toolData.put("version", version);
+
         return toolData;
     }
 
     // Helper method to upload data to Firebase
     private void uploadDataToFirebase(String documentID, Map<String, Object> data) {
-        firestore.collection("Vehicles")
+        firestore.collection("Companies")
+                .document(companyId).collection("Vehicles")
                 .document(documentID)
                 .set(data)
                 .addOnSuccessListener(aVoid -> {
@@ -165,7 +168,7 @@ public class RegisterToolActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     // Navigate to ManagerActivity
-                    navigateToActivity(ManagerActivity.class);
+                    navigateToActivity(CompanyActivity.class);
                 })
                 .addOnFailureListener(e -> {
                     // Error uploading data
@@ -191,7 +194,8 @@ public class RegisterToolActivity extends AppCompatActivity {
     // Helper method to create a subCollection for "history"
     private void createHistorySubCollection(String documentID) {
         // Create a subCollection reference for "history"
-        CollectionReference historySubCollectionRef = firestore.collection("Vehicles").document(documentID).collection("history");
+        CollectionReference historySubCollectionRef = firestore.collection("Companies")
+                .document(companyId).collection("Vehicles").document(documentID).collection("history");
 
         // Create an empty document for "refueling" in the "history" subCollection
         historySubCollectionRef.document("refuels").set(new HashMap<>());
