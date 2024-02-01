@@ -106,7 +106,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
             Map<String, String> employeeData = createEmployeeDataMap(firstName, lastName, email, phone, companyId);
 
             // Upload data to Firebase
-            uploadDataToFirebase(employeeData);
+            uploadDataToFirebase(employeeData , email);
         }
     }
 
@@ -122,7 +122,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
     }
 
     // Helper method to upload data to Firebase
-    private void uploadDataToFirebase(Map<String, String> data) {
+    private void uploadDataToFirebase(Map<String, String> data ,String email) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         // Create a new user with the provided email and password
         // As default, the new user's password is set to "password"
@@ -136,12 +136,12 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
                         assert firebaseUser != null;
                         firestore.collection("Companies")
                                 .document(companyId).collection("Employees")
-                                .document(firebaseUser.getUid())
+                                .document(email)
                                 .set(data)
                                 .addOnSuccessListener(aVoid -> {
                                     // Data successfully uploaded
                                     // Create the "history" subCollection
-                                    createHistorySubCollection(firebaseUser.getUid());
+                                    createHistorySubCollection(email);
 
                                     // Navigate to the ManagerActivity
                                     navigateToActivity(CompanyActivity.class);
