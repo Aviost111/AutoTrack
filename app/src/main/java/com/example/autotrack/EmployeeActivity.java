@@ -23,6 +23,9 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -35,6 +38,8 @@ public class EmployeeActivity extends AppCompatActivity {
     private ListView listViewFactoryVehicles;
     private Button btnLogout;
 
+    private String UId;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,25 +49,27 @@ public class EmployeeActivity extends AppCompatActivity {
         listViewFactoryVehicles = findViewById(R.id.listViewFactoryVehicles);
         btnLogout = findViewById(R.id.btnLogout);
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            // Get the user's UID
+            UId = user.getUid();
+        }
+
         // Access a Cloud Firestore instance
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Read data from the "vehicles" collection
-        db.collection("Vehicles")
+        db.collection("Companies")
+                .document(UId)
+                .collection("Vehicles")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         List<Vehicle> vehicleList = new ArrayList<>();
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Log.d("Firestore Data", document.getData().toString());
                             // Convert the document to a Vehicle object
                             Vehicle vehicle = document.toObject(Vehicle.class);
-
-//                            // Set longs (firebase numeric values)
-//                            vehicle.setTreatment_hours(document.getLong("Hours_for_treatment").intValue());
-//                            vehicle.setHours_till_treatment(document.getLong("Hours_lf_treatment").intValue());
-//                            vehicle.setManufacture_year(document.getLong("manufactor_year").intValue());
-
 
                             // Add the Vehicle object to the list
                             vehicleList.add(vehicle);

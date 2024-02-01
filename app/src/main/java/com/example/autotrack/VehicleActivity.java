@@ -30,12 +30,13 @@ import java.util.Map;
 
 public class VehicleActivity extends AppCompatActivity {
 
+    private String UId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle);
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
         // Get references to UI elements
         TextView textViewEmployeeDetails = findViewById(R.id.textViewEmployeeDetails);
         TextView textViewVehicleDetails = findViewById(R.id.textViewVehicleDetails);
@@ -49,7 +50,6 @@ public class VehicleActivity extends AppCompatActivity {
         // Retrieve data from Intent
         Intent intent = getIntent();
 
-        //
         String employeeName = "Avi Ostroff";  // Replace with actual employee name
         String employeeId = "12345";       // Replace with actual employee ID
         String vehicleId = intent.getStringExtra("vehicleId");
@@ -69,10 +69,19 @@ public class VehicleActivity extends AppCompatActivity {
             textViewAvailability.setTextColor(Color.GREEN);
         }
 
-        //Set start-stop button text-
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        firestore.collection("Vehicles")
+        if (user != null) {
+            // Get the user's UID
+            UId = user.getUid();
+        }
+
+        //Set start-stop button text-
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("Companies")
+                .document(UId).
+                collection("Vehicles")
                 .document(vehicleId)
                 .collection("history")
                 .document("start-stop")
@@ -97,7 +106,7 @@ public class VehicleActivity extends AppCompatActivity {
                                 String latestAction = (String) entries.get(latestKey);
 
 
-                                // Now, you can check if the latest action was "start" or "stop"
+                                // Now, we can check if the latest action was "start" or "stop"
                                 if ("start".equals(latestAction)) {
                                     btnStartStop.setText("Stop");
                                 } else if ("stop".equals(latestAction)) {
@@ -156,8 +165,10 @@ public class VehicleActivity extends AppCompatActivity {
                     updateHoursTillTreatment(now);
                 }
 
-                FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-                firestore.collection("Vehicles")
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("Companies")
+                        .document(UId).
+                        collection("Vehicles")
                         .document(vehicleId)
                         .collection("history")
                         .document("start-stop")
@@ -189,9 +200,11 @@ public class VehicleActivity extends AppCompatActivity {
         //parse "now" sting timestamp into long
         Long nowLong = Long.parseLong(now);
 
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        firestore.collection("Vehicles")
+        db.collection("Companies")
+                .document(UId).
+                collection("Vehicles")
                 .document(getIntent().getStringExtra("vehicleId"))
                 .collection("history")
                 .document("start-stop")
@@ -216,7 +229,9 @@ public class VehicleActivity extends AppCompatActivity {
                                 double deltaHours = ((double) (nowLong-latestKeyLong)) / (60 * 60 * 1000);
 
                                 //update hours till treatment
-                                DocumentReference docRef = firestore.collection("Vehicles")
+                                DocumentReference docRef = db.collection("Companies")
+                                        .document(UId).
+                                        collection("Vehicles")
                                         .document(getIntent().getStringExtra("vehicleId"));
 
                                 docRef.get().addOnSuccessListener(documentSnapshot -> {
