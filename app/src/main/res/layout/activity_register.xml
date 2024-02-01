@@ -92,6 +92,23 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/registerCompanyIDTil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/registerCompanyID"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:hint="@string/company_id"
+                        android:inputType="text"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/RegisterEmailTil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

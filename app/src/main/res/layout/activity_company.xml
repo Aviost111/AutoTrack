@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ManagerActivity">
+    tools:context=".CompanyActivity">
 
     <!-- Top Section with Buttons to Register New Employees and New Tool -->
     <LinearLayout
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/red"
-            android:text="@string/add_tool"
+            android:text="@string/add_vehicle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,6 +45,8 @@
 
     </LinearLayout>
 
+
+    <!-- Middle Section with Buttons to View Tools and Employees -->
     <LinearLayout
         android:id="@+id/middleSection"
         android:layout_width="match_parent"
@@ -52,12 +54,12 @@
         android:layout_below="@id/topSection"
         android:orientation="vertical"
         android:padding="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
+        app:layout_constraintBottom_toTopOf="@+id/bottomSection"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topSection"
-        app:layout_constraintVertical_bias="0.5">
+        app:layout_constraintVertical_bias="0.254">
 
         <!-- Text in the Middle Section -->
         <TextView
@@ -76,7 +78,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/red"
-            android:text="Tools" />
+            android:text="Vehicles"
+            android:layout_marginBottom="10dp"
+            />
 
         <!-- Second Button in the Middle Section -->
         <Button
@@ -84,11 +88,55 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/red"
-            android:text="Employees" />
+            android:text="Employees"
+            android:layout_marginBottom="10dp"/>
 
     </LinearLayout>
 
-    <!-- Bottom Section with Logout Button -->
+    <!-- Bottom Section with Delete Employee and Delete Vehicle Buttons -->
+    <LinearLayout
+        android:id="@+id/bottomSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
+        app:layout_constraintStart_toStartOf="parent"
+        android:padding="16dp"
+
+        >
+
+        <!-- Delete Employee Button -->
+        <Button
+            android:id="@+id/btnDeleteEmployee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
+            android:text="Delete Employee"
+            android:layout_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Delete Vehicle Button -->
+        <Button
+            android:id="@+id/btnDeleteVehicle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
+            android:text="Delete Vehicle"
+            android:layout_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </LinearLayout>
+
+
+
+
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="wrap_content"
