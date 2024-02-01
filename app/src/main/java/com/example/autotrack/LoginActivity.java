@@ -113,12 +113,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void checkUserTypeAndNavigate(String uid) {
-        db.collection("Managers").document(uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection("Companies").document(uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     if (task.getResult().exists()) {
-                        navigateToManagerActivity();
+                        navigateToCompanyActivity();
                     } else {
                         navigateToEmployeeActivity();
                     }
@@ -129,8 +129,8 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void navigateToManagerActivity() {
-        Toast.makeText(LoginActivity.this, "manager", Toast.LENGTH_SHORT).show();
+    private void navigateToCompanyActivity() {
+        Toast.makeText(LoginActivity.this, "Company", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(LoginActivity.this, ManagerActivity.class);
         editTextemail.setText("");
         editTextpwd.setText("");
@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void navigateToEmployeeActivity() {
-        Toast.makeText(LoginActivity.this, "employee", Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, "Employee", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(LoginActivity.this, EmployeeActivity.class);
         startActivity(intent);
     }
@@ -154,7 +154,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void startRegistrationActivity() {
-        Intent intent = new Intent(LoginActivity.this, RegisterManagerActivity.class);
+        Intent intent = new Intent(LoginActivity.this, RegisterCompanyActivity.class);
         startActivity(intent);
     }
 

@@ -1,8 +1,5 @@
 package com.example.autotrack;
 
-import static android.content.ContentValues.TAG;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,14 +7,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,19 +23,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RegisterManagerActivity extends AppCompatActivity {
+public class RegisterCompanyActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterManagerActivity";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private EditText editTextRegisterEmail, editTextRegisterConfirmEmail, editTextRegisterPwd,
-            editTextRegisterConfirmPwd, editTextRegisterPhoneNumber, editTextRegisterFirstName,
-            editTextRegisterLastName, editTextRegisterCompanyID;
+            editTextRegisterConfirmPwd, editTextRegisterPhoneNumber, editTextRegisterCompanyName
+            , editTextRegisterCompanyID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_register_manager);
 
         // Set the title for the ActionBar
         ActionBar actionBar = getSupportActionBar();
@@ -66,15 +59,13 @@ public class RegisterManagerActivity extends AppCompatActivity {
         editTextRegisterPwd = findViewById(R.id.RegisterPassword);
         editTextRegisterConfirmPwd = findViewById(R.id.RegisterConfirmPassword);
         editTextRegisterPhoneNumber = findViewById(R.id.registerPhone);
-        editTextRegisterFirstName = findViewById(R.id.registerFirstName);
-        editTextRegisterLastName = findViewById(R.id.registerLastName);
+        editTextRegisterCompanyName = findViewById(R.id.registerCompanyName);
         editTextRegisterCompanyID = findViewById(R.id.registerCompanyID);
     }
 
     // Helper method to handle the registration process
     private void handleRegistration() {
-        String textFirstName = editTextRegisterFirstName.getText().toString();
-        String textLastName = editTextRegisterLastName.getText().toString();
+        String textCompanyName = editTextRegisterCompanyName.getText().toString();
         String textPwd = editTextRegisterPwd.getText().toString();
         String textConfirmPwd = editTextRegisterConfirmPwd.getText().toString();
         String textEmail = editTextRegisterEmail.getText().toString();
@@ -82,19 +73,16 @@ public class RegisterManagerActivity extends AppCompatActivity {
         String textPhoneNumber = editTextRegisterPhoneNumber.getText().toString();
         String textCompanyID = editTextRegisterCompanyID.getText().toString();
 
-        if (validateInputs(textFirstName, textLastName, textCompanyID, textEmail, textConfirmEmail, textPhoneNumber, textPwd, textConfirmPwd)) {
-            registerUser(textFirstName, textLastName, textPhoneNumber, textEmail, textPwd, textCompanyID);
+        if (validateInputs(textCompanyName, textCompanyID, textEmail, textConfirmEmail, textPhoneNumber, textPwd, textConfirmPwd)) {
+            registerUser(textCompanyName, textPhoneNumber, textEmail, textPwd, textCompanyID);
         }
     }
 
     // Helper method to validate user inputs
-    private boolean validateInputs(String firstName, String lastName, String companyID, String email, String confirmEmail,
+    private boolean validateInputs(String ComapnyName, String companyID, String email, String confirmEmail,
                                    String phoneNumber, String password, String confirmPassword) {
-        if (TextUtils.isEmpty(firstName)) {
-            showErrorAndFocus(editTextRegisterFirstName, "Please enter your first name");
-            return false;
-        } else if (TextUtils.isEmpty(lastName)) {
-            showErrorAndFocus(editTextRegisterLastName, "Please enter your last name");
+        if (TextUtils.isEmpty(ComapnyName)) {
+            showErrorAndFocus(editTextRegisterCompanyName, "Please enter your first name");
             return false;
         } else if (TextUtils.isEmpty(companyID)) {
             showErrorAndFocus(editTextRegisterCompanyID, "Please enter your CompanyID");
@@ -129,13 +117,13 @@ public class RegisterManagerActivity extends AppCompatActivity {
     }
 
     // Helper method to register the user
-    private void registerUser(String textFirstName, String textLastName, String textPhoneNumber,
+    private void registerUser(String textCompanyName, String textPhoneNumber,
                               String textEmail, String textPwd, String companyID) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.createUserWithEmailAndPassword(textEmail, textPwd).addOnCompleteListener(this,
                 task -> {
                     if (task.isSuccessful()) {
-                        handleSuccessfulRegistration(textEmail, textFirstName, textLastName, textPhoneNumber, companyID);
+                        handleSuccessfulRegistration(textEmail,textCompanyName, textPhoneNumber, companyID);
                     } else {
                         handleRegistrationFailure(task);
                     }
@@ -143,30 +131,29 @@ public class RegisterManagerActivity extends AppCompatActivity {
     }
 
     // Helper method to handle successful registration
-    private void handleSuccessfulRegistration(String email, String firstName, String lastName, String phoneNumber, String companyID) {
-        Toast.makeText(RegisterManagerActivity.this, "User Registered", Toast.LENGTH_SHORT).show();
+    private void handleSuccessfulRegistration(String email, String companyName, String phoneNumber, String companyID) {
+        Toast.makeText(RegisterCompanyActivity.this, "User Registered", Toast.LENGTH_SHORT).show();
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         Map<String, Object> user = new HashMap<>();
         user.put("email", email);
-        user.put("first_name", firstName);
-        user.put("last_name", lastName);
+        user.put("company_name", companyName);
         user.put("phone", phoneNumber);
         user.put("company_id", companyID);
 
         assert firebaseUser != null;
-        db.collection("Managers").document(firebaseUser.getUid()).set(user)
+        db.collection("Companies").document(firebaseUser.getUid()).set(user)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(RegisterManagerActivity.this, "User saved", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterCompanyActivity.this, "User saved", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(RegisterManagerActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterCompanyActivity.this, "Error", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, e.toString());
                 });
 
         firebaseUser.sendEmailVerification();
 
-        Intent intent = new Intent(RegisterManagerActivity.this, LoginActivity.class);
+        Intent intent = new Intent(RegisterCompanyActivity.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
@@ -184,7 +171,7 @@ public class RegisterManagerActivity extends AppCompatActivity {
             showErrorAndFocus(editTextRegisterEmail, "User is already registered with this email.");
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
-            Toast.makeText(RegisterManagerActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterCompanyActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

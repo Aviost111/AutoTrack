@@ -14,6 +14,7 @@
     <string name="confirm_password">Confirm password:</string>
     <string name="register">Register</string>
     <string name="please_sign_up">Please sign-up</string>
+    <string name="company_name">Company name:</string>
     <string name="first_name">First name:</string>
     <string name="phone_number">Phone number:</string>
     <string name="last_name">Last name:</string>
@@ -28,4 +29,7 @@
     <string name="register_employee">Register Employee</string>
     <string name="employees_list">Employees List</string>
     <string name="company_id_reg">Company ID:</string>
+    <string name="menu_home">Menu home</string>
+    <string name="menu_gallery">Menu home</string>
+    <string name="menu_slideshow">Menu home</string>
 </resources>
