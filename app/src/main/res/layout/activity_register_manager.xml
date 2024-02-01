@@ -42,15 +42,32 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/registerCompanyNameTil"
+                    android:id="@+id/registerFirstNameTil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/registerCompanyName"
+                        android:id="@+id/registerFirstName"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:hint="@string/company_name"
+                        android:hint="@string/first_name"
+                        android:inputType="text"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/registerLastNameTil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/registerLastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:hint="@string/last_name"
                         android:inputType="text"
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="2dp" />

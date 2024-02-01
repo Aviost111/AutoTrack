@@ -4,14 +4,22 @@ import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -185,6 +193,7 @@ public class VehicleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Implement logic to navigate to the report car care / refueling page
+                showNameInputPopup();
             }
         });
 
@@ -195,6 +204,61 @@ public class VehicleActivity extends AppCompatActivity {
             }
         });
     }
+    private View.OnClickListener submitClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View popupView = inflater.inflate(R.layout.trying, null);
+            EditText nameInput = popupView.findViewById(R.id.name_input);
+            String name = nameInput.getText().toString();
+            Toast.makeText(VehicleActivity.this, name, Toast.LENGTH_LONG).show();
+
+
+            // Do something with the entered name
+            dismissPopupWindow(); // Close the popup
+        }
+    };
+
+    //avi
+    private PopupWindow popupWindow;
+
+    private void showNameInputPopup() {
+        if (popupWindow == null) {
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View popupView = inflater.inflate(R.layout.trying, null);
+            Button submitButton = popupView.findViewById(R.id.submit_button);
+
+            submitButton.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EditText nameInput = popupView.findViewById(R.id.name_input);
+                    String name = nameInput.getText().toString();
+                    Toast.makeText(VehicleActivity.this, name, Toast.LENGTH_LONG).show();
+                    Log.d("VehicleActivity", "Retrieved name: " + name);
+
+
+                    // Do something with the entered name
+                    dismissPopupWindow(); // Close the popup
+                }
+            });
+
+            submitButton.setOnClickListener(submitClickListener);
+
+            popupWindow = new PopupWindow(popupView, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
+            popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+        popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+        // Use a suitable anchor view in your layout
+    }
+
+    private void dismissPopupWindow() {
+        if (popupWindow != null) {
+            popupWindow.dismiss();
+        }
+    }
+
+    //avi
 
     private void updateHoursTillTreatment(String now){
         //parse "now" sting timestamp into long
