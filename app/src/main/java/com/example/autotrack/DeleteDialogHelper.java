@@ -2,17 +2,18 @@ package com.example.autotrack;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class DeleteDialogHelper {
     public static void showDialog(Context context, String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Delete " + type);
-        builder.setMessage("Enter the ID of the " + type + " to delete:");
+        builder.setMessage("Enter the ID of the " + type + " to remove:");
 
-        // Set up the input
+        // Set up the input field
         final EditText input = new EditText(context);
         builder.setView(input);
 
@@ -31,8 +32,36 @@ public class DeleteDialogHelper {
 
     // Method to delete the entity from the database
     private static void deleteEntity(Context context, String type, String id) {
-        // Implement the logic to delete the entity (employee/vehicle) with the provided ID from the database
-        // You can show a toast message to indicate success or failure
-        Toast.makeText(context, type + " deleted successfully", Toast.LENGTH_SHORT).show();
+        // remove the entity from the database
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        if (type.equals("Employees")) {
+            // Delete the employee document from the "Employees" collection
+            db.collection("Employees").document(id)
+                    .delete()
+                    .addOnSuccessListener(aVoid -> {
+                        // Employee successfully deleted
+                        Toast.makeText(context, "Employee deleted successfully", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        // Failed to delete employee
+                        Toast.makeText(context, "Failed to delete employee: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else if (type.equals("Vehicles")) {
+            // Delete the vehicle document from the "Vehicles" collection
+            db.collection("Vehicles").document(id)
+                    .delete()
+                    .addOnSuccessListener(aVoid -> {
+                        // Vehicle successfully deleted
+                        Toast.makeText(context, "Vehicle deleted successfully", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        // Failed to delete vehicle
+                        Toast.makeText(context, "Failed to delete vehicle: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            // Invalid entity type
+            Toast.makeText(context, "Invalid entity type", Toast.LENGTH_SHORT).show();
+        }
     }
 }

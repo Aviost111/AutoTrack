@@ -80,7 +80,8 @@ public class CompanyActivity extends AppCompatActivity {
                             displayManagerInfo(firstName, lastName);
                         } else {
                             // Document does not exist
-                            handleManagerNotFound();
+                            // Display an error message
+                            Toast.makeText(this, "Manager not found", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         // Task failed with an exception
@@ -92,11 +93,6 @@ public class CompanyActivity extends AppCompatActivity {
     private void displayManagerInfo(String firstName, String lastName) {
         String welcomeMessage = "Welcome, " + firstName + " " + lastName;
         tvProfileInfo.setText(welcomeMessage);
-    }
-
-    private void handleManagerNotFound() {
-        // Display an error message
-        Toast.makeText(this, "Manager not found", Toast.LENGTH_SHORT).show();
     }
 
     private void handleTaskFailure(Exception exception) {

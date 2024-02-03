@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void navigateToCompanyActivity() {
         Toast.makeText(LoginActivity.this, "Company", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LoginActivity.this, ManagerActivity.class);
+        Intent intent = new Intent(LoginActivity.this, CompanyActivity.class);
         editTextemail.setText("");
         editTextpwd.setText("");
         startActivity(intent);
