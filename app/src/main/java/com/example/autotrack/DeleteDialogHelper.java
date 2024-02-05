@@ -2,13 +2,14 @@ package com.example.autotrack;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class DeleteDialogHelper {
-    public static void showDialog(Context context, String type) {
+    public static void showDialog(Context context,FirebaseFirestore db, String companyUid, String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Delete " + type);
         builder.setMessage("Enter the ID of the " + type + " to remove:");
@@ -21,7 +22,7 @@ public class DeleteDialogHelper {
         builder.setPositiveButton("OK", (dialog, which) -> {
             String id = input.getText().toString();
             // Call a method to delete the entity with the provided ID
-            deleteEntity(context, type, id);
+            deleteEntity(context,db, companyUid, type, id);
         });
 
         // Set up the cancel button
@@ -31,13 +32,13 @@ public class DeleteDialogHelper {
     }
 
     // Method to delete the entity from the database
-    private static void deleteEntity(Context context, String type, String id) {
-        // remove the entity from the database
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static void deleteEntity(Context context,FirebaseFirestore db,String companyUid, String type, String id) {
+        // Remove the entity from the database
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         if (type.equals("Employees")) {
             // Delete the employee document from the "Employees" collection
-            db.collection("Employees").document(id)
+            db.collection("Companies").document(companyUid).collection("Employees").document(id)
                     .delete()
                     .addOnSuccessListener(aVoid -> {
                         // Employee successfully deleted
@@ -49,7 +50,7 @@ public class DeleteDialogHelper {
                     });
         } else if (type.equals("Vehicles")) {
             // Delete the vehicle document from the "Vehicles" collection
-            db.collection("Vehicles").document(id)
+            db.collection("Companies").document(companyUid).collection("Vehicles").document(id)
                     .delete()
                     .addOnSuccessListener(aVoid -> {
                         // Vehicle successfully deleted
@@ -64,4 +65,5 @@ public class DeleteDialogHelper {
             Toast.makeText(context, "Invalid entity type", Toast.LENGTH_SHORT).show();
         }
     }
+
 }

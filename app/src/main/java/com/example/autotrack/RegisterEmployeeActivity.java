@@ -117,7 +117,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         employeeData.put("last_name", lastName);
         employeeData.put("email", email);
         employeeData.put("phone", phone);
-        employeeData.put("company_ID", companyId);
+        employeeData.put("company_id", companyId);
         return employeeData;
     }
 
@@ -166,6 +166,8 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         Map<String, Object> userData = new HashMap<>();
         userData.put("company_id", companyId);
         userData.put("is_manager", false);
+        userData.put("first_name", etFirstName.getText().toString());
+        userData.put("last_name", etLastName.getText().toString());
 
         firestore.collection("User-ManagerId")
                 .document(email)
