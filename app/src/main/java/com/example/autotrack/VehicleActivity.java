@@ -5,8 +5,6 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -21,6 +19,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -73,86 +73,90 @@ public class VehicleActivity extends AppCompatActivity {
             userMail = user.getEmail();
         }
 
+        // Access a Cloud Firestore instance
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         // Get companyId (=ManagerId)
         db.collection("Users")
                 .document(userMail)
                 .get()
                 .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    Toast.makeText(VehicleActivity.this,"hi from exists", Toast.LENGTH_SHORT).show();
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            // Access the document data
+                            companyId = document.getString("company_id");
+                            String firstName = document.getString("first_name");
+                            String lastName = document.getString("last_name");
+                            // Set text for employee details
+                            textViewEmployeeDetails.setText(firstName + " " + lastName);
+                        } else {
+                            // Document doesn't exist
+                            Log.d("Firestore", "No such document");
+                        }
+                    } else {
+                        // Task failed with an exception
+                        Log.e("Firestore", "Error getting document: ", task.getException());
+                    }
 
-                                    // Access the document data
-                                    companyId = document.getString("company_id");
-                                    firstName = document.getString("first_name");
-                                    lastName = document.getString("last_name");
-                                    Toast.makeText(VehicleActivity.this,"id->"+companyId, Toast.LENGTH_SHORT).show();
+                    // See if last action was start or stop and set button string by that
+                    db.collection("Companies")
+                            .document(companyId).
+                            collection("Vehicles")
+                            .document(vehicleId)
+                            .collection("history")
+                            .document("start-stop")
+                            .get()
+                            .addOnCompleteListener(innerTask -> {
+                                if (innerTask.isSuccessful()) {
+                                    DocumentSnapshot startStopDocument = innerTask.getResult();
 
-                                    // Set text for employee details
-                                    textViewEmployeeDetails.setText(firstName + " " + lastName);
-                                }else{
-                                    Toast.makeText(VehicleActivity.this,"hi from else", Toast.LENGTH_SHORT).show();
+                                    if (startStopDocument.exists()) {
+                                        // Get all the entries from the document
+                                        Map<String, Object> entries = startStopDocument.getData();
 
+                                        // Find the latest entry by sorting keys in descending order
+                                        List<String> sortedKeys = new ArrayList<>(entries.keySet());
+                                        Collections.sort(sortedKeys, Collections.reverseOrder());
+
+                                        if (!sortedKeys.isEmpty()) {
+                                            // Get the key of the latest entry
+                                            String latestKey = sortedKeys.get(0);
+
+                                            // Get the action field from the latest entry
+                                            String latestAction = (String) entries.get(latestKey);
+
+
+                                            // Now, we can check if the latest action was "start" or "stop"
+                                            if ("start".equals(latestAction)) {
+                                                btnStartStop.setText("Stop");
+                                            } else if ("stop".equals(latestAction)) {
+                                                btnStartStop.setText("Start");
+                                            }
+                                        } else {
+                                            btnStartStop.setText("Start");
+                                        }
+                                    }
+                                } else {
+                                    // Handle errors
                                 }
-                            }
-                        });
+                            });
+                });
+
         // Set text for vehicle details
         textViewVehicleDetails.setText("VehicleType: " + vehicleType + " (ID: " + vehicleId + ")");
 
         //Set text for availability
-        if(hoursTillTreatment <= 0) {
+        if (hoursTillTreatment <= 0) {
             textViewAvailability.setText("Unavailable");
             textViewAvailability.setTextColor(Color.RED);
         } else {
             textViewAvailability.setText("Available");
             textViewAvailability.setTextColor(Color.GREEN);
         }
-        //todo here
-        // See if last action was start or stop and set button string by that
-        assert vehicleId != null;
-        Toast.makeText(VehicleActivity.this,"company id:"+companyId, Toast.LENGTH_SHORT).show();
-        companyId="1" ;
-
-        db.collection("Companies")
-                .document(companyId).
-                collection("Vehicles")
-                .document(vehicleId)
-                .collection("history")
-                .document("start-stop")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-
-                        DocumentSnapshot startStopDocument = task.getResult();
-
-                        if (startStopDocument.exists()) {
-                            // Get all the entries from the document
-                            Map<String, Object> entries = startStopDocument.getData();
-
-                            // Find the latest entry by sorting keys in descending order
-                            List<String> sortedKeys = new ArrayList<>(entries.keySet());
-                            Collections.sort(sortedKeys, Collections.reverseOrder());
-
-                            if (!sortedKeys.isEmpty()) {
-                                // Get the key of the latest entry
-                                String latestKey = sortedKeys.get(0);
-
-                                // Get the action field from the latest entry
-                                String latestAction = (String) entries.get(latestKey);
 
 
-                                // Now, we can check if the latest action was "start" or "stop"
-                                if ("start".equals(latestAction)) {
-                                    btnStartStop.setText("Stop");
-                                } else if ("stop".equals(latestAction)) {
-                                    btnStartStop.setText("Start");
-                                }
-                            } else {btnStartStop.setText("Start");}
-                        }
-                    } else {
-                    }
-                });
+
         //////////////////////////////////////////////////////////////////////////////
 
         // History button click listener
@@ -166,7 +170,8 @@ public class VehicleActivity extends AppCompatActivity {
                 intent.putExtra("vehicleId", vehicleId);
 
                 // Start the VehicleActivity
-                startActivity(intent);            }
+                startActivity(intent);
+            }
         });
 
         // Back button click listener
@@ -194,7 +199,7 @@ public class VehicleActivity extends AppCompatActivity {
                 if (btnStartStop.getText().equals("Start")) {
                     startStopData.put(now, "start");
                     btnStartStop.setText("Stop");
-                }else{
+                } else {
                     startStopData.put(now, "stop");
                     btnStartStop.setText("Start");
                     updateHoursTillTreatment(now);
@@ -221,7 +226,7 @@ public class VehicleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Implement logic to navigate to the report car care / refueling page
-                showNameInputPopup();
+//                showNameInputPopup();
             }
         });
 
@@ -293,7 +298,7 @@ private PopupWindow popupWindow;
     }
 //    //avi
 
-    private void updateHoursTillTreatment(String now){
+    private void updateHoursTillTreatment(String now) {
         //parse "now" string timestamp into long
         Long nowLong = Long.parseLong(now);
 
@@ -323,7 +328,7 @@ private PopupWindow popupWindow;
                                 String latestKey = sortedKeys.get(1);
                                 Long latestKeyLong = Long.parseLong(latestKey);
 
-                                double deltaHours = ((double) (nowLong-latestKeyLong)) / (60 * 60 * 1000);
+                                double deltaHours = ((double) (nowLong - latestKeyLong)) / (60 * 60 * 1000);
 
                                 //update hours till treatment
                                 DocumentReference docRef = db.collection("Companies")
