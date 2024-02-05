@@ -13,10 +13,13 @@
         android:theme="@style/Theme.AutoTrack"
         tools:targetApi="31">
         <activity
+            android:name=".EmployeesListActivity"
+            android:exported="false" />
+        <activity
             android:name=".VehicleHistoryActivity"
             android:exported="false" />
         <activity
-            android:name=".ManagerActivity"
+            android:name=".CompanyActivity"
             android:exported="false" />
         <activity
             android:name=".RegisterEmployeeActivity"

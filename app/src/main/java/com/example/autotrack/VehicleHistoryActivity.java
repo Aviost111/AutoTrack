@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -21,9 +23,10 @@ public class VehicleHistoryActivity extends AppCompatActivity {
 
     private ListView listViewTreatments;
     private ListView listViewRefuels;
-
     private FirebaseFirestore db;
     private String vehicleId;
+    private String UId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +47,20 @@ public class VehicleHistoryActivity extends AppCompatActivity {
         // Retrieve and populate treatments and refuels data
         retrieveAndPopulateData("treatments", listViewTreatments);
         retrieveAndPopulateData("refuels", listViewRefuels);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            // Get the user's UID
+            UId = user.getUid();
+        }
     }
 
     private void retrieveAndPopulateData(String subcollectionName, ListView listView) {
         // Reference to the "history" subcollection for the specific vehicle
-        CollectionReference historySubcollectionRef = db.collection("Vehicles")
+        CollectionReference historySubcollectionRef = db.collection("Companies")
+                .document(UId)
+                .collection("Vehicles")
                 .document(vehicleId)
                 .collection("history");
 

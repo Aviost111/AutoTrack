@@ -101,7 +101,7 @@
                         android:id="@+id/registerCompanyID"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:hint="@string/company_id_reg"
+                        android:hint="@string/company_id"
                         android:inputType="text"
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="2dp" />
