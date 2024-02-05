@@ -54,7 +54,7 @@ public class CompanyActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        setupClickListener(R.id.btnRegisterTool, RegisterToolActivity.class);
+        setupClickListener(R.id.btnRegisterTool, RegisterVehicleActivity.class);
         setupClickListener(R.id.btnRegisterEmployee, RegisterEmployeeActivity.class);
         setupClickListener(R.id.btnLogout, LoginActivity.class);
         setupClickListener(R.id.btnToolsList, EmployeeActivity.class);

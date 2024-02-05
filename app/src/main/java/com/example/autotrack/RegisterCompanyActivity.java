@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class RegisterCompanyActivity extends AppCompatActivity {
 
-    private static final String TAG = "RegisterManagerActivity";
+    private static final String TAG = "RegisterCompanyActivity";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private EditText editTextRegisterEmail, editTextRegisterConfirmEmail, editTextRegisterPwd,
