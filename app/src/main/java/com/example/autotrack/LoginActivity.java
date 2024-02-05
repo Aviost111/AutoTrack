@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         String pwd = editTextpwd.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            showErrorAndFocus(editTextemail, "Please enter an email");
+            showErrorAndFocus(editTextemail, "Please enter an email!");
         } else if (TextUtils.isEmpty(pwd)) {
             showErrorAndFocus(editTextpwd, "Please enter your Password");
         } else {
