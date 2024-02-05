@@ -67,7 +67,9 @@ public class CompanyActivity extends AppCompatActivity {
         // Add click listener for the "Delete Vehicle" button
         Button btnDeleteVehicle = findViewById(R.id.btnDeleteVehicle);
         btnDeleteVehicle.setOnClickListener(v -> showDeleteDialog("Vehicles"));
+
     }
+
 
     private void retrieveManagerInfo(String uid) {
         db.collection("Companies")
