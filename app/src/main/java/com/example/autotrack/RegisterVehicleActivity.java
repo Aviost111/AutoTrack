@@ -18,10 +18,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class RegisterToolActivity extends AppCompatActivity {
+public class RegisterVehicleActivity extends AppCompatActivity {
 
     // Tag for logging purposes
-    private static final String TAG = "RegisterToolActivity";
+    private static final String TAG = "RegisterVehicleActivity";
 
     // Firebase instance
     private FirebaseFirestore firestore;
@@ -35,7 +35,7 @@ public class RegisterToolActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_tool);
+        setContentView(R.layout.activity_register_vehicle);
 
         // Initialize UI elements
         initializeViews();
@@ -50,10 +50,6 @@ public class RegisterToolActivity extends AppCompatActivity {
         FirebaseUser companyUser = FirebaseAuth.getInstance().getCurrentUser();
         assert companyUser != null;
         companyId = companyUser.getUid();
-
-        //Get the company ID from the manager's document and assign it to the companyId variable
-
-//        getCompanyIdFromManager(managerUser.getUid());
 
         // Set click listener for the "Register Tool" button
         btnRegisterTool.setOnClickListener(view -> registerTool());
@@ -120,16 +116,6 @@ public class RegisterToolActivity extends AppCompatActivity {
         }
     }
 
-    // Helper method to check if any of the provided fields are empty
-    private boolean areFieldsEmpty(String... fields) {
-        for (String field : fields) {
-            if (field.isEmpty()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     // Helper method to create a Map with tool data
     private Map<String, Object> createToolDataMap(String type, String ID, String engineSize,
                                                   int manufactureYear, double treatmentHours, String version) {
@@ -148,6 +134,7 @@ public class RegisterToolActivity extends AppCompatActivity {
 
     // Helper method to upload data to Firebase
     private void uploadDataToFirebase(String documentID, Map<String, Object> data) {
+        Log.d("companyId", "uploadDataToFirebase: " + companyId);
         firestore.collection("Companies")
                 .document(companyId).collection("Vehicles")
                 .document(documentID)
@@ -159,7 +146,7 @@ public class RegisterToolActivity extends AppCompatActivity {
                     createHistorySubCollection(documentID);
 
                     // Show a success message
-                    Toast.makeText(RegisterToolActivity.this, "Vehicle registered successfully", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterVehicleActivity.this, "Vehicle registered successfully", Toast.LENGTH_LONG).show();
 
                     //wait before going back to manager activity
                     try {
@@ -173,7 +160,7 @@ public class RegisterToolActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     // Error uploading data
                     // Show an error message
-                    Toast.makeText(RegisterToolActivity.this, "Vehicle registration failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterVehicleActivity.this, "Vehicle registration failed", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, e.toString());
                 });
     }
@@ -186,7 +173,7 @@ public class RegisterToolActivity extends AppCompatActivity {
 
     // Helper method to navigate to another activity and finish the current activity
     private void navigateToActivity(Class<?> destinationClass) {
-        Intent intent = new Intent(RegisterToolActivity.this, destinationClass);
+        Intent intent = new Intent(RegisterVehicleActivity.this, destinationClass);
         startActivity(intent);
         finish(); // Finish the current activity to prevent going back via backspace button
     }

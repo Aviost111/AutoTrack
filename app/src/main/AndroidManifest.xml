@@ -13,26 +13,20 @@
         android:theme="@style/Theme.AutoTrack"
         tools:targetApi="31">
         <activity
-            android:name=".EmployeesListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".VehicleHistoryActivity"
-            android:exported="false" />
-        <activity
             android:name=".CompanyActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".RegisterEmployeeActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
-            android:name=".RegisterToolActivity"
-            android:exported="false" />
+            android:name=".RegisterVehicleActivity"
+            android:exported="false"/>
         <activity
             android:name=".EmployeeActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".VehicleActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".RegisterCompanyActivity"
             android:exported="false" />
@@ -45,6 +39,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".EmployeesListActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".EmployeeDetailsActivity"
+            android:exported="false"/>
+        
     </application>
 
 </manifest>

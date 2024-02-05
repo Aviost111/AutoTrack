@@ -19,6 +19,7 @@ public class CompanyActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private TextView tvProfileInfo;
+    private String uid;
 
 
     @SuppressLint("UseSupportActionBar")
@@ -40,8 +41,10 @@ public class CompanyActivity extends AppCompatActivity {
         // Retrieve the currently signed-in user
         FirebaseUser user = mAuth.getCurrentUser();
 
+
         if (user != null) {
-            retrieveManagerInfo(user.getUid());
+            uid = user.getUid();
+            retrieveManagerInfo(uid);
         } else {
             // If the user is not signed in, navigate to the login screen
             // Pop an error message using toast and go back to the login screen
@@ -51,7 +54,7 @@ public class CompanyActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        setupClickListener(R.id.btnRegisterTool, RegisterToolActivity.class);
+        setupClickListener(R.id.btnRegisterTool, RegisterVehicleActivity.class);
         setupClickListener(R.id.btnRegisterEmployee, RegisterEmployeeActivity.class);
         setupClickListener(R.id.btnLogout, LoginActivity.class);
         setupClickListener(R.id.btnToolsList, EmployeeActivity.class);
@@ -59,11 +62,11 @@ public class CompanyActivity extends AppCompatActivity {
 
         // Add click listener for the "Delete Employee" button
         Button btnDeleteEmployee = findViewById(R.id.btnDeleteEmployee);
-        btnDeleteEmployee.setOnClickListener(v -> showDeleteDialog("Employee"));
+        btnDeleteEmployee.setOnClickListener(v -> showDeleteDialog("Employees"));
 
         // Add click listener for the "Delete Vehicle" button
         Button btnDeleteVehicle = findViewById(R.id.btnDeleteVehicle);
-        btnDeleteVehicle.setOnClickListener(v -> showDeleteDialog("Vehicle"));
+        btnDeleteVehicle.setOnClickListener(v -> showDeleteDialog("Vehicles"));
     }
 
     private void retrieveManagerInfo(String uid) {
@@ -80,7 +83,8 @@ public class CompanyActivity extends AppCompatActivity {
                             displayManagerInfo(firstName, lastName);
                         } else {
                             // Document does not exist
-                            handleManagerNotFound();
+                            // Display an error message
+                            Toast.makeText(this, "Manager not found", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         // Task failed with an exception
@@ -92,11 +96,6 @@ public class CompanyActivity extends AppCompatActivity {
     private void displayManagerInfo(String firstName, String lastName) {
         String welcomeMessage = "Welcome, " + firstName + " " + lastName;
         tvProfileInfo.setText(welcomeMessage);
-    }
-
-    private void handleManagerNotFound() {
-        // Display an error message
-        Toast.makeText(this, "Manager not found", Toast.LENGTH_SHORT).show();
     }
 
     private void handleTaskFailure(Exception exception) {
@@ -120,7 +119,7 @@ public class CompanyActivity extends AppCompatActivity {
 
     // Method to show the delete dialog
     private void showDeleteDialog(String type) {
-        DeleteDialogHelper.showDialog(this, type);
+        DeleteDialogHelper.showDialog(this,db,uid, type);
     }
 
 }

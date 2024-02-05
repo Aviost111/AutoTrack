@@ -8,7 +8,6 @@ import java.util.Calendar;
 // It is used in RegisterEmployeeActivity and RegisterToolActivity to validate the user input
 public class InputValidator {
 
-
     // Helper method to check if any of the provided fields are empty
     public static boolean areFieldsEmpty(String... fields) {
         for (String field : fields) {

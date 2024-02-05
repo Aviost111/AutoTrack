@@ -106,7 +106,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
             Map<String, String> employeeData = createEmployeeDataMap(firstName, lastName, email, phone, companyId);
 
             // Upload data to Firebase
-            uploadDataToFirebase(employeeData , email);
+            uploadDataToFirebase(employeeData, email);
         }
     }
 
@@ -117,12 +117,12 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         employeeData.put("last_name", lastName);
         employeeData.put("email", email);
         employeeData.put("phone", phone);
-        employeeData.put("company_ID", companyId);
+        employeeData.put("company_id", companyId);
         return employeeData;
     }
 
     // Helper method to upload data to Firebase
-    private void uploadDataToFirebase(Map<String, String> data ,String email) {
+    private void uploadDataToFirebase(Map<String, String> data, String email) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         // Create a new user with the provided email and password
         // As default, the new user's password is set to "password"
@@ -143,6 +143,9 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
                                     // Create the "history" subCollection
                                     createHistorySubCollection(email);
 
+                                    // Add the employee mail to the company's employees list
+                                    addToUserManagerId(email);
+
                                     // Navigate to the ManagerActivity
                                     navigateToActivity(CompanyActivity.class);
                                 })
@@ -156,6 +159,19 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private void addToUserManagerId(String email) {
+        // Update the "User-ManagerId" data
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("company_id", companyId);
+        userData.put("is_manager", false);
+        userData.put("first_name", etFirstName.getText().toString());
+        userData.put("last_name", etLastName.getText().toString());
+
+        firestore.collection("Users")
+                .document(email)
+                .set(userData);
     }
 
     // Helper method to handle user registration failure
@@ -219,7 +235,6 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         // All validations passed
         return true;
     }
-
 
 
     // Helper method to create a subCollection for "history"
