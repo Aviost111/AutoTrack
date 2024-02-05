@@ -1,16 +1,29 @@
 package com.example.autotrack;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -26,8 +39,12 @@ import java.util.Map;
 
 public class VehicleActivity extends AppCompatActivity {
 
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     private String userMail;
     private String companyId;
+    private String firstName;
+    private String lastName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +88,8 @@ public class VehicleActivity extends AppCompatActivity {
                         if (document.exists()) {
                             // Access the document data
                             companyId = document.getString("company_id");
-                            String firstName = document.getString("first_name");
-                            String lastName = document.getString("last_name");
+                            firstName = document.getString("first_name");
+                            lastName = document.getString("last_name");
                             // Set text for employee details
                             textViewEmployeeDetails.setText(firstName + " " + lastName);
                         } else {
@@ -211,7 +228,7 @@ public class VehicleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Implement logic to navigate to the report car care / refueling page
-//                showNameInputPopup();
+                showNameInputPopup();
             }
         });
 
@@ -222,60 +239,65 @@ public class VehicleActivity extends AppCompatActivity {
             }
         });
     }
-//    private View.OnClickListener submitClickListener = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            View popupView = inflater.inflate(R.layout.trying, null);
-//            EditText nameInput = popupView.findViewById(R.id.name_input);
-//            String name = nameInput.getText().toString();
-//            Toast.makeText(VehicleActivity.this, name, Toast.LENGTH_LONG).show();
-//
-//
-//            // Do something with the entered name
-//            dismissPopupWindow(); // Close the popup
-//        }
-//    };
-//
+
 //    //avi
-//    private PopupWindow popupWindow;
-//
-//    private void showNameInputPopup() {
-//        if (popupWindow == null) {
-//            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            View popupView = inflater.inflate(R.layout.trying, null);
-//            Button submitButton = popupView.findViewById(R.id.submit_button);
-//
-//            submitButton.setOnClickListener( new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    EditText nameInput = popupView.findViewById(R.id.name_input);
-//                    String name = nameInput.getText().toString();
-//                    Toast.makeText(VehicleActivity.this, name, Toast.LENGTH_LONG).show();
-//                    Log.d("VehicleActivity", "Retrieved name: " + name);
-//
-//
-//                    // Do something with the entered name
-//                    dismissPopupWindow(); // Close the popup
-//                }
-//            });
-//
-//            submitButton.setOnClickListener(submitClickListener);
-//
-//            popupWindow = new PopupWindow(popupView, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
-//            popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        }
-//
-//        popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
-//        // Use a suitable anchor view in your layout
-//    }
-//
-//    private void dismissPopupWindow() {
-//        if (popupWindow != null) {
-//            popupWindow.dismiss();
-//        }
-//    }
-//
+private PopupWindow popupWindow;
+
+    private void showNameInputPopup() {
+        if (popupWindow == null) {
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View popupView = inflater.inflate(R.layout.trying, null);
+            Button submitButton = popupView.findViewById(R.id.submit_button);
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            FirebaseUser firebaseUser = auth.getCurrentUser();
+            assert firebaseUser != null;
+
+            submitButton.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EditText nameInput = popupView.findViewById(R.id.name_input);
+                    String name = nameInput.getText().toString();
+                    Toast.makeText(VehicleActivity.this, name, Toast.LENGTH_LONG).show();
+                    String now = String.valueOf(System.currentTimeMillis());
+                    Map<String,Object> fuel =new HashMap<>();
+                    fuel.put(now,name);
+                    Log.d("VehicleActivity", "Retrieved name: " + name);
+                    String path = "Companies/"+companyId+"/Employees/"+userMail+"/history/refuels";
+                    DocumentReference docRef = db.document(path);
+                    docRef.set(fuel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(VehicleActivity.this, "refuel saved", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Handle failure to save user data
+                                    Toast.makeText(VehicleActivity.this, "not saved", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, e.toString());
+                                }
+                            });
+
+                    // Do something with the entered name
+                    dismissPopupWindow(); // Close the popup
+                }
+            });
+
+
+            popupWindow = new PopupWindow(popupView, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
+            popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+        popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+        // Use a suitable anchor view in your layout
+    }
+
+    private void dismissPopupWindow() {
+        if (popupWindow != null) {
+            popupWindow.dismiss();
+        }
+    }
 //    //avi
 
     private void updateHoursTillTreatment(String now) {

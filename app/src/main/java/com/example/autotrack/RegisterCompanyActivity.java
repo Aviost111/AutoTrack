@@ -59,7 +59,6 @@ public class RegisterCompanyActivity extends AppCompatActivity {
         editTextRegisterPhoneNumber = findViewById(R.id.registerPhone);
         editTextRegisterFirstName = findViewById(R.id.registerFirstName);
         editTextRegisterLastName = findViewById(R.id.registerLastName);
-        editTextRegisterCompanyID = findViewById(R.id.registerCompanyID);
 
         Button buttonRegister = findViewById(R.id.RegisterButton);
         buttonRegister.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +72,6 @@ public class RegisterCompanyActivity extends AppCompatActivity {
                 String textEmail = editTextRegisterEmail.getText().toString();
                 String textConfirmEmail = editTextRegisterConfirmEmail.getText().toString();
                 String textPhoneNumber = editTextRegisterPhoneNumber.getText().toString();
-                String textCompanyID = editTextRegisterCompanyID.getText().toString();
 
                 // Input validation checks
                 if (TextUtils.isEmpty(textFirstname)) {
@@ -85,11 +83,6 @@ public class RegisterCompanyActivity extends AppCompatActivity {
                     // Display error message for last name
                     Toast.makeText(RegisterCompanyActivity.this, "Please enter your last name", Toast.LENGTH_SHORT).show();
                     editTextRegisterLastName.setError("Last name required");
-                    editTextRegisterLastName.requestFocus();
-                } else if (TextUtils.isEmpty(textCompanyID)) {
-                    // Display error message for company id
-                    Toast.makeText(RegisterCompanyActivity.this, "Please enter your CompanyID", Toast.LENGTH_SHORT).show();
-                    editTextRegisterLastName.setError("CompanyID required");
                     editTextRegisterLastName.requestFocus();
                 } else if (TextUtils.isEmpty(textEmail)) {
                     // Display error message for email
@@ -125,14 +118,14 @@ public class RegisterCompanyActivity extends AppCompatActivity {
                     editTextRegisterPwd.clearComposingText();
                 } else {
                     // If all checks pass, register the user
-                    registerUser(textFirstname, textLastname, textPhoneNumber, textEmail, textPwd, textCompanyID);
+                    registerUser(textFirstname, textLastname, textPhoneNumber, textEmail, textPwd);
                 }
             }
         });
     }
 
     private void registerUser(String textFirstName, String textLastName, String textPhoneNumber,
-                              String textEmail, String textPwd, String companyID) {
+                              String textEmail, String textPwd) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         // Create user
         auth.createUserWithEmailAndPassword(textEmail, textPwd).addOnCompleteListener(RegisterCompanyActivity.this,
@@ -143,6 +136,7 @@ public class RegisterCompanyActivity extends AppCompatActivity {
                             // User registration successful
                             Toast.makeText(RegisterCompanyActivity.this, "User Registered", Toast.LENGTH_SHORT).show();
                             FirebaseUser firebaseUser = auth.getCurrentUser();
+                            assert firebaseUser != null;
 
                             // Create a user data map company
                             Map<String, Object> company = new HashMap<>();
@@ -150,18 +144,17 @@ public class RegisterCompanyActivity extends AppCompatActivity {
                             company.put("first_name", textFirstName);
                             company.put("last_name", textLastName);
                             company.put("phone", textPhoneNumber);
-                            company.put("company_id", companyID);
+                            company.put("company_id", firebaseUser.getUid());
 
                             //Create a user data map for user
                             Map<String,Object> users =new HashMap<>();
-                            users.put("company_id",companyID);
+                            users.put("company_id",firebaseUser.getUid());
                             users.put("first_name", textFirstName);
                             users.put("last_name", textLastName);
                             users.put("is_manager",true);
 
-                            assert firebaseUser != null;
                             // Save user data to Firestore
-                            db.collection("Managers").document(firebaseUser.getUid()).set(company)
+                            db.collection("Companies").document(firebaseUser.getUid()).set(company)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
