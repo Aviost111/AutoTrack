@@ -169,7 +169,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         userData.put("first_name", etFirstName.getText().toString());
         userData.put("last_name", etLastName.getText().toString());
 
-        firestore.collection("User-ManagerId")
+        firestore.collection("Users")
                 .document(email)
                 .set(userData);
     }

@@ -128,6 +128,7 @@ public class RegisterToolActivity extends AppCompatActivity {
             }
         }
         return false;
+
     }
 
     // Helper method to create a Map with tool data
