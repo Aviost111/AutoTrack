@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 // EmployeeActivity.java
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,70 +13,90 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeActivity extends AppCompatActivity {
 
-    private TextView textViewEmployeeDetails;
     private ListView listViewFactoryVehicles;
-    private Button btnLogout;
-
-    private String UId;
+    private String userMail;
+    private boolean isManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee);
-
-        textViewEmployeeDetails = findViewById(R.id.textViewEmployeeDetails);
+        TextView textViewEmployeeDetails = findViewById(R.id.textViewEmployeeDetails);
         listViewFactoryVehicles = findViewById(R.id.listViewFactoryVehicles);
-        btnLogout = findViewById(R.id.btnLogout);
+        Button btnLogout = findViewById(R.id.btnLogout);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
             // Get the user's UID
-            UId = user.getUid();
+            userMail = user.getEmail();
         }
 
         // Access a Cloud Firestore instance
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Read data from the "vehicles" collection
-        db.collection("Companies")
-                .document(UId)
-                .collection("Vehicles")
+        // Get companyId (=ManagerId)
+        db.collection("Users")
+                .document(userMail)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        List<Vehicle> vehicleList = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            // Convert the document to a Vehicle object
-                            Vehicle vehicle = document.toObject(Vehicle.class);
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            // Access the document data
+                            String companyId = document.getString("company_id");
+                            String firstName = document.getString("first_name");
+                            String lastName = document.getString("last_name");
+                            isManager = document.getBoolean("is_manager");
 
-                            // Add the Vehicle object to the list
-                            vehicleList.add(vehicle);
+                            // Set userName
+                            textViewEmployeeDetails.setText(firstName + " " + lastName);
+
+                            // Set logout/ back button
+                            if(isManager) btnLogout.setText("Back");
+                            else btnLogout.setText("Logout");
+
+                            // Read data from the "vehicles" collection
+                            db.collection("Companies")
+                                    .document(companyId)
+                                    .collection("Vehicles")
+                                    .get()
+                                    .addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            List<Vehicle> vehicleList = new ArrayList<>();
+                                            for (QueryDocumentSnapshot document1 : task1.getResult()) {
+                                                // Convert the document to a Vehicle object
+                                                Vehicle vehicle = document1.toObject(Vehicle.class);
+
+                                                // Add the Vehicle object to the list
+                                                vehicleList.add(vehicle);
+                                            }
+                                            updateListView(vehicleList);
+                                        } else {
+                                            // Handle errors
+
+                                        }
+                                    });
+                        } else {
+                            Log.d("Firestore", "No such document");
                         }
-                        updateListView(vehicleList);
                     } else {
                         // Handle errors
-
+                        Exception exception = task.getException();
+                        if (exception != null) {
+                            System.err.println("Error getting documents: " + exception.getMessage());
+                        }
                     }
                 });
 
@@ -86,10 +105,15 @@ public class EmployeeActivity extends AppCompatActivity {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EmployeeActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish(); // Finish the current activity to prevent going back to it from the login page
+                if(isManager){
+                    // Finish the current activity to go back
+                    finish();
+                } else {
+                    Intent intent = new Intent(EmployeeActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish(); // Finish the current activity to prevent going back to it from the login page
+                }
             }
         });
     }

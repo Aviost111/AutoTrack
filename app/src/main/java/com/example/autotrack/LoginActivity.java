@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         if (task.getResult().exists()) {
                                             Toast.makeText(LoginActivity.this, "manager", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(LoginActivity.this, ManagerActivity.class);
+                                            Intent intent = new Intent(LoginActivity.this, CompanyActivity.class);
                                             editTextemail.setText("");
                                             editTextpwd.setText("");
                                             startActivity(intent);
@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, RegisterCompanyActivity.class);
                         startActivity(intent);
                     }
                 }, 200); // Adjust delay as needed

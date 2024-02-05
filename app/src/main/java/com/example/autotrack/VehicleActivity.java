@@ -1,34 +1,19 @@
 package com.example.autotrack;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.ActionBar;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.EditText;
 import android.widget.Toast;
-
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,7 +23,8 @@ import java.util.Map;
 
 public class VehicleActivity extends AppCompatActivity {
 
-    private String UId;
+    private String userMail;
+    private String companyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +43,40 @@ public class VehicleActivity extends AppCompatActivity {
 
         // Retrieve data from Intent
         Intent intent = getIntent();
-
-        String employeeName = "Avi Ostroff";  // Replace with actual employee name
-        String employeeId = "12345";       // Replace with actual employee ID
         String vehicleId = intent.getStringExtra("vehicleId");
         String vehicleType = intent.getStringExtra("vehicleType");
         double hoursTillTreatment = intent.getDoubleExtra("hoursTillTreatment", 0);
 
-        // Set text for employee and vehicle details
-        textViewEmployeeDetails.setText("Employee: " + employeeName + " (ID: " + employeeId + ")");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Get user data
+        if (user != null) {
+            // Get the user's UID
+            userMail = user.getEmail();
+        }
+
+        // Access a Cloud Firestore instance
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Get companyId (=ManagerId)
+        db.collection("Users")
+                .document(userMail)
+                .get()
+                .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    // Access the document data
+                                    companyId = document.getString("company_id");
+                                    String firstName = document.getString("first_name");
+                                    String lastName = document.getString("last_name");
+                                    // Set text for employee details
+                                    textViewEmployeeDetails.setText(firstName + " " + lastName);
+                                }
+                            }
+                        });
+
+        // Set text for vehicle details
         textViewVehicleDetails.setText("VehicleType: " + vehicleType + " (ID: " + vehicleId + ")");
 
         //Set text for availability
@@ -77,18 +88,9 @@ public class VehicleActivity extends AppCompatActivity {
             textViewAvailability.setTextColor(Color.GREEN);
         }
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user != null) {
-            // Get the user's UID
-            UId = user.getUid();
-        }
-
-        //Set start-stop button text-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+        // See if last action was start or stop and set button string by that
         db.collection("Companies")
-                .document(UId).
+                .document(companyId).
                 collection("Vehicles")
                 .document(vehicleId)
                 .collection("history")
@@ -173,9 +175,10 @@ public class VehicleActivity extends AppCompatActivity {
                     updateHoursTillTreatment(now);
                 }
 
+                // Update data on start-stop
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 db.collection("Companies")
-                        .document(UId).
+                        .document(companyId).
                         collection("Vehicles")
                         .document(vehicleId)
                         .collection("history")
@@ -193,7 +196,7 @@ public class VehicleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Implement logic to navigate to the report car care / refueling page
-                showNameInputPopup();
+//                showNameInputPopup();
             }
         });
 
@@ -204,70 +207,70 @@ public class VehicleActivity extends AppCompatActivity {
             }
         });
     }
-    private View.OnClickListener submitClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View popupView = inflater.inflate(R.layout.trying, null);
-            EditText nameInput = popupView.findViewById(R.id.name_input);
-            String name = nameInput.getText().toString();
-            Toast.makeText(VehicleActivity.this, name, Toast.LENGTH_LONG).show();
-
-
-            // Do something with the entered name
-            dismissPopupWindow(); // Close the popup
-        }
-    };
-
-    //avi
-    private PopupWindow popupWindow;
-
-    private void showNameInputPopup() {
-        if (popupWindow == null) {
-            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View popupView = inflater.inflate(R.layout.trying, null);
-            Button submitButton = popupView.findViewById(R.id.submit_button);
-
-            submitButton.setOnClickListener( new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EditText nameInput = popupView.findViewById(R.id.name_input);
-                    String name = nameInput.getText().toString();
-                    Toast.makeText(VehicleActivity.this, name, Toast.LENGTH_LONG).show();
-                    Log.d("VehicleActivity", "Retrieved name: " + name);
-
-
-                    // Do something with the entered name
-                    dismissPopupWindow(); // Close the popup
-                }
-            });
-
-            submitButton.setOnClickListener(submitClickListener);
-
-            popupWindow = new PopupWindow(popupView, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
-            popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        }
-
-        popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
-        // Use a suitable anchor view in your layout
-    }
-
-    private void dismissPopupWindow() {
-        if (popupWindow != null) {
-            popupWindow.dismiss();
-        }
-    }
-
-    //avi
+//    private View.OnClickListener submitClickListener = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//            View popupView = inflater.inflate(R.layout.trying, null);
+//            EditText nameInput = popupView.findViewById(R.id.name_input);
+//            String name = nameInput.getText().toString();
+//            Toast.makeText(VehicleActivity.this, name, Toast.LENGTH_LONG).show();
+//
+//
+//            // Do something with the entered name
+//            dismissPopupWindow(); // Close the popup
+//        }
+//    };
+//
+//    //avi
+//    private PopupWindow popupWindow;
+//
+//    private void showNameInputPopup() {
+//        if (popupWindow == null) {
+//            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//            View popupView = inflater.inflate(R.layout.trying, null);
+//            Button submitButton = popupView.findViewById(R.id.submit_button);
+//
+//            submitButton.setOnClickListener( new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    EditText nameInput = popupView.findViewById(R.id.name_input);
+//                    String name = nameInput.getText().toString();
+//                    Toast.makeText(VehicleActivity.this, name, Toast.LENGTH_LONG).show();
+//                    Log.d("VehicleActivity", "Retrieved name: " + name);
+//
+//
+//                    // Do something with the entered name
+//                    dismissPopupWindow(); // Close the popup
+//                }
+//            });
+//
+//            submitButton.setOnClickListener(submitClickListener);
+//
+//            popupWindow = new PopupWindow(popupView, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
+//            popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        }
+//
+//        popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+//        // Use a suitable anchor view in your layout
+//    }
+//
+//    private void dismissPopupWindow() {
+//        if (popupWindow != null) {
+//            popupWindow.dismiss();
+//        }
+//    }
+//
+//    //avi
 
     private void updateHoursTillTreatment(String now){
-        //parse "now" sting timestamp into long
+        //parse "now" string timestamp into long
         Long nowLong = Long.parseLong(now);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("Companies")
-                .document(UId).
+                .document(companyId).
                 collection("Vehicles")
                 .document(getIntent().getStringExtra("vehicleId"))
                 .collection("history")
@@ -294,7 +297,7 @@ public class VehicleActivity extends AppCompatActivity {
 
                                 //update hours till treatment
                                 DocumentReference docRef = db.collection("Companies")
-                                        .document(UId).
+                                        .document(companyId).
                                         collection("Vehicles")
                                         .document(getIntent().getStringExtra("vehicleId"));
 
