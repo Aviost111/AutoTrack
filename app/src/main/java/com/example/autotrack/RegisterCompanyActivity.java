@@ -144,18 +144,24 @@ public class RegisterCompanyActivity extends AppCompatActivity {
                             Toast.makeText(RegisterCompanyActivity.this, "User Registered", Toast.LENGTH_SHORT).show();
                             FirebaseUser firebaseUser = auth.getCurrentUser();
 
-                            // Create a user data map
-                            Map<String, Object> user = new HashMap<>();
-                            user.put("email", textEmail);
-                            user.put("first_name", textFirstName);
-                            user.put("last_name", textLastName);
-                            user.put("phone", textPhoneNumber);
-                            user.put("company_id", companyID);
+                            // Create a user data map company
+                            Map<String, Object> company = new HashMap<>();
+                            company.put("email", textEmail);
+                            company.put("first_name", textFirstName);
+                            company.put("last_name", textLastName);
+                            company.put("phone", textPhoneNumber);
+                            company.put("company_id", companyID);
 
+                            //Create a user data map for user
+                            Map<String,Object> users =new HashMap<>();
+                            users.put("company_id",companyID);
+                            users.put("first_name", textFirstName);
+                            users.put("last_name", textLastName);
+                            users.put("is_manager",true);
 
                             assert firebaseUser != null;
                             // Save user data to Firestore
-                            db.collection("Managers").document(firebaseUser.getUid()).set(user)
+                            db.collection("Managers").document(firebaseUser.getUid()).set(company)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
@@ -166,10 +172,25 @@ public class RegisterCompanyActivity extends AppCompatActivity {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             // Handle failure to save user data
-                                            Toast.makeText(RegisterCompanyActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(RegisterCompanyActivity.this, "Error in company", Toast.LENGTH_SHORT).show();
                                             Log.d(TAG, e.toString());
                                         }
                                     });
+                            db.collection("Users").document(firebaseUser.getEmail()).set(users)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // Handle failure to save user data
+                                            Toast.makeText(RegisterCompanyActivity.this, "Error in user", Toast.LENGTH_SHORT).show();
+                                            Log.d(TAG, e.toString());
+                                        }
+                                    });
+
 
                             // Send email verification to the user
                             firebaseUser.sendEmailVerification();
