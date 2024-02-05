@@ -179,7 +179,7 @@ public class RegisterVehicleActivity extends AppCompatActivity {
     private void navigateToActivity(Class<?> destinationClass) {
         Intent intent = new Intent(RegisterVehicleActivity.this, destinationClass);
         startActivity(intent);
-        finish(); // Finish the current activity to prevent going back via backspace button
+        finish();
     }
 
     // Helper method to create a subCollection for "history"
