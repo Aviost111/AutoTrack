@@ -3,6 +3,7 @@ package com.example.autotrack;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,11 +17,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class CompanyActivity extends AppCompatActivity {
+
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private TextView tvProfileInfo;
     private String uid;
-
+    private String password;
 
     @SuppressLint("UseSupportActionBar")
     @Override
@@ -40,6 +42,9 @@ public class CompanyActivity extends AppCompatActivity {
 
         // Retrieve the currently signed-in user
         FirebaseUser user = mAuth.getCurrentUser();
+
+        Intent intent = getIntent();
+        password = intent.getStringExtra("company_password");
 
 
         if (user != null) {
@@ -67,7 +72,9 @@ public class CompanyActivity extends AppCompatActivity {
         // Add click listener for the "Delete Vehicle" button
         Button btnDeleteVehicle = findViewById(R.id.btnDeleteVehicle);
         btnDeleteVehicle.setOnClickListener(v -> showDeleteDialog("Vehicles"));
+
     }
+
 
     private void retrieveManagerInfo(String uid) {
         db.collection("Companies")
@@ -112,14 +119,13 @@ public class CompanyActivity extends AppCompatActivity {
     // Helper method to navigate to another activity and finish the current activity
     private void navigateToActivity(Class<?> destinationClass) {
         Intent intent = new Intent(CompanyActivity.this, destinationClass);
+        intent.putExtra("password",password);
         startActivity(intent);
-        //TODO check if this is needed or if it causes problems
-        finish(); // Finish the current activity to prevent going back via backspace button
     }
 
     // Method to show the delete dialog
     private void showDeleteDialog(String type) {
-        DeleteDialogHelper.showDialog(this,db,uid, type);
+        DeleteDialogHelper.showDialog(this, db, uid, type);
     }
 
 }

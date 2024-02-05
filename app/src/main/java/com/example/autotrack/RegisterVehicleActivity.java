@@ -48,7 +48,12 @@ public class RegisterVehicleActivity extends AppCompatActivity {
 
         // Get the currently authenticated user (manager)
         FirebaseUser companyUser = FirebaseAuth.getInstance().getCurrentUser();
-        assert companyUser != null;
+        if (companyUser == null) {
+            // If the user is not signed in, navigate to the login screen
+            // Pop an error message using toast and go back to the login screen
+            Toast.makeText(this, "User not signed in", Toast.LENGTH_SHORT).show();
+            navigateToActivity(LoginActivity.class);
+        }
         companyId = companyUser.getUid();
 
         // Set click listener for the "Register Tool" button
@@ -134,7 +139,6 @@ public class RegisterVehicleActivity extends AppCompatActivity {
 
     // Helper method to upload data to Firebase
     private void uploadDataToFirebase(String documentID, Map<String, Object> data) {
-        Log.d("companyId", "uploadDataToFirebase: " + companyId);
         firestore.collection("Companies")
                 .document(companyId).collection("Vehicles")
                 .document(documentID)
@@ -175,7 +179,7 @@ public class RegisterVehicleActivity extends AppCompatActivity {
     private void navigateToActivity(Class<?> destinationClass) {
         Intent intent = new Intent(RegisterVehicleActivity.this, destinationClass);
         startActivity(intent);
-        finish(); // Finish the current activity to prevent going back via backspace button
+        finish();
     }
 
     // Helper method to create a subCollection for "history"
