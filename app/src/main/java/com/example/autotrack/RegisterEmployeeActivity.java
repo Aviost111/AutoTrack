@@ -118,16 +118,24 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
                         Toast.makeText(RegisterEmployeeActivity.this, "Employee registered successfully", Toast.LENGTH_SHORT).show();
                         FirebaseUser firebaseUser = auth.getCurrentUser();
 
+                        // Sign out the current user (employee) and sign in as the company manager
                         auth.signOut();
+                        Log.d(companyEmail, companyPassword);
                         auth.signInWithEmailAndPassword(companyEmail, companyPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+
                                 if (task.isSuccessful()) {
                                     // Sign-in as company manager successful
+                                    Log.d(TAG, "Signed in as company manager");
 
-                                    assert firebaseUser != null;
+                                    // Proceed with Firestore operations
+                                    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+                                    // Add employee data to Firestore
                                     firestore.collection("Companies")
-                                            .document(companyId).collection("Employees")
+                                            .document(companyId)
+                                            .collection("Employees")
                                             .document(email)
                                             .set(data)
                                             .addOnSuccessListener(aVoid -> {
@@ -137,6 +145,8 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
 
                                                 // Add the employee mail to the company's employees list
                                                 addToUsersList(email);
+
+                                                Log.d(TAG, "Employee data uploaded successfully");
 
                                                 // Navigate to the CompanyActivity
                                                 navigateToActivity(CompanyActivity.class);
@@ -157,6 +167,35 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    // Helper method to add employee data to Firestore
+    private void addEmployeeToFirestore(Map<String, String> data, String email) {
+        // Access Firestore instance
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+        // Add employee data to Firestore
+        firestore.collection("Companies")
+                .document(companyId)
+                .collection("Employees")
+                .document(email)
+                .set(data)
+                .addOnSuccessListener(aVoid -> {
+                    // Data successfully uploaded
+                    // Create the "history" subCollection
+                    createHistorySubCollection(email);
+
+                    // Add the employee mail to the company's employees list
+                    addToUsersList(email);
+
+                    // Navigate to the CompanyActivity
+                    navigateToActivity(CompanyActivity.class);
+                })
+                .addOnFailureListener(e -> {
+                    // Error uploading data
+                    Toast.makeText(RegisterEmployeeActivity.this, "Employee registration failed", Toast.LENGTH_SHORT).show();
+                });
+    }
+
 
     private void addToUsersList(String email) {
         // Update the "User-ManagerId" data
