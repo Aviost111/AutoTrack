@@ -5,6 +5,8 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -86,8 +88,8 @@ public class VehicleActivity extends AppCompatActivity {
                         if (document.exists()) {
                             // Access the document data
                             companyId = document.getString("company_id");
-                            String firstName = document.getString("first_name");
-                            String lastName = document.getString("last_name");
+                            firstName = document.getString("first_name");
+                            lastName = document.getString("last_name");
                             // Set text for employee details
                             textViewEmployeeDetails.setText(firstName + " " + lastName);
                         } else {
@@ -226,7 +228,7 @@ public class VehicleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Implement logic to navigate to the report car care / refueling page
-//                showNameInputPopup();
+                showNameInputPopup();
             }
         });
 
@@ -261,7 +263,7 @@ private PopupWindow popupWindow;
                     fuel.put(now,name);
                     Log.d("VehicleActivity", "Retrieved name: " + name);
                     String path = "Companies/"+companyId+"/Employees/"+userMail+"/history/refuels";
-                    DocumentReference docRef = db.collection(path).document();
+                    DocumentReference docRef = db.document(path);
                     docRef.set(fuel).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
