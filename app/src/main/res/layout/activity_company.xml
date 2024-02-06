@@ -28,6 +28,9 @@
             android:layout_weight="1"
             android:backgroundTint="@color/red"
             android:text="@string/add_vehicle"
+            app:icon="@drawable/ic_add_vehicle"
+            app:iconPadding="0dp"
+            app:iconSize="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,7 +42,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/red"
+            android:drawableTop="@drawable/ic_add_user"
             android:text="@string/add_employee"
+            app:icon="@drawable/ic_add_user"
+            app:iconPadding="0dp"
+            app:iconSize="27dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -77,19 +84,18 @@
             android:id="@+id/btnToolsList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/red"
-            android:text="Vehicles"
             android:layout_marginBottom="10dp"
-            />
+            android:backgroundTint="@color/red"
+            android:text="Vehicles" />
 
         <!-- Second Button in the Middle Section -->
         <Button
             android:id="@+id/btnEmployeesList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:backgroundTint="@color/red"
-            android:text="Employees"
-            android:layout_marginBottom="10dp"/>
+            android:text="Employees" />
 
     </LinearLayout>
 
@@ -100,12 +106,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:orientation="horizontal"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
         app:layout_constraintStart_toStartOf="parent"
-        android:padding="16dp"
 
         >
 
@@ -114,9 +120,9 @@
             android:id="@+id/btnDeleteEmployee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:backgroundTint="@color/red"
             android:text="Delete Employee"
-            android:layout_weight="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -125,16 +131,14 @@
             android:id="@+id/btnDeleteVehicle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:backgroundTint="@color/red"
             android:text="Delete Vehicle"
-            android:layout_weight="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
     </LinearLayout>
-
-
 
 
     <Button
