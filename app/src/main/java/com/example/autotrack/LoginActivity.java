@@ -132,8 +132,7 @@ public class LoginActivity extends AppCompatActivity {
     private void navigateToCompanyActivity() {
         Toast.makeText(LoginActivity.this, "Company", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(LoginActivity.this, CompanyActivity.class);
-        intent.putExtra("company_password",editTextpwd.getText().toString());
-        intent.putExtra("company_uid",FirebaseAuth.getInstance().getCurrentUser().getUid()); //TODO check if this is correct
+        intent.putExtra("company_uid",FirebaseAuth.getInstance().getCurrentUser().getUid()); // Add the company's UID to the intent for use in the next activity
         editTextemail.setText("");
         editTextpwd.setText("");
         startActivity(intent);

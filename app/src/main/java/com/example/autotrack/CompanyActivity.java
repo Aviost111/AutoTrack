@@ -3,7 +3,6 @@ package com.example.autotrack;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,19 +10,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class CompanyActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private TextView tvProfileInfo;
-    private String uid;
-    private String MyUid;
-    private String password;
+    private String company_uid;
 
     @SuppressLint("UseSupportActionBar")
     @Override
@@ -35,29 +30,19 @@ public class CompanyActivity extends AppCompatActivity {
         setupClickListeners();
 
         // Initialize Firebase Authentication and Firestore
-        mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         // Initialize UI element for displaying welcome message
         tvProfileInfo = findViewById(R.id.tvProfileInfo);
 
-        // Retrieve the currently signed-in user
-        FirebaseUser user = mAuth.getCurrentUser();
+        // Get the company ID from the intent extra
+        company_uid = getIntent().getStringExtra("company_uid");
 
-        Intent intent = getIntent();
-        password = intent.getStringExtra("company_password");
-        MyUid = intent.getStringExtra("company_uid");
-        Log.d("CompanyActivity", "MyUid: " + MyUid);
-
-
-        if (user != null) {
-            uid = user.getUid();
-            Log.d("CompanyActivity", "uid: " + uid);
-            retrieveManagerInfo(MyUid);
+        if (company_uid != null) {
+            retrieveCompanyInfo(company_uid);
         } else {
-            // If the user is not signed in, navigate to the login screen
             // Pop an error message using toast and go back to the login screen
-            Toast.makeText(this, "User not signed in", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error sign in company ", Toast.LENGTH_SHORT).show();
             navigateToActivity(LoginActivity.class);
         }
     }
@@ -79,8 +64,7 @@ public class CompanyActivity extends AppCompatActivity {
 
     }
 
-
-    private void retrieveManagerInfo(String uid) {
+    private void retrieveCompanyInfo(String uid) {
         db.collection("Companies")
                 .document(uid)
                 .get()
@@ -123,14 +107,12 @@ public class CompanyActivity extends AppCompatActivity {
     // Helper method to navigate to another activity and finish the current activity
     private void navigateToActivity(Class<?> destinationClass) {
         Intent intent = new Intent(CompanyActivity.this, destinationClass);
-        intent.putExtra("password",password);
-        intent.putExtra("uid",MyUid);
+        intent.putExtra("company_uid", company_uid);
         startActivity(intent);
     }
 
     // Method to show the delete dialog
     private void showDeleteDialog(String type) {
-        DeleteDialogHelper.showDialog(this, db, MyUid, type);
+        DeleteDialogHelper.showDialog(this, db, company_uid, type);
     }
-
 }
