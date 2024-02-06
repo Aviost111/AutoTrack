@@ -13,7 +13,6 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -33,8 +32,8 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity {
 
     private TextView signUp;
-    private EditText editTextemail, editTextpwd;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private EditText editTextEmail, editTextPwd;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,36 +41,26 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // Initialize UI elements
-        editTextemail = findViewById(R.id.emailLogin);
-        editTextpwd = findViewById(R.id.passwordLogin);
+        editTextEmail = findViewById(R.id.emailLogin);
+        editTextPwd = findViewById(R.id.passwordLogin);
         Button loginButton = findViewById(R.id.loginButton);
         signUp = findViewById(R.id.signUp);
 
         // Set onClickListener for login button
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attemptLogin();
-            }
-        });
+        loginButton.setOnClickListener(v -> attemptLogin());
 
         // Set onClickListener for sign-up TextView
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                underlineAndStartRegistration();
-            }
-        });
+        signUp.setOnClickListener(v -> underlineAndStartRegistration());
     }
 
     private void attemptLogin() {
-        String email = editTextemail.getText().toString();
-        String pwd = editTextpwd.getText().toString();
+        String email = editTextEmail.getText().toString();
+        String pwd = editTextPwd.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            showErrorAndFocus(editTextemail, "Please enter an email!");
+            showErrorAndFocus(editTextEmail, "Please enter an email!");
         } else if (TextUtils.isEmpty(pwd)) {
-            showErrorAndFocus(editTextpwd, "Please enter your Password!");
+            showErrorAndFocus(editTextPwd, "Please enter your Password!");
         } else {
             authenticateUser(email, pwd);
         }
@@ -105,11 +94,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void handleLoginFailure(Task<AuthResult> task) {
         try {
-            throw task.getException();
+            throw Objects.requireNonNull(task.getException());
         } catch (FirebaseAuthInvalidCredentialsException e) {
-            showErrorAndFocus(editTextpwd, "Incorrect Email or Password");
+            showErrorAndFocus(editTextPwd, "Incorrect Email or Password");
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getMessage()));
             Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -135,8 +124,8 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(LoginActivity.this, "Company", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(LoginActivity.this, CompanyActivity.class);
         intent.putExtra("company_uid", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
-        editTextemail.setText("");
-        editTextpwd.setText("");
+        editTextEmail.setText("");
+        editTextPwd.setText("");
         startActivity(intent);
     }
 
@@ -148,12 +137,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void underlineAndStartRegistration() {
         underlineText(signUp);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startRegistrationActivity();
-            }
-        }, 200);
+        new Handler().postDelayed(this::startRegistrationActivity, 200);
     }
 
     private void startRegistrationActivity() {
@@ -168,12 +152,9 @@ public class LoginActivity extends AppCompatActivity {
         spannableString.setSpan(underlineSpan, 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         textView.setText(spannableString);
 
-        textView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                spannableString.removeSpan(underlineSpan);
-                textView.setText(spannableString);
-            }
+        textView.postDelayed(() -> {
+            spannableString.removeSpan(underlineSpan);
+            textView.setText(spannableString);
         }, 100);
     }
 }

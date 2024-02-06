@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -30,13 +29,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RegisterCompanyActivity extends AppCompatActivity {
 
     private EditText editTextRegisterEmail, editTextRegisterConfirmEmail, editTextRegisterPwd,
             editTextRegisterConfirmPwd, editTextRegisterPhoneNumber, editTextRegisterFirstName,
-            editTextRegisterLastName, editTextRegisterCompanyID;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+            editTextRegisterLastName;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,8 @@ public class RegisterCompanyActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setTitle("Register");
         } else {
-            // Handle the case where the ActionBar is not available
+            Toast.makeText(RegisterCompanyActivity.this, "error", Toast.LENGTH_SHORT).show();
+
         }
 
         // Initialize EditText and Button views
@@ -61,65 +62,62 @@ public class RegisterCompanyActivity extends AppCompatActivity {
         editTextRegisterLastName = findViewById(R.id.registerLastName);
 
         Button buttonRegister = findViewById(R.id.RegisterButton);
-        buttonRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Extracting user input from EditText fields
-                String textFirstname = editTextRegisterFirstName.getText().toString();
-                String textLastname = editTextRegisterLastName.getText().toString();
-                String textPwd = editTextRegisterPwd.getText().toString();
-                String textConfirmPwd = editTextRegisterConfirmPwd.getText().toString();
-                String textEmail = editTextRegisterEmail.getText().toString();
-                String textConfirmEmail = editTextRegisterConfirmEmail.getText().toString();
-                String textPhoneNumber = editTextRegisterPhoneNumber.getText().toString();
+        buttonRegister.setOnClickListener(v -> {
+            // Extracting user input from EditText fields
+            String textFirstname = editTextRegisterFirstName.getText().toString();
+            String textLastname = editTextRegisterLastName.getText().toString();
+            String textPwd = editTextRegisterPwd.getText().toString();
+            String textConfirmPwd = editTextRegisterConfirmPwd.getText().toString();
+            String textEmail = editTextRegisterEmail.getText().toString();
+            String textConfirmEmail = editTextRegisterConfirmEmail.getText().toString();
+            String textPhoneNumber = editTextRegisterPhoneNumber.getText().toString();
 
-                // Input validation checks
-                if (TextUtils.isEmpty(textFirstname)) {
-                    // Display error message for first name
-                    Toast.makeText(RegisterCompanyActivity.this, "Please enter your first name", Toast.LENGTH_SHORT).show();
-                    editTextRegisterFirstName.setError("First name required");
-                    editTextRegisterFirstName.requestFocus();
-                } else if (TextUtils.isEmpty(textLastname)) {
-                    // Display error message for last name
-                    Toast.makeText(RegisterCompanyActivity.this, "Please enter your last name", Toast.LENGTH_SHORT).show();
-                    editTextRegisterLastName.setError("Last name required");
-                    editTextRegisterLastName.requestFocus();
-                } else if (TextUtils.isEmpty(textEmail)) {
-                    // Display error message for email
-                    Toast.makeText(RegisterCompanyActivity.this, "Please enter your email", Toast.LENGTH_SHORT).show();
-                    editTextRegisterEmail.setError("Email required");
-                    editTextRegisterEmail.requestFocus();
-                } else if (!textEmail.equals(textConfirmEmail)) {
-                    // Display error message if email and email confirmation are not equal
-                    Toast.makeText(RegisterCompanyActivity.this, "Email and Email confirmation are not equal", Toast.LENGTH_SHORT).show();
-                    editTextRegisterConfirmEmail.setError("Email and Email confirmation are not equal");
-                    editTextRegisterConfirmEmail.requestFocus();
-                } else if (!PhoneNumberValidation(textPhoneNumber)) {
-                    // Display error message for invalid phone number
-                    Toast.makeText(RegisterCompanyActivity.this, "Please enter your phone number", Toast.LENGTH_SHORT).show();
-                    editTextRegisterPhoneNumber.setError("Please enter a valid phone number");
-                    editTextRegisterPhoneNumber.requestFocus();
-                } else if (TextUtils.isEmpty(textPwd)) {
-                    // Display error message for password
-                    Toast.makeText(RegisterCompanyActivity.this, "Please enter your password", Toast.LENGTH_SHORT).show();
-                    editTextRegisterPwd.setError("Password required");
-                    editTextRegisterPwd.requestFocus();
-                } else if (textPwd.length() < 6) {
-                    // Display error message for weak password
-                    Toast.makeText(RegisterCompanyActivity.this, "Password should be at least 6 digits", Toast.LENGTH_SHORT).show();
-                    editTextRegisterPwd.setError("Password too weak");
-                    editTextRegisterPwd.requestFocus();
-                } else if (!textPwd.equals(textConfirmPwd)) {
-                    // Display error message if password and password confirmation are not equal
-                    Toast.makeText(RegisterCompanyActivity.this, "Password and Password confirmation are not equal", Toast.LENGTH_SHORT).show();
-                    editTextRegisterConfirmPwd.setError("Password and Password confirmation are not equal");
-                    editTextRegisterConfirmPwd.requestFocus();
-                    editTextRegisterConfirmPwd.clearComposingText();
-                    editTextRegisterPwd.clearComposingText();
-                } else {
-                    // If all checks pass, register the user
-                    registerUser(textFirstname, textLastname, textPhoneNumber, textEmail, textPwd);
-                }
+            // Input validation checks
+            if (TextUtils.isEmpty(textFirstname)) {
+                // Display error message for first name
+                Toast.makeText(RegisterCompanyActivity.this, "Please enter your first name", Toast.LENGTH_SHORT).show();
+                editTextRegisterFirstName.setError("First name required");
+                editTextRegisterFirstName.requestFocus();
+            } else if (TextUtils.isEmpty(textLastname)) {
+                // Display error message for last name
+                Toast.makeText(RegisterCompanyActivity.this, "Please enter your last name", Toast.LENGTH_SHORT).show();
+                editTextRegisterLastName.setError("Last name required");
+                editTextRegisterLastName.requestFocus();
+            } else if (TextUtils.isEmpty(textEmail)) {
+                // Display error message for email
+                Toast.makeText(RegisterCompanyActivity.this, "Please enter your email", Toast.LENGTH_SHORT).show();
+                editTextRegisterEmail.setError("Email required");
+                editTextRegisterEmail.requestFocus();
+            } else if (!textEmail.equals(textConfirmEmail)) {
+                // Display error message if email and email confirmation are not equal
+                Toast.makeText(RegisterCompanyActivity.this, "Email and Email confirmation are not equal", Toast.LENGTH_SHORT).show();
+                editTextRegisterConfirmEmail.setError("Email and Email confirmation are not equal");
+                editTextRegisterConfirmEmail.requestFocus();
+            } else if (!PhoneNumberValidation(textPhoneNumber)) {
+                // Display error message for invalid phone number
+                Toast.makeText(RegisterCompanyActivity.this, "Please enter your phone number", Toast.LENGTH_SHORT).show();
+                editTextRegisterPhoneNumber.setError("Please enter a valid phone number");
+                editTextRegisterPhoneNumber.requestFocus();
+            } else if (TextUtils.isEmpty(textPwd)) {
+                // Display error message for password
+                Toast.makeText(RegisterCompanyActivity.this, "Please enter your password", Toast.LENGTH_SHORT).show();
+                editTextRegisterPwd.setError("Password required");
+                editTextRegisterPwd.requestFocus();
+            } else if (textPwd.length() < 6) {
+                // Display error message for weak password
+                Toast.makeText(RegisterCompanyActivity.this, "Password should be at least 6 digits", Toast.LENGTH_SHORT).show();
+                editTextRegisterPwd.setError("Password too weak");
+                editTextRegisterPwd.requestFocus();
+            } else if (!textPwd.equals(textConfirmPwd)) {
+                // Display error message if password and password confirmation are not equal
+                Toast.makeText(RegisterCompanyActivity.this, "Password and Password confirmation are not equal", Toast.LENGTH_SHORT).show();
+                editTextRegisterConfirmPwd.setError("Password and Password confirmation are not equal");
+                editTextRegisterConfirmPwd.requestFocus();
+                editTextRegisterConfirmPwd.clearComposingText();
+                editTextRegisterPwd.clearComposingText();
+            } else {
+                // If all checks pass, register the user
+                registerUser(textFirstname, textLastname, textPhoneNumber, textEmail, textPwd);
             }
         });
     }
@@ -153,7 +151,7 @@ public class RegisterCompanyActivity extends AppCompatActivity {
                             users.put("last_name", textLastName);
                             users.put("is_manager",true);
 
-                            // Save user data to Firestore
+                            // Save user data to FireStore
                             db.collection("Companies").document(firebaseUser.getUid()).set(company)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
@@ -169,7 +167,7 @@ public class RegisterCompanyActivity extends AppCompatActivity {
                                             Log.d(TAG, e.toString());
                                         }
                                     });
-                            db.collection("Users").document(firebaseUser.getEmail()).set(users)
+                            db.collection("Users").document(Objects.requireNonNull(firebaseUser.getEmail())).set(users)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
@@ -197,7 +195,7 @@ public class RegisterCompanyActivity extends AppCompatActivity {
                         } else {
                             // Handle registration failure
                             try {
-                                throw task.getException();
+                                throw Objects.requireNonNull(task.getException());
                             } catch (FirebaseAuthWeakPasswordException e) {
                                 editTextRegisterPwd.setError("Your password is too weak");
                                 editTextRegisterPwd.requestFocus();
@@ -208,7 +206,7 @@ public class RegisterCompanyActivity extends AppCompatActivity {
                                 editTextRegisterEmail.setError("User is already registered with this email.");
                                 editTextRegisterEmail.requestFocus();
                             } catch (Exception e) {
-                                Log.e(TAG, e.getMessage());
+                                Log.e(TAG, Objects.requireNonNull(e.getMessage()));
                                 Toast.makeText(RegisterCompanyActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
