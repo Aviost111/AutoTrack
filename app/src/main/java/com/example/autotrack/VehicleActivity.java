@@ -48,8 +48,8 @@ public class VehicleActivity extends AppCompatActivity {
     private String companyId;
     private String firstName;
     private String lastName;
+    private boolean isManager;
     private String vehicleId;
-
     private int treatmentHours;
 
     @Override
@@ -73,7 +73,7 @@ public class VehicleActivity extends AppCompatActivity {
         String vehicleType = intent.getStringExtra("vehicleType");
         double hoursTillTreatment = intent.getDoubleExtra("hoursTillTreatment", 0);
         treatmentHours = intent.getIntExtra("treatment_hours", 0);
-        Toast.makeText(VehicleActivity.this, Integer.toString( treatmentHours), Toast.LENGTH_SHORT).show();
+        Toast.makeText(VehicleActivity.this, Integer.toString(treatmentHours), Toast.LENGTH_SHORT).show();
 
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -99,6 +99,7 @@ public class VehicleActivity extends AppCompatActivity {
                             companyId = document.getString("company_id");
                             firstName = document.getString("first_name");
                             lastName = document.getString("last_name");
+                            isManager = document.getBoolean("is_manager");
                             // Set text for employee details
                             textViewEmployeeDetails.setText(firstName + " " + lastName);
                         } else {
@@ -135,15 +136,21 @@ public class VehicleActivity extends AppCompatActivity {
                                             // Get the key of the latest entry
                                             String latestKey = sortedKeys.get(0);
 
-                                            // Get the action field from the latest entry
-                                            String latestAction = (String) entries.get(latestKey);
+                                            // Get the map corresponding to the latest key
+                                            Map<String, Object> latestEntry = (Map<String, Object>) entries.get(latestKey);
 
 
-                                            // Now, we can check if the latest action was "start" or "stop"
-                                            if ("start".equals(latestAction)) {
-                                                btnStartStop.setText("Stop");
-                                            } else if ("stop".equals(latestAction)) {
-                                                btnStartStop.setText("Start");
+                                            // Check if the latest entry is not null and contains the "action" field
+                                            if (latestEntry != null && latestEntry.containsKey("action")) {
+                                                // Get the value of the "action" field
+                                                String latestAction = (String) latestEntry.get("action");
+
+                                                // Now, we can check if the latest action was "start" or "stop"
+                                                if ("start".equals(latestAction)) {
+                                                    btnStartStop.setText("Stop");
+                                                } else if ("stop".equals(latestAction)) {
+                                                    btnStartStop.setText("Start");
+                                                }
                                             }
                                         } else {
                                             btnStartStop.setText("Start");
@@ -202,34 +209,66 @@ public class VehicleActivity extends AppCompatActivity {
         // Button click listeners
         btnStartStop.setOnClickListener(new View.OnClickListener() {
             @Override
+            ////////////////
             public void onClick(View v) {
                 String now = String.valueOf(System.currentTimeMillis());
-                Map<String, Object> startStopData = new HashMap<>();
+                Map<String, Object> startStop = new HashMap<>();
+                Map<String, Object> startStopInfo = new HashMap<>();
 
                 // Check current vehicle status (started or not)
                 if (btnStartStop.getText().equals("Start")) {
-                    startStopData.put(now, "start");
+                    startStopInfo.put("action", "start");
                     btnStartStop.setText("Stop");
                 } else {
-                    startStopData.put(now, "stop");
+                    startStopInfo.put("action", "stop");
                     btnStartStop.setText("Start");
                     updateHoursTillTreatment(now);
                 }
 
                 // Update data on start-stop
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("Companies")
-                        .document(companyId).
-                        collection("Vehicles")
-                        .document(vehicleId)
-                        .collection("history")
-                        .document("start-stop")
-                        .update(startStopData)
-                        .addOnSuccessListener(aVoid -> {
-                            // Data successfully uploaded
-                            // Show a success message
-                            Toast.makeText(VehicleActivity.this, "Vehicle status changed", Toast.LENGTH_LONG).show();
+                startStopInfo.put("first_name", firstName);
+                startStopInfo.put("last_name", lastName);
+                startStopInfo.put("vehicle_id", vehicleId);
+                startStop.put(now, startStopInfo);
+
+                // Update start/stop history for Only employee in Employees
+                if(!isManager) {
+                    String path = "Companies/" + companyId + "/Employees/" + userMail + "/history/start-stop";
+                    DocumentReference docRef = db.document(path);
+                    docRef.update(startStop).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(VehicleActivity.this, "start/stop saved in employees", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Handle failure to save user data
+                                    Toast.makeText(VehicleActivity.this, "not saved in employees", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, e.toString());
+                                }
+                            });
+                }
+
+                // Update start/stop history for manager or employee in Vehicles
+                String vPath = "Companies/" + companyId + "/Vehicles/" + vehicleId + "/history/start-stop";
+                DocumentReference vDocRef = db.document(vPath);
+                vDocRef.update(startStop).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(VehicleActivity.this, "start/stop saved in vehicles", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Handle failure to save user data
+                                Toast.makeText(VehicleActivity.this, "not saved in vehicles", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, e.toString());
+                            }
                         });
+                ///////////////////
             }
         });
 
@@ -353,14 +392,14 @@ public class VehicleActivity extends AppCompatActivity {
                     hrsTil.put("hours_till_treatment", treatmentHours);
                     treatmentInfo.put("first_name", firstName);
                     treatmentInfo.put("last_name", lastName);
-                    treatmentInfo.put("vehicle_id",vehicleId);
+                    treatmentInfo.put("vehicle_id", vehicleId);
                     treatment.put(now, treatmentInfo);
 
                     String path = "Companies/" + companyId + "/Employees/" + userMail + "/history/treatments";
                     String vPath = "Companies/" + companyId + "/Vehicles/" + vehicleId;
 
                     DocumentReference vDocRef = db.document(vPath);
-                    DocumentReference vHDocRef = db.document(vPath+"/history/treatments");
+                    DocumentReference vHDocRef = db.document(vPath + "/history/treatments");
                     DocumentReference docRef = db.document(path);
 
 // Update hours_till_treatment in the vehicle document
