@@ -28,6 +28,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Objects;
+
 public class LoginActivity extends AppCompatActivity {
 
     private TextView signUp;
@@ -132,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
     private void navigateToCompanyActivity() {
         Toast.makeText(LoginActivity.this, "Company", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(LoginActivity.this, CompanyActivity.class);
-        intent.putExtra("company_password",editTextpwd.getText().toString());
+        intent.putExtra("company_uid", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
         editTextemail.setText("");
         editTextpwd.setText("");
         startActivity(intent);

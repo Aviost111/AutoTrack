@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -135,8 +137,10 @@ public class EmployeeActivity extends AppCompatActivity {
                 // Create an Intent to start the VehicleActivity
                 Intent intent = new Intent(EmployeeActivity.this, VehicleActivity.class);
 
+
                 // Pass necessary information as extras to the VehicleActivity
                 intent.putExtra("vehicleId", clickedVehicle.getID());
+                intent.putExtra("treatment_hours",clickedVehicle.getTreatment_hours());
                 intent.putExtra("vehicleType", clickedVehicle.getType());
                 intent.putExtra("hoursTillTreatment",clickedVehicle.getHours_till_treatment());
 
