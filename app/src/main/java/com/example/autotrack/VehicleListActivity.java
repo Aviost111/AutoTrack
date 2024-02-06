@@ -69,10 +69,10 @@ public class VehicleListActivity extends AppCompatActivity {
                                     .get()
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
-                                            List<Vehicle> vehicleList = new ArrayList<>();
+                                            List<VehicleObj> vehicleList = new ArrayList<>();
                                             for (QueryDocumentSnapshot document1 : task1.getResult()) {
                                                 // Convert the document to a Vehicle object
-                                                Vehicle vehicle = document1.toObject(Vehicle.class);
+                                                VehicleObj vehicle = document1.toObject(VehicleObj.class);
 
                                                 // Add the Vehicle object to the list
                                                 vehicleList.add(vehicle);
@@ -114,8 +114,8 @@ public class VehicleListActivity extends AppCompatActivity {
     }
 
 
-    private void updateListView(List<Vehicle> vehicleList) {
-        ArrayAdapter<Vehicle> adapter = new ArrayAdapter<>(this,
+    private void updateListView(List<VehicleObj> vehicleList) {
+        ArrayAdapter<VehicleObj> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, vehicleList);
 
         listViewFactoryVehicles.setAdapter(adapter);
@@ -125,7 +125,7 @@ public class VehicleListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Get the clicked Vehicle object
-                Vehicle clickedVehicle = (Vehicle) parent.getItemAtPosition(position);
+                VehicleObj clickedVehicle = (VehicleObj) parent.getItemAtPosition(position);
 
                 // Create an Intent to start the VehicleActivity
                 Intent intent = new Intent(VehicleListActivity.this, VehicleActivity.class);
