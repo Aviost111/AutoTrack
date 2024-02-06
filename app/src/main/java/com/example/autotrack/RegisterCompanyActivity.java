@@ -47,9 +47,6 @@ public class RegisterCompanyActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle("Register");
-        } else {
-            Toast.makeText(RegisterCompanyActivity.this, "error", Toast.LENGTH_SHORT).show();
-
         }
 
         // Initialize EditText and Button views
