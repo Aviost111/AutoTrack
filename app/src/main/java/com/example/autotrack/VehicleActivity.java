@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class VehicleActivity extends AppCompatActivity {
@@ -48,7 +49,7 @@ public class VehicleActivity extends AppCompatActivity {
     private String firstName;
     private String lastName;
     private String vehicleId;
-    private double hoursTillTreatment;
+
     private int treatmentHours;
 
     @Override
@@ -70,7 +71,7 @@ public class VehicleActivity extends AppCompatActivity {
         Intent intent = getIntent();
         vehicleId = intent.getStringExtra("vehicleId");
         String vehicleType = intent.getStringExtra("vehicleType");
-        hoursTillTreatment = intent.getDoubleExtra("hoursTillTreatment", 0);
+        double hoursTillTreatment = intent.getDoubleExtra("hoursTillTreatment", 0);
         treatmentHours = intent.getIntExtra("treatment_hours", 0);
         Toast.makeText(VehicleActivity.this, Integer.toString( treatmentHours), Toast.LENGTH_SHORT).show();
 
@@ -126,6 +127,7 @@ public class VehicleActivity extends AppCompatActivity {
                                         Map<String, Object> entries = startStopDocument.getData();
 
                                         // Find the latest entry by sorting keys in descending order
+                                        assert entries != null;
                                         List<String> sortedKeys = new ArrayList<>(entries.keySet());
                                         Collections.sort(sortedKeys, Collections.reverseOrder());
 
@@ -365,41 +367,41 @@ public class VehicleActivity extends AppCompatActivity {
                     vDocRef.update(hrsTil)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
-                                public void onComplete(Task<Void> vTask) {
+                                public void onComplete(@NonNull Task<Void> vTask) {
                                     if (vTask.isSuccessful()) {
                                         // Set treatment data in employee history
                                         docRef.set(treatment)
                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
-                                                    public void onComplete(Task<Void> task) {
+                                                    public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
                                                             // All operations are successful
                                                             Toast.makeText(VehicleActivity.this, "Treatment saved", Toast.LENGTH_SHORT).show();
                                                         } else {
                                                             // Handle failure to save treatment data
                                                             Toast.makeText(VehicleActivity.this, "Failed to save treatment data", Toast.LENGTH_SHORT).show();
-                                                            Log.d(TAG, task.getException().toString());
+                                                            Log.d(TAG, Objects.requireNonNull(task.getException()).toString());
                                                         }
                                                     }
                                                 });
                                         vHDocRef.set(treatment)
                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
-                                                    public void onComplete(Task<Void> task) {
+                                                    public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
                                                             // All operations are successful
                                                             Toast.makeText(VehicleActivity.this, "Treatment saved", Toast.LENGTH_SHORT).show();
                                                         } else {
                                                             // Handle failure to save treatment data
                                                             Toast.makeText(VehicleActivity.this, "Failed to save treatment data", Toast.LENGTH_SHORT).show();
-                                                            Log.d(TAG, task.getException().toString());
+                                                            Log.d(TAG, Objects.requireNonNull(task.getException()).toString());
                                                         }
                                                     }
                                                 });
                                     } else {
                                         // Handle failure to update hours_till_treatment in vehicle document
                                         Toast.makeText(VehicleActivity.this, "Failed to update hours till treatment", Toast.LENGTH_SHORT).show();
-                                        Log.d(TAG, vTask.getException().toString());
+                                        Log.d(TAG, Objects.requireNonNull(vTask.getException()).toString());
                                     }
                                 }
                             });
