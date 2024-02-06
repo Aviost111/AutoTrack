@@ -54,7 +54,8 @@ public class RegisterVehicleActivity extends AppCompatActivity {
             Toast.makeText(this, "User not signed in", Toast.LENGTH_SHORT).show();
             navigateToActivity(LoginActivity.class);
         }
-        companyId = companyUser.getUid();
+        companyId = getIntent().getStringExtra("uid");
+
 
         // Set click listener for the "Register Tool" button
         btnRegisterTool.setOnClickListener(view -> registerTool());

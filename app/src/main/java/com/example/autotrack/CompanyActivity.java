@@ -22,6 +22,7 @@ public class CompanyActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private TextView tvProfileInfo;
     private String uid;
+    private String MyUid;
     private String password;
 
     @SuppressLint("UseSupportActionBar")
@@ -45,11 +46,14 @@ public class CompanyActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         password = intent.getStringExtra("company_password");
+        MyUid = intent.getStringExtra("company_uid");
+        Log.d("CompanyActivity", "MyUid: " + MyUid);
 
 
         if (user != null) {
             uid = user.getUid();
-            retrieveManagerInfo(uid);
+            Log.d("CompanyActivity", "uid: " + uid);
+            retrieveManagerInfo(MyUid);
         } else {
             // If the user is not signed in, navigate to the login screen
             // Pop an error message using toast and go back to the login screen
@@ -120,12 +124,13 @@ public class CompanyActivity extends AppCompatActivity {
     private void navigateToActivity(Class<?> destinationClass) {
         Intent intent = new Intent(CompanyActivity.this, destinationClass);
         intent.putExtra("password",password);
+        intent.putExtra("uid",MyUid);
         startActivity(intent);
     }
 
     // Method to show the delete dialog
     private void showDeleteDialog(String type) {
-        DeleteDialogHelper.showDialog(this, db, uid, type);
+        DeleteDialogHelper.showDialog(this, db, MyUid, type);
     }
 
 }
