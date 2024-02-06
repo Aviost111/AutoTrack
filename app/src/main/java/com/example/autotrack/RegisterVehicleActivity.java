@@ -140,6 +140,7 @@ public class RegisterVehicleActivity extends AppCompatActivity {
     // Helper method to navigate to another activity and finish the current activity
     private void navigateToActivity(Class<?> destinationClass) {
         Intent intent = new Intent(RegisterVehicleActivity.this, destinationClass);
+        intent.putExtra("company_uid", company_uid);
         startActivity(intent);
         finish();
     }

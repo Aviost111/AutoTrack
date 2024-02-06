@@ -133,7 +133,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
     }
 
     private void addToUsersDatabase(String email) {
-        // Update the "User-ManagerId" data
+        // Update the "Users" database
         Map<String, Object> userData = new HashMap<>();
         userData.put("company_id", company_uid);
         userData.put("is_manager", false);
@@ -176,6 +176,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
     // Helper method to navigate to another activity and finish the current activity
     private void navigateToActivity(Class<?> destinationClass) {
         Intent intent = new Intent(RegisterEmployeeActivity.this, destinationClass);
+        intent.putExtra("company_uid", company_uid);
         startActivity(intent);
         finish(); // Finish the current activity to prevent going back via backspace button
     }
