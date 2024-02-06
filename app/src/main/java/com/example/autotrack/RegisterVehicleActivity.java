@@ -26,11 +26,11 @@ public class RegisterVehicleActivity extends AppCompatActivity {
     // Firebase instance
     private FirebaseFirestore firestore;
 
-
     // UI elements
     private EditText etType, etEngineSize, etManufactureYear, etTreatmentHours, etVersion, etID;
     private Button btnRegisterTool;
-    private String companyId;
+
+    private String company_uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,43 +46,12 @@ public class RegisterVehicleActivity extends AppCompatActivity {
         // Initialize Firebase Firestore
         firestore = FirebaseFirestore.getInstance();
 
-        // Get the currently authenticated user (manager)
-        FirebaseUser companyUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (companyUser == null) {
-            // If the user is not signed in, navigate to the login screen
-            // Pop an error message using toast and go back to the login screen
-            Toast.makeText(this, "User not signed in", Toast.LENGTH_SHORT).show();
-            navigateToActivity(LoginActivity.class);
-        }
-        companyId = companyUser.getUid();
+        // Get the company ID from the intent extra
+        company_uid = getIntent().getStringExtra("company_uid");
 
         // Set click listener for the "Register Tool" button
         btnRegisterTool.setOnClickListener(view -> registerTool());
     }
-
-//    private void getCompanyIdFromManager(String managerUid) {
-//        // Retrieve the manager's document from Firestore
-//        firestore.collection("Managers")
-//                .document(managerUid)
-//                .get()
-//                .addOnSuccessListener(documentSnapshot -> {
-//                    if (documentSnapshot.exists()) {
-//                        // Manager document found
-//                        // Extract the companyId from the document and assign it to the companyId variable
-//                        companyId = documentSnapshot.getString("company_id");
-//                    } else {
-//                        // Manager document does not exist
-//                        // Handle the case where the manager's document is not found
-//                        Toast.makeText(RegisterToolActivity.this, "Manager document not found", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .addOnFailureListener(e -> {
-//                    // Error occurred while fetching manager document
-//                    // Handle the failure scenario
-//                    Toast.makeText(RegisterToolActivity.this, "Failed to fetch manager document: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                });
-//    }
-
 
     // Helper method to initialize UI elements
     private void initializeViews() {
@@ -140,7 +109,7 @@ public class RegisterVehicleActivity extends AppCompatActivity {
     // Helper method to upload data to Firebase
     private void uploadDataToFirebase(String documentID, Map<String, Object> data) {
         firestore.collection("Companies")
-                .document(companyId).collection("Vehicles")
+                .document(company_uid).collection("Vehicles")
                 .document(documentID)
                 .set(data)
                 .addOnSuccessListener(aVoid -> {
@@ -152,12 +121,6 @@ public class RegisterVehicleActivity extends AppCompatActivity {
                     // Show a success message
                     Toast.makeText(RegisterVehicleActivity.this, "Vehicle registered successfully", Toast.LENGTH_LONG).show();
 
-                    //wait before going back to manager activity
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     // Navigate to ManagerActivity
                     navigateToActivity(CompanyActivity.class);
                 })
@@ -165,7 +128,6 @@ public class RegisterVehicleActivity extends AppCompatActivity {
                     // Error uploading data
                     // Show an error message
                     Toast.makeText(RegisterVehicleActivity.this, "Vehicle registration failed", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, e.toString());
                 });
     }
 
@@ -186,7 +148,7 @@ public class RegisterVehicleActivity extends AppCompatActivity {
     private void createHistorySubCollection(String documentID) {
         // Create a subCollection reference for "history"
         CollectionReference historySubCollectionRef = firestore.collection("Companies")
-                .document(companyId).collection("Vehicles").document(documentID).collection("history");
+                .document(company_uid).collection("Vehicles").document(documentID).collection("history");
 
         // Create an empty document for "refueling" in the "history" subCollection
         historySubCollectionRef.document("refuels").set(new HashMap<>());
