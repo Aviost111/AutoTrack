@@ -22,7 +22,7 @@
             android:name=".RegisterVehicleActivity"
             android:exported="false"/>
         <activity
-            android:name=".EmployeeActivity"
+            android:name=".VehicleListActivity"
             android:exported="false"/>
         <activity
             android:name=".VehicleActivity"

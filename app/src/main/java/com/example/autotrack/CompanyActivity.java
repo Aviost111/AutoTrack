@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -51,7 +51,7 @@ public class CompanyActivity extends AppCompatActivity {
         setupClickListener(R.id.btnRegisterTool, RegisterVehicleActivity.class);
         setupClickListener(R.id.btnRegisterEmployee, RegisterEmployeeActivity.class);
         setupClickListener(R.id.btnLogout, LoginActivity.class);
-        setupClickListener(R.id.btnToolsList, EmployeeActivity.class);
+        setupClickListener(R.id.btnToolsList, VehicleListActivity.class);
         setupClickListener(R.id.btnEmployeesList, EmployeesListActivity.class);
 
         // Add click listener for the "Delete Employee" button
@@ -108,7 +108,18 @@ public class CompanyActivity extends AppCompatActivity {
     private void navigateToActivity(Class<?> destinationClass) {
         Intent intent = new Intent(CompanyActivity.this, destinationClass);
         intent.putExtra("company_uid", company_uid);
-        startActivity(intent);
+
+        //get the email of the current company using company_uid and pass it to the next activity
+
+        DocumentReference companyRef = db.document("Companies/" + company_uid);
+
+        companyRef.get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    String email = documentSnapshot.getString("email");
+                    intent.putExtra("email", email);
+                    startActivity(intent);
+                })
+                .addOnFailureListener(this::handleTaskFailure);
     }
 
     // Method to show the delete dialog

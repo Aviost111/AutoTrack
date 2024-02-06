@@ -131,7 +131,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void navigateToEmployeeActivity() {
         Toast.makeText(LoginActivity.this, "Employee", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LoginActivity.this, EmployeeActivity.class);
+        Intent intent = new Intent(LoginActivity.this, VehicleListActivity.class);
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        intent.putExtra("email", email);
         startActivity(intent);
     }
 
