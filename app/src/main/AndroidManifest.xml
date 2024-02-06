@@ -28,6 +28,9 @@
             android:name=".VehicleActivity"
             android:exported="false"/>
         <activity
+            android:name=".VehicleHistoryActivity"
+            android:exported="false"/>
+        <activity
             android:name=".RegisterCompanyActivity"
             android:exported="false" />
         <activity

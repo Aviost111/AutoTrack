@@ -186,6 +186,7 @@ public class VehicleActivity extends AppCompatActivity {
 
                 // Pass necessary information as extras to the VehicleActivity
                 intent.putExtra("vehicleId", vehicleId);
+                intent.putExtra("userMail", userMail);
 
                 // Start the VehicleActivity
                 startActivity(intent);
