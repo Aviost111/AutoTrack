@@ -3,7 +3,6 @@ package com.example.autotrack;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,7 +52,7 @@ public class CompanyActivity extends AppCompatActivity {
         setupClickListener(R.id.btnRegisterTool, RegisterVehicleActivity.class);
         setupClickListener(R.id.btnRegisterEmployee, RegisterEmployeeActivity.class);
         setupClickListener(R.id.btnLogout, LoginActivity.class);
-        setupClickListener(R.id.btnToolsList, EmployeeActivity.class);
+        setupClickListener(R.id.btnToolsList, VehicleListActivity.class);
         setupClickListener(R.id.btnEmployeesList, EmployeesListActivity.class);
 
         // Add click listener for the "Delete Employee" button

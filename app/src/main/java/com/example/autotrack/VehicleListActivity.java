@@ -13,18 +13,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeActivity extends AppCompatActivity {
+public class VehicleListActivity extends AppCompatActivity {
 
     private ListView listViewFactoryVehicles;
     private String userMail;
@@ -38,12 +36,7 @@ public class EmployeeActivity extends AppCompatActivity {
         listViewFactoryVehicles = findViewById(R.id.listViewFactoryVehicles);
         Button btnLogout = findViewById(R.id.btnLogout);
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user != null) {
-            // Get the user's UID
-            userMail = user.getEmail();
-        }
+        userMail = getIntent().getStringExtra("email");
 
         // Access a Cloud Firestore instance
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -76,10 +69,10 @@ public class EmployeeActivity extends AppCompatActivity {
                                     .get()
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
-                                            List<Vehicle> vehicleList = new ArrayList<>();
+                                            List<VehicleObj> vehicleList = new ArrayList<>();
                                             for (QueryDocumentSnapshot document1 : task1.getResult()) {
                                                 // Convert the document to a Vehicle object
-                                                Vehicle vehicle = document1.toObject(Vehicle.class);
+                                                VehicleObj vehicle = document1.toObject(VehicleObj.class);
 
                                                 // Add the Vehicle object to the list
                                                 vehicleList.add(vehicle);
@@ -111,7 +104,7 @@ public class EmployeeActivity extends AppCompatActivity {
                     // Finish the current activity to go back
                     finish();
                 } else {
-                    Intent intent = new Intent(EmployeeActivity.this, LoginActivity.class);
+                    Intent intent = new Intent(VehicleListActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish(); // Finish the current activity to prevent going back to it from the login page
@@ -121,8 +114,8 @@ public class EmployeeActivity extends AppCompatActivity {
     }
 
 
-    private void updateListView(List<Vehicle> vehicleList) {
-        ArrayAdapter<Vehicle> adapter = new ArrayAdapter<>(this,
+    private void updateListView(List<VehicleObj> vehicleList) {
+        ArrayAdapter<VehicleObj> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, vehicleList);
 
         listViewFactoryVehicles.setAdapter(adapter);
@@ -132,10 +125,10 @@ public class EmployeeActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Get the clicked Vehicle object
-                Vehicle clickedVehicle = (Vehicle) parent.getItemAtPosition(position);
+                VehicleObj clickedVehicle = (VehicleObj) parent.getItemAtPosition(position);
 
                 // Create an Intent to start the VehicleActivity
-                Intent intent = new Intent(EmployeeActivity.this, VehicleActivity.class);
+                Intent intent = new Intent(VehicleListActivity.this, VehicleActivity.class);
 
 
                 // Pass necessary information as extras to the VehicleActivity
@@ -143,6 +136,7 @@ public class EmployeeActivity extends AppCompatActivity {
                 intent.putExtra("treatment_hours",clickedVehicle.getTreatment_hours());
                 intent.putExtra("vehicleType", clickedVehicle.getType());
                 intent.putExtra("hoursTillTreatment",clickedVehicle.getHours_till_treatment());
+                intent.putExtra("email", userMail);
 
                 // Start the VehicleActivity
                 startActivity(intent);

@@ -76,13 +76,8 @@ public class VehicleActivity extends AppCompatActivity {
         Toast.makeText(VehicleActivity.this, Integer.toString(treatmentHours), Toast.LENGTH_SHORT).show();
 
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        // Get user data
-        if (user != null) {
-            // Get the user's UID
-            userMail = user.getEmail();
-        }
+        // Get user mail
+        userMail = getIntent().getStringExtra("email");
 
         // Access a Cloud Firestore instance
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -186,6 +181,7 @@ public class VehicleActivity extends AppCompatActivity {
 
                 // Pass necessary information as extras to the VehicleActivity
                 intent.putExtra("vehicleId", vehicleId);
+                intent.putExtra("userMail", userMail);
 
                 // Start the VehicleActivity
                 startActivity(intent);
@@ -200,8 +196,9 @@ public class VehicleActivity extends AppCompatActivity {
                 finish();
 
                 // Create an Intent to start the EmployeeActivity and clear the activity stack
-                Intent intent = new Intent(VehicleActivity.this, EmployeeActivity.class);
+                Intent intent = new Intent(VehicleActivity.this, VehicleListActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("email", userMail);
                 startActivity(intent);
             }
         });

@@ -3,7 +3,7 @@ package com.example.autotrack;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Vehicle {
+public class VehicleObj {
     private String ID;
     private String company_ID;
     private String engine_size;
@@ -14,7 +14,7 @@ public class Vehicle {
     private String version;
 
     // Required empty public constructor for Firestore
-    public Vehicle() {
+    public VehicleObj() {
     }
 
     public String getID() {
