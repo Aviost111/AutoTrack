@@ -51,9 +51,15 @@ public class CompanyActivity extends AppCompatActivity {
     private void setupClickListeners() {
         setupClickListener(R.id.btnRegisterTool, RegisterVehicleActivity.class);
         setupClickListener(R.id.btnRegisterEmployee, RegisterEmployeeActivity.class);
-        setupClickListener(R.id.btnLogout, LoginActivity.class);
         setupClickListener(R.id.btnToolsList, VehicleListActivity.class);
         setupClickListener(R.id.btnEmployeesList, EmployeesListActivity.class);
+
+        // Set up click listener for the "Logout" button and navigate to the login activity + finish the current activity
+        findViewById(R.id.btnLogout).setOnClickListener(v -> {
+            Intent intent = new Intent(CompanyActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         // Add click listener for the "Delete Employee" button
         Button btnDeleteEmployee = findViewById(R.id.btnDeleteEmployee);

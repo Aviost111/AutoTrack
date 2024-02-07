@@ -3,6 +3,7 @@ package com.example.autotrack;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.CollectionReference;
@@ -14,12 +15,23 @@ public class DeleteDialogHelper {
 
     public static void showDialog(Context context, FirebaseFirestore db, String companyUid, String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Delete " + type);
-        builder.setMessage("Enter the ID of the " + type + " to remove:");
+
+        // Set the dialog title and message based on the entity type
+        if (type.equals("Employees")) {
+            builder.setTitle("Remove Employee");
+            builder.setMessage("Enter the email of the employee to remove:");
+        } else if (type.equals("Vehicles")) {
+            builder.setTitle("Remove Vehicle");
+            builder.setMessage("Enter the ID of the vehicle to remove:");
+        } else {
+            Toast.makeText(context, "Invalid entity type", Toast.LENGTH_SHORT).show();
+            return; // Exit if type is invalid
+        }
 
         // Set up the input field
         final EditText input = new EditText(context);
         builder.setView(input);
+
 
         // Set up the buttons
         builder.setPositiveButton("OK", (dialog, which) -> {
@@ -31,8 +43,11 @@ public class DeleteDialogHelper {
         // Set up the cancel button
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
+
+
         builder.show();
     }
+
 
     private static void deleteEntity(Context context, FirebaseFirestore db, String companyUid, String type, String id) {
         DocumentReference docRef;
