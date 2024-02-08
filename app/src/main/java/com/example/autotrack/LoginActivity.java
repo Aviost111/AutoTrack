@@ -13,7 +13,6 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,134 +23,140 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Objects;
+
 public class LoginActivity extends AppCompatActivity {
 
     private TextView signUp;
-    private EditText editTextemail, editTextpwd;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private EditText editTextEmail, editTextPwd;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        editTextemail = findViewById(R.id.emailLogin);
-        editTextpwd = findViewById(R.id.passwordLogin);
-
-
+        // Initialize UI elements
+        editTextEmail = findViewById(R.id.emailLogin);
+        editTextPwd = findViewById(R.id.passwordLogin);
         Button loginButton = findViewById(R.id.loginButton);
         signUp = findViewById(R.id.signUp);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            //log into app
-            @Override
-            public void onClick(View v) {
 
-                String email = editTextemail.getText().toString();
-                String pwd = editTextpwd.getText().toString();
-                if (TextUtils.isEmpty(email)) {
-                    // Display error message for first name
-                    Toast.makeText(LoginActivity.this, "Please enter an email", Toast.LENGTH_SHORT).show();
-                    editTextemail.setError("Email required");
-                    editTextemail.requestFocus();
-                    return;
-                }else if(TextUtils.isEmpty(pwd)) {
-                    Toast.makeText(LoginActivity.this, "Please enter your Password", Toast.LENGTH_SHORT).show();
-                    editTextpwd.setError("Password required");
-                    editTextpwd.requestFocus();
-                    return;
+        // Set onClickListener for login button
+        loginButton.setOnClickListener(v -> attemptLogin());
+
+        // Set onClickListener for sign-up TextView
+        signUp.setOnClickListener(v -> underlineAndStartRegistration());
+    }
+
+    private void attemptLogin() {
+        String email = editTextEmail.getText().toString();
+        String pwd = editTextPwd.getText().toString();
+
+        if (TextUtils.isEmpty(email)) {
+            showErrorAndFocus(editTextEmail, "Please enter an email!");
+        } else if (TextUtils.isEmpty(pwd)) {
+            showErrorAndFocus(editTextPwd, "Please enter your Password!");
+        } else {
+            authenticateUser(email, pwd);
+        }
+    }
+
+    private void showErrorAndFocus(EditText editText, String errorMessage) {
+        Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+        editText.setError(errorMessage);
+        editText.requestFocus();
+    }
+
+    private void authenticateUser(String email, String pwd) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signInWithEmailAndPassword(email, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    handleSuccessfulLogin();
+                } else {
+                    handleLoginFailure(task);
                 }
-                FirebaseAuth auth = FirebaseAuth.getInstance();
-                auth.signInWithEmailAndPassword(email, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser firebaseUser = auth.getCurrentUser();
-                            assert firebaseUser != null;
-                            db.collection("Managers").document(firebaseUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        if (task.getResult().exists()) {
-                                            Toast.makeText(LoginActivity.this, "manager", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(LoginActivity.this, ManagerActivity .class);
-                                            editTextemail.setText("");
-                                            editTextpwd.setText("");
-                                            startActivity(intent);
-                                        } else {
-                                            //TODO goes to register if its an employee
-                                            Toast.makeText(LoginActivity.this, "employee", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(LoginActivity.this, EmployeeActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    } else {
-                                        Toast.makeText(LoginActivity.this, "User doesn't exist", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-
-                        } else {
-                            try {
-                                throw task.getException();
-                            } catch (FirebaseAuthInvalidCredentialsException e) {
-                                editTextpwd.setError("Incorrect Email or Password");
-                                editTextpwd.requestFocus();
-                            }catch (Exception e) {
-                                Log.e(TAG, e.getMessage());
-                                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-
-
-                            }
-
-                        }
-                    }
-                });
-            }
-        });
-
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Handler handler = new Handler(); // Create a Handler for delayed actions
-
-                underlineText(signUp); // Apply underline animation
-                underlineText(signUp);
-
-                // Start RegisterActivity after animation
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                        startActivity(intent);
-                    }
-                }, 200); // Adjust delay as needed
             }
         });
     }
 
-    private void
+    private void handleSuccessfulLogin() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert firebaseUser != null;
+        checkUserTypeAndNavigate(firebaseUser.getUid());
+    }
 
-    underlineText(TextView textView) {
+    private void handleLoginFailure(Task<AuthResult> task) {
+        try {
+            throw Objects.requireNonNull(task.getException());
+        } catch (FirebaseAuthInvalidCredentialsException e) {
+            showErrorAndFocus(editTextPwd, "Incorrect Email or Password");
+        } catch (Exception e) {
+            Log.e(TAG, Objects.requireNonNull(e.getMessage()));
+            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void checkUserTypeAndNavigate(String uid) {
+        db.collection("Companies").document(uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task.getResult().exists()) {
+                        navigateToCompanyActivity();
+                    } else {
+                        navigateToEmployeeActivity();
+                    }
+                } else {
+                    Toast.makeText(LoginActivity.this, "User doesn't exist!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void navigateToCompanyActivity() {
+        Toast.makeText(LoginActivity.this, "Company", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(LoginActivity.this, CompanyActivity.class);
+        intent.putExtra("company_uid", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
+        editTextEmail.setText("");
+        editTextPwd.setText("");
+        startActivity(intent);
+    }
+
+    private void navigateToEmployeeActivity() {
+        Toast.makeText(LoginActivity.this, "Employee", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(LoginActivity.this, VehicleListActivity.class);
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        intent.putExtra("email", email);
+        startActivity(intent);
+    }
+
+    private void underlineAndStartRegistration() {
+        underlineText(signUp);
+        new Handler().postDelayed(this::startRegistrationActivity, 200);
+    }
+
+    private void startRegistrationActivity() {
+        Intent intent = new Intent(LoginActivity.this, RegisterCompanyActivity.class);
+        startActivity(intent);
+    }
+
+    private void underlineText(TextView textView) {
         String text = textView.getText().toString();
         SpannableString spannableString = new SpannableString(text);
         UnderlineSpan underlineSpan = new UnderlineSpan();
         spannableString.setSpan(underlineSpan, 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         textView.setText(spannableString);
 
-        // Add a slight delay before removing underline
-        textView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                spannableString.removeSpan(underlineSpan);
-                textView.setText(spannableString);
-            }
-        }, 100); // Adjust delay as needed
+        textView.postDelayed(() -> {
+            spannableString.removeSpan(underlineSpan);
+            textView.setText(spannableString);
+        }, 100);
     }
-
 }

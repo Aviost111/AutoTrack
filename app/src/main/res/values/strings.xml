@@ -8,15 +8,15 @@
     <string name="sign_up">Sign up!</string>
     <string name="autotrack">AutoTrack</string>
     <string name="logo">logo</string>
-    <string name="email">Email:</string>
+    <string name="email">Email</string>
     <string name="confirm_email">Confirm email:</string>
     <string name="passwordR">Password:</string>
     <string name="confirm_password">Confirm password:</string>
     <string name="register">Register</string>
     <string name="please_sign_up">Please sign-up</string>
-    <string name="first_name">First name:</string>
-    <string name="phone_number">Phone number:</string>
-    <string name="last_name">Last name:</string>
+    <string name="first_name">First name</string>
+    <string name="phone_number">Phone number</string>
+    <string name="last_name">Last name</string>
     <string name="add_tool">Add Tool</string>
     <string name="add_employee">Add Employee</string>
     <string name="logout">Logout</string>
@@ -27,5 +27,7 @@
     <string name="phone">Phone</string>
     <string name="register_employee">Register Employee</string>
     <string name="employees_list">Employees List</string>
-    <string name="company_id_reg">Company ID:</string>
+    <string name="vehicles">Add Vehicle</string>
+    <string name="add_vehicle">Add Vehicle</string>
+    <string name="report_treatment">Report Treatment</string>
 </resources>

@@ -43,7 +43,7 @@
         android:layout_below="@id/textViewAvailability"
         android:layout_marginTop="70dp"
         android:layout_centerHorizontal="true"
-        android:text="Start / Stop" />
+        android:text="Start" />
 
     <!-- Vehicle History Button -->
     <Button
@@ -56,22 +56,44 @@
         android:text="Vehicle History" />
 
     <!-- Report Car Care / Refueling Button -->
-    <Button
-        android:id="@+id/btnReportCarCare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnVehicleHistory"
-        android:layout_marginTop="37dp"
-        android:layout_centerHorizontal="true"
-        android:text="Report Car Care / Refueling" />
 
     <!-- Back Button -->
+
+    <LinearLayout
+        android:id="@+id/btnRefuelTreatContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/btnVehicleHistory"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/btnReportRefuel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="37dp"
+            android:text="Report Refuel" />
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnReportTreatment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="37dp"
+            android:text="Report Treatment" />
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btnReportCarCare"
-        android:layout_marginTop="69dp"
+        android:layout_below="@+id/btnRefuelTreatContainer"
+        android:layout_marginTop="30dp"
         android:layout_marginLeft="50dp"
         android:text="Back" />
 

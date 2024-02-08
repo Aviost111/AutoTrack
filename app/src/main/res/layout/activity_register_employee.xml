@@ -16,19 +16,33 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
 
+
     <!-- Back Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
         android:backgroundTint="@color/red"
+        app:icon="@drawable/ic_action_name"
+        app:iconSize="28dp"
+        app:iconTint="@color/white" />
+
+
+    <!-- Page Title -->
+    <TextView
+        android:id="@+id/tvPageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
         android:padding="10dp"
-        android:text="Back"
-        app:cornerRadius="30dp"
-        app:strokeColor="@color/white"
-        app:strokeWidth="2dp" />
+        android:text="Register New Employee"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <!-- Employee Registration Form -->
     <LinearLayout
@@ -36,72 +50,79 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:orientation="vertical"
-        android:padding="15dp">
+        android:padding="15dp"
+        android:layout_below="@id/tvPageTitle">
 
 
         <!-- First Name -->
-        <EditText
-            android:id="@+id/etFirstName"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="name"
-            android:hint="@string/first_name"
-            android:inputType="text" />
+            android:hint="@string/first_name">
+
+            <EditText
+                android:id="@+id/etFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="name"
+                android:inputType="text"
+                android:padding="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Last Name -->
-        <EditText
-            android:id="@+id/etLastName"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="name"
-            android:hint="@string/last_name"
-            android:inputType="text" />
+            android:hint="@string/last_name">
+
+            <EditText
+                android:id="@+id/etLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="name"
+                android:inputType="text"
+                android:padding="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
         <!-- Email -->
-        <EditText
-            android:id="@+id/etEmail"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="emailAddress"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+            android:hint="@string/email">
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="emailAddress"
+                android:inputType="textEmailAddress"
+                android:padding="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
         <!-- Phone -->
-        <EditText
-            android:id="@+id/etPhone"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="phone"
-            android:hint="@string/phone"
-            android:inputType="phone" /> <!-- TODO check! Autofill Hints for Phone Number -->
+            android:hint="@string/phone">
 
-
-        <!-- Manager ID -->
-        <EditText
-            android:id="@+id/etManagerId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="identification"
-            android:hint="@string/manager_id"
-            android:inputType="number" />
-
-        <!-- Company ID -->
-        <EditText
-            android:id="@+id/etCompanyId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="identification"
-            android:hint="@string/company_id"
-            android:inputType="number" />
-
+            <EditText
+                android:id="@+id/etPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="phone"
+                android:inputType="phone"
+                android:padding="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Button to Perform Registration -->
         <Button
             android:id="@+id/btnRegisterEmployee"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
             android:backgroundTint="@color/red"
             android:text="@string/register_employee" />
 
