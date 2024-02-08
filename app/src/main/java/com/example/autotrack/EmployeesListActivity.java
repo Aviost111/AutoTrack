@@ -14,7 +14,6 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class EmployeesListActivity extends AppCompatActivity {
 
 
 private ListView listviewEmployees;
-
+private String companyId;
 private TextView textName;
 private Button btnLogout;
 
@@ -37,8 +36,12 @@ protected void onCreate(Bundle savedInstanceState) {
 
     textName = findViewById(R.id.userName);
 
-// Fetch manager data asynchronously
-    CompletableFuture<CompanyObj> managerFuture = FirestoreAppData.returnCompany();
+    // Get the company's ID for the manager name.
+    companyId = getIntent().getStringExtra("company_uid");
+    // send this company_uid also to the firestoreAppData class:
+    FirestoreAppData.handleCompanyUid(companyId);
+
+    CompletableFuture<CompanyObj> managerFuture = FirestoreAppData.returnCompany(companyId);
 
     // Set the text of textName when the manager data is retrieved
     managerFuture.thenAccept(company -> {
@@ -84,8 +87,8 @@ protected void onCreate(Bundle savedInstanceState) {
     backButton.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            // Perform any additional actions before finishing the activity if needed
-            finish(); // This will close the current activity and go back to the "manager Activity"
+                    // Finish the current activity to go back
+                    finish();
         }});
 }
 
@@ -97,21 +100,22 @@ protected void onCreate(Bundle savedInstanceState) {
         listviewEmployees.setAdapter((adapter));
 
         //set the item click listener:
-
         listviewEmployees.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // get the clicked activity_employee_details.xml object
+                // get the clicked activity_employee_history.xml object
                 EmployeeObj clickedEmployeeObj = (EmployeeObj)  parent.getItemAtPosition(position);
 
                 //Access information from clicked EmployeeObj
                 String employeeId = clickedEmployeeObj.getEmail();
-
+                Log.d("EmployeeListActivity", "employeeId: " + employeeId);
                 //create an intent to start the EmployeeActivity
-                Intent intent = new Intent(EmployeesListActivity.this, EmployeeDetailsActivity.class);
+                Intent intent = new Intent(EmployeesListActivity.this, EmployeeHistoryActivity.class);
 
-                //pass necessary information as extras to the the activity_employee_details.xml activity.
-//                intent.putExtra("EmployeeId" , EmployeeId);
+//                pass necessary information as extras to the the activity_employee_details.xml activity.
+                intent.putExtra("employeeId" , employeeId);
+                intent.putExtra("company_uid", companyId);
+
                 startActivity(intent);            }
         });
     }

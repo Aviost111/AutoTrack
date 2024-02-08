@@ -24,22 +24,31 @@ public class FirestoreAppData {
     public static CollectionReference getCompaniesCollection() {
         return companiesCollection;
     }
+    private static String current_company_id;
+
+    // use the company_id from companyActivity
+    public static void handleCompanyUid(String companyUid) {
+        current_company_id = companyUid;
+    }
 
 
     public FirestoreAppData() {
+
         firestore = FirebaseFirestore.getInstance();
         //        get the data of all companies
         companiesCollection = firestore.collection("Companies");
 
         //       get the current user's companies details
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        String uid = currentUser.getUid();
-        DocumentReference companyDocument = companiesCollection.document(uid);
+//        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+//        String uid = currentUser.getUid();
+
+        DocumentReference companyDocument = companiesCollection.document(current_company_id);
 
         //        get the "employees" and "vehicle" data of this company
         employeesCollection = companyDocument.collection("Employees");
         vehiclesCollection = companyDocument.collection("Vehicles");
     }
+
 
 
     // Write Manager data to Firestore
@@ -169,31 +178,32 @@ public class FirestoreAppData {
         }
 
 
-    // Read company data from Firestore and return CompletableFuture with specify company details
-    public static CompletableFuture<CompanyObj> returnCompany() {
+    // Read company data from Firestore and return CompletableFuture with specified company details
+    public static CompletableFuture<CompanyObj> returnCompany(String company_id) {
         CompletableFuture<CompanyObj> future = new CompletableFuture<>();
 
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            String uid = currentUser.getUid();
-            if (companiesCollection != null) {
-                DocumentReference companyDocument = companiesCollection.document(uid);
-                companyDocument.get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        CompanyObj company = task.getResult().toObject(CompanyObj.class);
-                        future.complete(company); // Complete the future with the result
-                    } else {
-                        future.completeExceptionally(task.getException()); // Complete the future exceptionally in case of failure
-                    }
-                });
-            }
+        // Access a Cloud Firestore instance
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        if (company_id != null) {
+            // Get companyId (=ManagerId)
+            DocumentReference companyDocument = db.collection("Companies").document(company_id);
+            companyDocument.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    CompanyObj company = task.getResult().toObject(CompanyObj.class);
+                    future.complete(company); // Complete the future with the result
+                } else {
+                    future.completeExceptionally(task.getException()); // Complete the future exceptionally in case of failure
+                }
+            });
         } else {
-            // Handle the case where collectionRef is null
-            return CompletableFuture.completedFuture(null);
-             }
+            // Handle the case where company_id is null
+            future.completeExceptionally(new IllegalArgumentException("Company ID is null"));
+        }
 
         return future;
     }
+
 
     // Interface to handle callbacks for reading data
     public interface OnGetDataListener<T> {

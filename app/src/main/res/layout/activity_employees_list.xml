@@ -1,63 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".EmployeesListActivity">
+    android:layout_height="match_parent">
 
 
     <TextView
         android:id="@+id/userName"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="64dp"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        android:layout_marginTop="30dp"
+        android:visibility="visible" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/employeeListTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="116dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="76dp"
+        android:text="Employees list"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/watchHistoryTextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="124dp"
-        android:backgroundTint="@color/red"
-        android:text="employees list"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Click to watch employee's history"
+        android:textSize="15sp" />
 
     <ListView
         android:id="@+id/listviewEmployees"
         android:layout_width="301dp"
         android:layout_height="574dp"
         android:layout_above="@+id/btnBack"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="200dp"
+        android:layout_below="@id/watchHistoryTextview"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:dividerHeight="1dp" />
 
     <Button
         android:id="@+id/btnBack"
         android:layout_width="165dp"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="32dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="6dp"
         android:backgroundTint="@color/red"
-        android:text="Back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Back" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
 
