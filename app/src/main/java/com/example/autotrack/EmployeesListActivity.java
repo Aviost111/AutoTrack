@@ -1,4 +1,6 @@
 package com.example.autotrack;
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,11 +13,13 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class EmployeesListActivity extends AppCompatActivity {
 
@@ -32,15 +36,34 @@ protected void onCreate(Bundle savedInstanceState) {
     listviewEmployees = findViewById(R.id.listviewEmployees);
 
     textName = findViewById(R.id.userName);
-    textName.setText("hello");
+
+// Fetch manager data asynchronously
+    CompletableFuture<CompanyObj> managerFuture = FirestoreAppData.returnCompany();
+
+    // Set the text of textName when the manager data is retrieved
+    managerFuture.thenAccept(company -> {
+        Log.d(TAG, "CompanyObj received: " + company);
+        if (company != null) {
+            // Use the company name to set the text
+            String companyName = company.getName();
+            runOnUiThread(() -> textName.setText(companyName));
+        } else {
+            Log.e(TAG, "CompanyObj is null.");
+            // Handle the null case appropriately
+        }
+    }).exceptionally(e -> {
+        // Handle exceptions if any
+        e.printStackTrace();
+        Log.e(TAG, "Exception while fetching and updating company data: " + e.getMessage());
+        return null;
+    });
 
     Button backButton = findViewById(R.id.btnBack);
 
     // Get a reference to the Firestore database
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    db.collection("Employees")
-            .get()
+    new FirestoreAppData();
+    CollectionReference emp  = FirestoreAppData.getEmployeesCollection();
+    emp.get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         List<EmployeeObj> employeelist = new ArrayList<>();
