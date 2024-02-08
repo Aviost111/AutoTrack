@@ -108,7 +108,7 @@ public class FirestoreAppData {
 
 
     // Write Vehicle data to Firestore
-    public void writeVehicle(Vehicle vehicle) {
+    public void writeVehicle(VehicleObj vehicle) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String uid = currentUser.getUid();
@@ -118,14 +118,14 @@ public class FirestoreAppData {
     }
 
     // Read Vehicle data from Firestore
-    public void readVehicle(final OnGetDataListener<Vehicle> listener) {
+    public void readVehicle(final OnGetDataListener<VehicleObj> listener) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String uid = currentUser.getUid();
             DocumentReference vehicleDocument = vehiclesCollection.document(uid);
             vehicleDocument.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    Vehicle vehicle = task.getResult().toObject(Vehicle.class);
+                    VehicleObj vehicle = task.getResult().toObject(VehicleObj.class);
                     if (listener != null) {
                         listener.onSuccess(vehicle);
                     }

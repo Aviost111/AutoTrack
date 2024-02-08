@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 // EmployeeActivity.java
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,18 +13,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,11 +46,11 @@ public class EmployeeActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d("HHHHHHHHHHHHHHH", "hekkooko");
-                        List<Vehicle> vehicleList = new ArrayList<>();
+                        List<VehicleObj> vehicleList = new ArrayList<>();
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Log.d("Firestore Data", document.getData().toString());
                             // Convert the document to a Vehicle object
-                            Vehicle vehicle = document.toObject(Vehicle.class);
+                            VehicleObj vehicle = document.toObject(VehicleObj.class);
 
 //                            // Set longs (firebase numeric values)
 //                            vehicle.setTreatment_hours(document.getLong("Hours_for_treatment").intValue());
@@ -89,8 +82,8 @@ public class EmployeeActivity extends AppCompatActivity {
     }
 
 
-    private void updateListView(List<Vehicle> vehicleList) {
-        ArrayAdapter<Vehicle> adapter = new ArrayAdapter<>(this,
+    private void updateListView(List<VehicleObj> vehicleList) {
+        ArrayAdapter<VehicleObj> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, vehicleList);
 
         listViewFactoryVehicles.setAdapter(adapter);
@@ -100,7 +93,7 @@ public class EmployeeActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Get the clicked Vehicle object
-                Vehicle clickedVehicle = (Vehicle) parent.getItemAtPosition(position);
+                VehicleObj clickedVehicle = (VehicleObj) parent.getItemAtPosition(position);
 
                 // Access information from the clicked Vehicle
                 String vehicleId = clickedVehicle.getID();
