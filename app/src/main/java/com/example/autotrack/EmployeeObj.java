@@ -4,6 +4,8 @@ class EmployeeObj {
     // Mandatory empty constructor
     // for use of FirebaseUI
 
+
+    private String Name;
     private String first_name;
 
 
@@ -36,6 +38,10 @@ class EmployeeObj {
 
     public void setLast_name(String last_name) {
         this.last_name = last_name;
+    }
+
+    public String getName() {
+        return first_name + " " + last_name;
     }
 
     public String getPhone() {
