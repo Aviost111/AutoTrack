@@ -5,7 +5,6 @@ import java.math.RoundingMode;
 
 public class VehicleObj {
     private String ID;
-    private String company_ID;
     private String engine_size;
     private int treatment_hours;
     private double hours_till_treatment;
@@ -23,14 +22,6 @@ public class VehicleObj {
 
     public void setID(String ID) {
         this.ID = ID;
-    }
-
-    public String getCompany_ID() {
-        return company_ID;
-    }
-
-    public void setCompany_ID(String company_ID) {
-        this.company_ID = company_ID;
     }
 
     public String getEngine_size() {
@@ -83,10 +74,10 @@ public class VehicleObj {
 
     @Override
     public String toString() {
-        return "\nVehicleType: " + type + ",VehicleId " + ID +
-                "\nversion: " + version +
-                "\nCompany ID: " + company_ID +
-                "\nManufacturing Year: " + manufacture_year +
+        return "\nVehicle type: " + type +
+                "\nVehicle id: " + ID +
+                "\nVersion: " + version +
+                "\nManufacturing year: " + manufacture_year +
                 "\nHours left for treatment: " + BigDecimal.valueOf(hours_till_treatment)
                 .setScale(2, RoundingMode.HALF_UP).doubleValue() +
                 "\n";
