@@ -229,7 +229,7 @@ public class VehicleActivity extends AppCompatActivity {
                 startStop.put(now, startStopInfo);
 
                 // Update start/stop history for Only employee in Employees
-                if(!isManager) {
+                if (!isManager) {
                     String path = "Companies/" + companyId + "/Employees/" + userMail + "/history/start-stop";
                     DocumentReference docRef = db.document(path);
                     docRef.update(startStop).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -328,20 +328,22 @@ public class VehicleActivity extends AppCompatActivity {
                     DocumentReference docRef = db.document(path);
                     DocumentReference vDocRef = db.document(vPath);
                     dismissPopupWindow(); // Close the popup
-                    docRef.set(fuel).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(VehicleActivity.this, "refuel saved in employees", Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    // Handle failure to save user data
-                                    Toast.makeText(VehicleActivity.this, "not saved in employees", Toast.LENGTH_SHORT).show();
-                                    Log.d(TAG, e.toString());
-                                }
-                            });
+                    if (!isManager) {
+                        docRef.set(fuel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Toast.makeText(VehicleActivity.this, "refuel saved in employees", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Handle failure to save user data
+                                        Toast.makeText(VehicleActivity.this, "not saved in employees", Toast.LENGTH_SHORT).show();
+                                        Log.d(TAG, e.toString());
+                                    }
+                                });
+                    }
                     vDocRef.set(fuel).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -391,7 +393,6 @@ public class VehicleActivity extends AppCompatActivity {
                     treatmentInfo.put("last_name", lastName);
                     treatmentInfo.put("vehicle_id", vehicleId);
                     treatment.put(now, treatmentInfo);
-
                     String path = "Companies/" + companyId + "/Employees/" + userMail + "/history/treatments";
                     String vPath = "Companies/" + companyId + "/Vehicles/" + vehicleId;
 
@@ -406,20 +407,22 @@ public class VehicleActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> vTask) {
                                     if (vTask.isSuccessful()) {
                                         // Set treatment data in employee history
-                                        docRef.set(treatment)
-                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            // All operations are successful
-                                                            Toast.makeText(VehicleActivity.this, "Treatment saved", Toast.LENGTH_SHORT).show();
-                                                        } else {
-                                                            // Handle failure to save treatment data
-                                                            Toast.makeText(VehicleActivity.this, "Failed to save treatment data", Toast.LENGTH_SHORT).show();
-                                                            Log.d(TAG, Objects.requireNonNull(task.getException()).toString());
+                                        if (!isManager) {
+                                            docRef.set(treatment)
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                // All operations are successful
+                                                                Toast.makeText(VehicleActivity.this, "Treatment saved", Toast.LENGTH_SHORT).show();
+                                                            } else {
+                                                                // Handle failure to save treatment data
+                                                                Toast.makeText(VehicleActivity.this, "Failed to save treatment data", Toast.LENGTH_SHORT).show();
+                                                                Log.d(TAG, Objects.requireNonNull(task.getException()).toString());
+                                                            }
                                                         }
-                                                    }
-                                                });
+                                                    });
+                                        }
                                         vHDocRef.set(treatment)
                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
