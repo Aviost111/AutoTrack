@@ -32,20 +32,31 @@ public class DeleteDialogHelper {
         final EditText input = new EditText(context);
         builder.setView(input);
 
-
         // Set up the buttons
-        builder.setPositiveButton("OK", (dialog, which) -> {
-            String id = input.getText().toString();
-            // Call a method to delete the entity with the provided ID
-            deleteEntity(context, db, companyUid, type, id);
-        });
+        builder.setPositiveButton("OK", null);
 
         // Set up the cancel button
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
+        AlertDialog dialog = builder.create(); // Create the dialog
 
+        // Override the positive button behavior
+        dialog.setOnShowListener(dialogInterface -> {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view -> {
+                String id = input.getText().toString().trim(); // Trim to remove leading/trailing whitespace
 
-        builder.show();
+                // Check if input is empty
+                if (id.isEmpty()) {
+                    Toast.makeText(context, "Please enter a valid " + type + " " + (type.equals("Employees") ? "email" : "ID"), Toast.LENGTH_SHORT).show();
+                } else {
+                    // Call a method to delete the entity with the provided ID
+                    deleteEntity(context, db, companyUid, type, id);
+                    dialog.dismiss(); // Dismiss the dialog after deletion
+                }
+            });
+        });
+
+        dialog.show(); // Show the dialog
     }
 
 
@@ -54,9 +65,11 @@ public class DeleteDialogHelper {
         CollectionReference historyRef;
 
         if (type.equals("Employees")) {
+            // Get the document reference for the employee
             docRef = db.collection("Companies").document(companyUid).collection("Employees").document(id);
             historyRef = docRef.collection("history");
         } else if (type.equals("Vehicles")) {
+            // Get the document reference for the vehicle
             docRef = db.collection("Companies").document(companyUid).collection("Vehicles").document(id);
             historyRef = docRef.collection("history");
         } else {
@@ -64,8 +77,21 @@ public class DeleteDialogHelper {
             return; // Exit if type is invalid
         }
 
-        // Delete the parent document and its subCollection
-        deleteDocumentAndSubCollection(context, docRef, historyRef, type);
+        // Check if the document exists before attempting to delete
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                if (task.getResult().exists()) {
+                    // Document exists, proceed with deletion
+                    deleteDocumentAndSubCollection(context, docRef, historyRef, type);
+                } else {
+                    // Document does not exist
+                    Toast.makeText(context, type + " with ID/email " + id + " does not exist", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // Task failed with an exception
+                Toast.makeText(context, "Failed to check existence of " + type + ": " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // Helper method to delete the document
@@ -92,7 +118,7 @@ public class DeleteDialogHelper {
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Failed to delete documents in subcollection: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Failed to delete documents in subCollection: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 }
