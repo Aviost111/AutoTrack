@@ -329,7 +329,7 @@ public class VehicleActivity extends AppCompatActivity {
                     DocumentReference vDocRef = db.document(vPath);
                     dismissPopupWindow(); // Close the popup
                     if (!isManager) {
-                        docRef.set(fuel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        docRef.update(fuel).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Toast.makeText(VehicleActivity.this, "refuel saved in employees", Toast.LENGTH_SHORT).show();
@@ -344,7 +344,7 @@ public class VehicleActivity extends AppCompatActivity {
                                     }
                                 });
                     }
-                    vDocRef.set(fuel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    vDocRef.update(fuel).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Toast.makeText(VehicleActivity.this, "refuel saved in vehicles", Toast.LENGTH_SHORT).show();
@@ -408,7 +408,7 @@ public class VehicleActivity extends AppCompatActivity {
                                     if (vTask.isSuccessful()) {
                                         // Set treatment data in employee history
                                         if (!isManager) {
-                                            docRef.set(treatment)
+                                            docRef.update(treatment)
                                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
@@ -423,7 +423,7 @@ public class VehicleActivity extends AppCompatActivity {
                                                         }
                                                     });
                                         }
-                                        vHDocRef.set(treatment)
+                                        vHDocRef.update(treatment)
                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {

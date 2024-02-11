@@ -41,7 +41,7 @@ public class VehicleListActivity extends AppCompatActivity {
         // Access a Cloud Firestore instance
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Get companyId (=ManagerId)
+        // Get companyId (=ManagerId) and retrieve it's Vehicles data
         db.collection("Users")
                 .document(userMail)
                 .get()

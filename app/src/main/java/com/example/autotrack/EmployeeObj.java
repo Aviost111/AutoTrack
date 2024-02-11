@@ -7,22 +7,14 @@ class EmployeeObj {
 
     private String Name;
     private String first_name;
-
-
     private String last_name;
-
-
     private String phone;
-
-
     private String company_ID;
-
-
     private String manager_ID;
-
     private String email;
 
-    public EmployeeObj() { }
+    public EmployeeObj() {
+    }
 
     public String getFirst_name() {
         return first_name;
@@ -78,9 +70,10 @@ class EmployeeObj {
 
     @Override
     public String toString() {
-        return "first_name: " + first_name + "last name: " + last_name
-                +"\n email: "+ email +
-                "\n phone: " + phone;
+        return "First name: " + first_name +
+                "\nLast name: " + last_name
+                + "\nEmail: " + email +
+                "\nPhone: " + phone;
     }
 }
 
