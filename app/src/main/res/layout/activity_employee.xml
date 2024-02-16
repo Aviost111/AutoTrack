@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- activity_employee.xml -->
+<?xml version="1.0" encoding="utf-8"?><!-- activity_employee.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,24 +9,42 @@
     <!-- Middle section with factory vehicles -->
 
     <!-- Logout button at the bottom left -->
+    <androidx.appcompat.widget.ActionMenuView
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:background="@color/red"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textViewEmployeeDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Employee Name: John Doe\nEmployee ID: 123456"
+        android:layout_below="@id/toolbar"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"/>
-
+        android:layout_centerVertical="true"
+        android:layout_marginTop="15dp"
+        android:gravity="center_horizontal"
+        android:text="Employee Name: John Doe\nEmployee ID: 123456"
+        android:textSize="18sp"
+        />
 
     <ListView
         android:id="@+id/listViewFactoryVehicles"
-        android:layout_width="343dp"
-        android:layout_height="489dp"
+        android:layout_width="400dp"
+        android:layout_height="450dp"
         android:layout_below="@id/textViewEmployeeDetails"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:scrollbars="vertical"/>
+        android:layout_marginTop="42dp"
+        android:scrollbars="vertical"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        />
 
     <Button
         android:id="@+id/btnLogout"
@@ -38,6 +56,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/red"
         android:text="Logout" />
 
 </RelativeLayout>

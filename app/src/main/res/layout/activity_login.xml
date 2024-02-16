@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,20 +6,21 @@
     android:background="@color/red"
     tools:context=".LoginActivity">
 
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="383dp"
+        android:layout_height="306dp"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginBottom="50dp"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="8dp"
-        app:strokeColor="@color/black"
+        android:layout_marginBottom="55dp"
+        app:cardBackgroundColor="@color/gray"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="200dp"
+        app:strokeColor="@color/gray"
         app:strokeWidth="0.5dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,7 +39,9 @@
                     android:hint="@string/email_username"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="8dp"
-                    android:paddingVertical="2dp" />
+                    android:paddingVertical="2dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#090909" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -63,17 +65,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:clickable="true"
-                android:textColor="@color/blue"
-                android:textSize="17sp"
+                android:focusable="true"
                 android:text="@string/forgot_password"
-                android:focusable="true" />
+                android:textColor="@color/blue"
+                android:textSize="17sp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:backgroundTint="@color/black"
+                android:fontFamily="@font/lato"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:text="@string/login"
@@ -82,19 +84,19 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="17sp"
-                android:text="@string/don_t_have_a_user" />
+                android:text="@string/don_t_have_a_user"
+                android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/signUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:textSize="17sp"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 android:text="@string/sign_up"
                 android:textColor="@color/blue"
-                android:foreground="?attr/selectableItemBackground"
-                android:focusable="true" />
+                android:textSize="17sp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -105,17 +107,16 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="420dp"
             android:background="@color/gray">
 
             <ImageView
                 android:id="@+id/forkLift_icon"
-                android:layout_width="239dp"
-                android:layout_height="266dp"
-                android:layout_centerHorizontal="true"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:cropToPadding="false"
                 android:layerType="software"
-                android:src="@drawable/forklift_svgrepo_com" />
-
+                android:src="@drawable/boxes" />
 
             <TextView
                 android:id="@+id/company_name"
@@ -123,13 +124,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/forkLift_icon"
                 android:layout_centerInParent="true"
+                android:layout_marginTop="-23dp"
+                android:fontFamily="@font/rocknroll_one"
                 android:text="@string/autotrack"
-                android:textSize="50sp" />
-
-
+                android:textColor="#000000"
+                android:textColorHighlight="#000000"
+                android:textColorHint="#000000"
+                android:textColorLink="#000000"
+                android:textSize="60sp" />
         </RelativeLayout>
-
     </androidx.appcompat.widget.LinearLayoutCompat>
-
-
 </RelativeLayout>

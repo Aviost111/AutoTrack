@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+    <!-- Back Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/red"
+        app:icon="@drawable/ic_action_name"
+        app:iconSize="28dp"
+        app:iconTint="@color/white" />
 
 
     <TextView
@@ -32,26 +54,13 @@
 
     <ListView
         android:id="@+id/listviewEmployees"
-        android:layout_width="301dp"
-        android:layout_height="574dp"
-        android:layout_above="@+id/btnBack"
+        android:layout_width="400dp"
+        android:layout_height="500dp"
         android:layout_below="@id/watchHistoryTextview"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:divider="@android:color/darker_gray"
         android:dividerHeight="1dp" />
-
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="165dp"
-        android:layout_height="48dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="6dp"
-        android:backgroundTint="@color/red"
-        android:text="Back" />
-
 
 </RelativeLayout>
 

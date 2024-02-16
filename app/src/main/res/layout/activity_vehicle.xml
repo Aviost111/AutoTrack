@@ -1,15 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+    <!-- Back Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/red"
+        app:icon="@drawable/ic_action_name"
+        app:iconSize="28dp"
+        app:iconTint="@color/white" />
 
     <!-- Employee Name and ID -->
     <TextView
         android:id="@+id/textViewEmployeeDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="25dp"
         android:layout_centerHorizontal="true"
+        android:layout_below="@id/toolbar"
         android:text="Employee: John Doe (ID: 12345)"
         android:textSize="20sp" />
 
@@ -19,8 +43,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewEmployeeDetails"
-        android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="25dp"
         android:text="Vehicle: Forklift (ID: ABC123)"
         android:textSize="20sp" />
 
@@ -87,14 +111,5 @@
             android:text="Report Treatment" />
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btnRefuelTreatContainer"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="50dp"
-        android:text="Back" />
 
 </RelativeLayout>

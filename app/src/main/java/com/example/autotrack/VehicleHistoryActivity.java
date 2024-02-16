@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.google.firebase.firestore.CollectionReference;
@@ -40,6 +42,13 @@ public class VehicleHistoryActivity extends AppCompatActivity {
         ListView listViewStartStop = findViewById(R.id.listViewStartStop);
         ListView listViewTreatments = findViewById(R.id.listViewTreatments);
         ListView listViewRefuels = findViewById(R.id.listViewRefuels);
+
+        Button backButton = findViewById(R.id.btnBack);
+        backButton.setOnClickListener(view -> {
+            // Finish the current activity to go back
+            finish();
+        });
+
 
         // Get companyId (=ManagerId)
         db.collection("Users")

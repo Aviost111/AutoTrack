@@ -2,16 +2,41 @@
 <!-- activity_vehicle_history.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+    <!-- Back Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/red"
+        app:icon="@drawable/ic_action_name"
+        app:iconSize="28dp"
+        app:iconTint="@color/white" />
+
 
     <TextView
         android:id="@+id/textViewStartStop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start-Stop"
-        android:textSize="33dp"
+        android:layout_below="@id/toolbar"
+        android:textSize="33sp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="25dp"/>
 
     <ListView
         android:id="@+id/listViewStartStop"
@@ -31,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/listViewStartStop"
         android:text="Treatments"
-        android:textSize="33dp"
+        android:textSize="33sp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"/>
 
@@ -53,7 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/listViewTreatments"
         android:text="Refuels"
-        android:textSize="33dp"
+        android:textSize="33sp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"/>
 
