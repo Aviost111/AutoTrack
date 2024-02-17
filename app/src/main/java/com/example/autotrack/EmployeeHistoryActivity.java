@@ -107,9 +107,9 @@ public class EmployeeHistoryActivity extends AppCompatActivity {
                                 // Iterate over the entries of the inner map
                                 for (Map.Entry<String, Object> innerEntry : innerMap.entrySet()) {
                                     // Append the field and value with appropriate formatting
-                                    data.append(innerEntry.getKey()).append(" : ").append(innerEntry.getValue()).append(",\n");
+                                    data.append(innerEntry.getKey()).append(": ").append(innerEntry.getValue()).append("\n");
                                 }
-                                dataList.add(formattedDateTime + ": \n" + data);
+                                dataList.add("Date: " +formattedDateTime + " \n" + data);
                                 // Clear the StringBuilder for the next iteration
                                 data.setLength(0);
                             }
