@@ -2,8 +2,12 @@ package com.example.autotrack;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.CollectionReference;
@@ -14,51 +18,54 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 public class DeleteDialogHelper {
 
     public static void showDialog(Context context, FirebaseFirestore db, String companyUid, String type) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.RoundedDialog);
+
+        // Inflate custom layout for dialog content
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_delete_entity, null);
+
+        builder.setView(view);
+
+        // Get references to dialog views
+        TextView textViewTitle = view.findViewById(R.id.textViewDialogTitle);
+        EditText editTextId = view.findViewById(R.id.editTextId);
+        Button buttonCancel = view.findViewById(R.id.buttonCancel);
+        Button buttonDelete = view.findViewById(R.id.buttonOk);
 
         // Set the dialog title and message based on the entity type
         if (type.equals("Employees")) {
-            builder.setTitle("Remove Employee");
-            builder.setMessage("Enter the email of the employee to remove:");
+            textViewTitle.setText("Remove Employee");
+            editTextId.setHint("Enter Email");
         } else if (type.equals("Vehicles")) {
-            builder.setTitle("Remove Vehicle");
-            builder.setMessage("Enter the ID of the vehicle to remove:");
+            textViewTitle.setText("Remove Vehicle");
+            editTextId.setHint("Enter ID");
         } else {
             Toast.makeText(context, "Invalid entity type", Toast.LENGTH_SHORT).show();
             return; // Exit if type is invalid
         }
 
-        // Set up the input field
-        final EditText input = new EditText(context);
-        builder.setView(input);
+        // Create the dialog
+        AlertDialog dialog = builder.create();
 
-        // Set up the buttons
-        builder.setPositiveButton("OK", null);
-
-        // Set up the cancel button
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
-        AlertDialog dialog = builder.create(); // Create the dialog
-
-        // Override the positive button behavior
-        dialog.setOnShowListener(dialogInterface -> {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view -> {
-                String id = input.getText().toString().trim(); // Trim to remove leading/trailing whitespace
-
-                // Check if input is empty
-                if (id.isEmpty()) {
-                    Toast.makeText(context, "Please enter a valid " + type + " " + (type.equals("Employees") ? "email" : "ID"), Toast.LENGTH_SHORT).show();
-                } else {
-                    // Call a method to delete the entity with the provided ID
-                    deleteEntity(context, db, companyUid, type, id);
-                    dialog.dismiss(); // Dismiss the dialog after deletion
-                }
-            });
+        // Set button click listener for "OK" button
+        buttonDelete.setOnClickListener(v -> {
+            String id = editTextId.getText().toString().trim();
+            // Check if input is empty
+            if (!id.isEmpty()) {
+                // Call method to delete entity
+                deleteEntity(context, db, companyUid, type, id);
+                dialog.dismiss(); // Dismiss the dialog after successful deletion
+            } else {
+                Toast.makeText(context, "Please enter ID", Toast.LENGTH_SHORT).show();
+                // Do not dismiss the dialog in this case
+            }
         });
 
-        dialog.show(); // Show the dialog
-    }
+        // Set button click listener for "Cancel" button
+        buttonCancel.setOnClickListener(v -> dialog.dismiss());
 
+        // Show the dialog
+        dialog.show();
+    }
 
     private static void deleteEntity(Context context, FirebaseFirestore db, String companyUid, String type, String id) {
         DocumentReference docRef;
