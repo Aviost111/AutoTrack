@@ -42,7 +42,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/red"
-            android:drawableTop="@drawable/ic_add_user"
             android:text="@string/add_employee"
             app:icon="@drawable/ic_add_user"
             app:iconPadding="0dp"

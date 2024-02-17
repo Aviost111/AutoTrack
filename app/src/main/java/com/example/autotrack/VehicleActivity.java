@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -62,10 +63,10 @@ public class VehicleActivity extends AppCompatActivity {
         TextView textViewVehicleDetails = findViewById(R.id.textViewVehicleDetails);
         TextView textViewAvailability = findViewById(R.id.textViewAvailability);
         Button btnBack = findViewById(R.id.btnBack);
-        Button btnStartStop = findViewById(R.id.btnStartStop);
-        Button btnVehicleHistory = findViewById(R.id.btnVehicleHistory);
-        Button btnReportRefuel = findViewById(R.id.btnReportRefuel);
-        Button btnReportTreatment = findViewById(R.id.btnReportTreatment);
+        CardView btnStartStop = findViewById(R.id.btnStartStop);
+        CardView btnVehicleHistory = findViewById(R.id.btnVehicleHistory);
+        CardView btnReportRefuel = findViewById(R.id.btnReportRefuel);
+        CardView btnReportTreatment = findViewById(R.id.btnReportTreatment);
 
         // Retrieve data from Intent
         Intent intent = getIntent();
@@ -106,6 +107,7 @@ public class VehicleActivity extends AppCompatActivity {
                         Log.e("Firestore", "Error getting document: ", task.getException());
                     }
 
+                    TextView textViewStartStop = btnStartStop.findViewById(R.id.textViewStartStop);
                     // See if last action was start or stop and set button string by that
                     db.collection("Companies")
                             .document(companyId).
@@ -142,13 +144,13 @@ public class VehicleActivity extends AppCompatActivity {
 
                                                 // Now, we can check if the latest action was "start" or "stop"
                                                 if ("start".equals(latestAction)) {
-                                                    btnStartStop.setText("Stop");
+                                                    textViewStartStop.setText("Stop");
                                                 } else if ("stop".equals(latestAction)) {
-                                                    btnStartStop.setText("Start");
+                                                    textViewStartStop.setText("Start");
                                                 }
                                             }
                                         } else {
-                                            btnStartStop.setText("Start");
+                                            textViewStartStop.setText("Start");
                                         }
                                     }
                                 } else {
@@ -212,13 +214,15 @@ public class VehicleActivity extends AppCompatActivity {
                 Map<String, Object> startStop = new HashMap<>();
                 Map<String, Object> startStopInfo = new HashMap<>();
 
+                TextView textViewStartStop = btnStartStop.findViewById(R.id.textViewStartStop);
+
                 // Check current vehicle status (started or not)
-                if (btnStartStop.getText().equals("Start")) {
+                if (textViewStartStop.getText().equals("Start")) {
                     startStopInfo.put("action", "start");
-                    btnStartStop.setText("Stop");
+                    textViewStartStop.setText("Stop");
                 } else {
                     startStopInfo.put("action", "stop");
-                    btnStartStop.setText("Start");
+                    textViewStartStop.setText("Start");
                     updateHoursTillTreatment(now);
                 }
 
