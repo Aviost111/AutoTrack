@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,33 +8,38 @@
     android:layout_height="match_parent"
     tools:context=".RegisterCompanyActivity">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/red"
         android:orientation="vertical">
+
         <LinearLayout
-            android:layout_width="match_parent"
             android:id="@+id/linearLayoutId"
+            android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@color/gray">
+            android:background="@color/white">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
+                android:layout_gravity="center"
                 android:foregroundGravity="center_vertical|center"
                 android:gravity="center_horizontal"
                 android:text="@string/please_sign_up"
                 android:textSize="50sp" />
 
         </LinearLayout>
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/linearLayoutId"
             android:layout_margin="12dp"
-            app:cardCornerRadius="0dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
             app:cardElevation="8dp"
             app:strokeColor="@color/black"
             app:strokeWidth="0.5dp">
