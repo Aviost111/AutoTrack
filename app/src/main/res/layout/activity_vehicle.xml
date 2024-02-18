@@ -1,4 +1,4 @@
-<!-- activity_vehicle_details.xml -->
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -61,8 +61,8 @@
     <!-- GridLayout for Buttons -->
     <GridLayout
         android:id="@+id/gridLayoutButtons"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/textViewAvailability"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="24dp"
@@ -70,19 +70,15 @@
         android:layout_marginRight="24dp"
         android:layout_marginBottom="20dp"
         android:columnCount="2"
-        android:rowCount="2"
         android:orientation="horizontal"
-        android:padding="10dp"
-        android:useDefaultMargins="true"
-        >
+        android:padding="10dp">
 
+        <!-- Start/Stop Button -->
         <androidx.cardview.widget.CardView
             android:id="@+id/btnStartStop"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_row="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_rowWeight="1"
-            android:layout_column="0"
             android:layout_columnWeight="1"
             android:layout_margin="5dp"
             app:cardCornerRadius="15dp"
@@ -109,19 +105,15 @@
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-                />
             </LinearLayout>
-
-
         </androidx.cardview.widget.CardView>
 
+        <!-- Vehicle History Button -->
         <androidx.cardview.widget.CardView
             android:id="@+id/btnVehicleHistory"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_row="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_rowWeight="1"
-            android:layout_column="1"
             android:layout_columnWeight="1"
             android:layout_margin="5dp"
             app:cardCornerRadius="15dp"
@@ -138,7 +130,6 @@
                     android:layout_height="110dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_action_history" />
-                />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -149,16 +140,14 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
-
-
         </androidx.cardview.widget.CardView>
 
+        <!-- Report Refuel Button -->
         <androidx.cardview.widget.CardView
             android:id="@+id/btnReportRefuel"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_rowWeight="1"
-            android:layout_column="0"
             android:layout_columnWeight="1"
             android:layout_margin="5dp"
             app:cardCornerRadius="15dp"
@@ -175,7 +164,6 @@
                     android:layout_height="110dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_action_refuel" />
-                />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -188,12 +176,11 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-
+        <!-- Report Treatment Button -->
         <androidx.cardview.widget.CardView
             android:id="@+id/btnReportTreatment"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_row="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="5dp"
@@ -207,7 +194,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="120dp"
+                    android:layout_width="110dp"
                     android:layout_height="110dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_action_treatment" />
@@ -216,13 +203,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal"
                     android:text="Report Treatment"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:textSize="19sp"
                     android:textStyle="bold" />
             </LinearLayout>
-
         </androidx.cardview.widget.CardView>
 
     </GridLayout>

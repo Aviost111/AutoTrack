@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -168,7 +169,7 @@ public class VehicleActivity extends AppCompatActivity {
             textViewAvailability.setTextColor(Color.RED);
         } else {
             textViewAvailability.setText("Available");
-            textViewAvailability.setTextColor(Color.GREEN);
+            textViewAvailability.setTextColor(ContextCompat.getColor(VehicleActivity.this, R.color.green));
         }
 
 
