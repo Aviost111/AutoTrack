@@ -1,51 +1,60 @@
-<?xml version="1.0" encoding="utf-8"?><!-- activity_employee.xml -->
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Top section with employee name and ID -->
-
-    <!-- Middle section with factory vehicles -->
-
-    <!-- Logout button at the bottom left -->
-    <androidx.appcompat.widget.ActionMenuView
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
         android:background="@color/red"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:theme="?attr/actionBarTheme" />
 
+    <!-- Top section with employee name and ID -->
     <TextView
         android:id="@+id/textViewEmployeeDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="Employee Name: John Doe"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="22sp"
+        app:emojiCompatEnabled="false" />
+
+    <!-- Title for vehicle selection -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewEmployeeDetails"
+        android:layout_centerInParent="true"
         android:layout_marginTop="15dp"
         android:gravity="center_horizontal"
-        android:text="Employee Name: John Doe\nEmployee ID: 123456"
-        android:textSize="18sp"
-        />
+        android:text="Pick Your Vehicle"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="25sp" />
 
+    <!-- Middle section with factory vehicles -->
     <ListView
         android:id="@+id/listViewFactoryVehicles"
         android:layout_width="400dp"
         android:layout_height="450dp"
         android:layout_below="@id/textViewEmployeeDetails"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="42dp"
-        android:scrollbars="vertical"
+        android:layout_marginTop="52dp"
         android:divider="@android:color/darker_gray"
         android:dividerHeight="1dp"
-        />
+        android:listSelector="#ff7979"
+        android:scrollbars="vertical" /> <!-- Add list selector here -->
 
+    <!-- Logout button at the bottom left -->
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="wrap_content"
@@ -57,6 +66,8 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/red"
-        android:text="Logout" />
+        android:text="Logout"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white" /> <!-- Make text all lowercase -->
 
 </RelativeLayout>

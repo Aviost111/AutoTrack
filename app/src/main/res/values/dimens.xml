@@ -10,4 +10,10 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="container_margin">8dp</dimen>
     <dimen name="container_horizontal_margin">16dp</dimen>
+    <dimen name="headerTextSize">22sp</dimen>
+    <dimen name="newsMoreTextSize">12sp</dimen>
+    <dimen name="loginCardRadius">20dp</dimen>
+    <dimen name="loginViewsMargin">20dp</dimen>
+
+    <dimen name="signup_text_margin_top">10dp</dimen>
 </resources>
