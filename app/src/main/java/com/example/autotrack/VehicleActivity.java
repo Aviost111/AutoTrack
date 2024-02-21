@@ -278,6 +278,7 @@ public class VehicleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Implement logic to navigate to the report car care / refueling page
+                findViewById(R.id.overlayView).setVisibility(View.VISIBLE);
                 refuelWindow();
             }
         });
@@ -285,6 +286,7 @@ public class VehicleActivity extends AppCompatActivity {
         btnReportTreatment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                findViewById(R.id.overlayView).setVisibility(View.VISIBLE);
                 treatmentWindow();
                 // Implement logic to navigate to the report car care / refueling page
             }
@@ -370,6 +372,7 @@ public class VehicleActivity extends AppCompatActivity {
 
             popupWindow = new PopupWindow(popupView, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
             popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         }
 
         popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
@@ -468,6 +471,7 @@ public class VehicleActivity extends AppCompatActivity {
         if (popupWindowT != null) {
             popupWindowT.dismiss();
         }
+        findViewById(R.id.overlayView).setVisibility(View.INVISIBLE);
     }
 //    //avi
 
