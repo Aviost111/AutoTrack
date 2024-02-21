@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -59,6 +60,7 @@ public class RegisterCompanyActivity extends AppCompatActivity {
         editTextRegisterLastName = findViewById(R.id.registerLastName);
 
         Button buttonRegister = findViewById(R.id.RegisterButton);
+        TextView signIn = findViewById(R.id.SignIn);
         buttonRegister.setOnClickListener(v -> {
             // Extracting user input from EditText fields
             String textFirstname = editTextRegisterFirstName.getText().toString();
@@ -116,6 +118,11 @@ public class RegisterCompanyActivity extends AppCompatActivity {
                 // If all checks pass, register the user
                 registerUser(textFirstname, textLastname, textPhoneNumber, textEmail, textPwd);
             }
+        });
+
+        signIn.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterCompanyActivity.this, LoginActivity.class);
+            startActivity(intent);
         });
     }
 

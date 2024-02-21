@@ -170,13 +170,16 @@
                             android:text="Submit" />
 
                         <TextView
+                            android:id="@+id/SignIn"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/loginViewsMargin"
                             android:text="@string/signup_login_hint"
                             android:textAlignment="center"
                             android:textColor="@color/black"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:clickable="true"
+                            android:focusable="true" />
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
