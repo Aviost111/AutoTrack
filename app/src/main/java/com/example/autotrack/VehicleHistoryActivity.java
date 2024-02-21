@@ -27,6 +27,11 @@ public class VehicleHistoryActivity extends AppCompatActivity {
     private String companyId;
 
 
+    private ListView listViewStartStop;
+    private ListView listViewTreatments;
+    private ListView listViewRefuels;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +46,14 @@ public class VehicleHistoryActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Find ListViews in the layout
-        ListView listViewStartStop = findViewById(R.id.listViewStartStop);
-        ListView listViewTreatments = findViewById(R.id.listViewTreatments);
-        ListView listViewRefuels = findViewById(R.id.listViewRefuels);
+        listViewStartStop = findViewById(R.id.listViewStartStop);
+        listViewTreatments = findViewById(R.id.listViewTreatments);
+        listViewRefuels = findViewById(R.id.listViewRefuels);
+
+        // Set initial visibility to GONE
+        listViewStartStop.setVisibility(View.GONE);
+        listViewTreatments.setVisibility(View.GONE);
+        listViewRefuels.setVisibility(View.GONE);
 
         Button backButton = findViewById(R.id.btnBack);
         backButton.setOnClickListener(view -> {
@@ -76,6 +86,26 @@ public class VehicleHistoryActivity extends AppCompatActivity {
                         Log.e("Firestore", "Error getting document: ", task.getException());
                     }
                 });
+    }
+
+    public void onStartStopClicked(View view) {
+        toggleListViewVisibility(listViewStartStop);
+    }
+
+    public void onTreatmentsClicked(View view) {
+        toggleListViewVisibility(listViewTreatments);
+    }
+
+    public void onRefuelsClicked(View view) {
+        toggleListViewVisibility(listViewRefuels);
+    }
+
+    private void toggleListViewVisibility(ListView listView) {
+        if (listView.getVisibility() == View.VISIBLE) {
+            listView.setVisibility(View.GONE);
+        } else {
+            listView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void retrieveAndPopulateData(String subcollectionName, ListView listView) {
@@ -123,7 +153,7 @@ public class VehicleHistoryActivity extends AppCompatActivity {
                                 // Iterate over the entries of the inner map
                                 for (Map.Entry<String, Object> innerEntry : innerMap.entrySet()) {
                                     // Append the field and value with appropriate formatting
-                                    data.append(innerEntry.getKey().substring(0, 1).toUpperCase() + innerEntry.getKey().substring(1).replace("_" ," ")).append(": ").append(innerEntry.getValue()).append("\n");
+                                    data.append(innerEntry.getKey().substring(0, 1).toUpperCase() + innerEntry.getKey().substring(1).replace("_", " ")).append(": ").append(innerEntry.getValue()).append("\n");
                                 }
 
                                 dataList.add("Date: " + formattedDateTime + "\n" + data);
@@ -145,5 +175,6 @@ public class VehicleHistoryActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
 }

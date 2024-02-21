@@ -26,6 +26,9 @@ public class EmployeeHistoryActivity extends AppCompatActivity {
     private String employeeId;
     private String companyId;
 
+    private ListView listViewStartStop;
+    private ListView listViewTreatments;
+    private ListView listViewRefuels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +52,51 @@ public class EmployeeHistoryActivity extends AppCompatActivity {
         // Access a Cloud Firestore instance
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Find ListViews in the layout
-        ListView listViewStartStop = findViewById(R.id.listViewStartStop);
-        ListView listViewTreatments = findViewById(R.id.listViewTreatments);
-        ListView listViewRefuels = findViewById(R.id.listViewRefuels);
+        // Initialize ListViews
+        listViewStartStop = findViewById(R.id.listViewStartStop);
+        listViewTreatments = findViewById(R.id.listViewTreatments);
+        listViewRefuels = findViewById(R.id.listViewRefuels);
+
+        // Set initial visibility to GONE
+        listViewStartStop.setVisibility(View.VISIBLE);
+        listViewTreatments.setVisibility(View.GONE);
+        listViewRefuels.setVisibility(View.GONE);
 
 
         // Retrieve and populate treatments, refuels and start-stop data
         retrieveAndPopulateData("start-stop", listViewStartStop);
         retrieveAndPopulateData("treatments", listViewTreatments);
         retrieveAndPopulateData("refuels", listViewRefuels);
+
+    }
+
+    // Click handler for Start-Stop TextView
+    public void onStartStopClicked(View view) {
+        toggleListViewVisibility(listViewStartStop);
+    }
+
+    // Click handler for Treatments TextView
+    public void onTreatmentsClicked(View view) {
+        toggleListViewVisibility(listViewTreatments);
+    }
+
+    // Click handler for Refuels TextView
+    public void onRefuelsClicked(View view) {
+        toggleListViewVisibility(listViewRefuels);
+    }
+
+    private void toggleListViewVisibility(ListView listView) {
+        //set all listViews to GONE except the one that was clicked
+        if (listView != listViewStartStop) {
+            listViewStartStop.setVisibility(View.GONE);
+        }
+        if (listView != listViewTreatments) {
+            listViewTreatments.setVisibility(View.GONE);
+        }
+        if (listView != listViewRefuels) {
+            listViewRefuels.setVisibility(View.GONE);
+        }
+        listView.setVisibility(View.VISIBLE);
 
     }
 
@@ -109,7 +147,7 @@ public class EmployeeHistoryActivity extends AppCompatActivity {
                                     // Append the field and value with appropriate formatting
                                     data.append(innerEntry.getKey()).append(": ").append(innerEntry.getValue()).append("\n");
                                 }
-                                dataList.add("Date: " +formattedDateTime + " \n" + data);
+                                dataList.add("Date: " + formattedDateTime + " \n" + data);
                                 // Clear the StringBuilder for the next iteration
                                 data.setLength(0);
                             }
@@ -118,7 +156,7 @@ public class EmployeeHistoryActivity extends AppCompatActivity {
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                                     android.R.layout.simple_list_item_1, dataList);
                             listView.setAdapter(adapter);
-                        } else{
+                        } else {
                             // Handle the case when the document doesn't exist
                             Toast.makeText(this, "Document does not exist", Toast.LENGTH_SHORT).show();
                         }

@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- activity_vehicle_history.xml -->
+<?xml version="1.0" encoding="utf-8"?><!-- activity_vehicle_history.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
 
     <!-- Toolbar -->
@@ -27,71 +26,95 @@
         app:iconSize="28dp"
         app:iconTint="@color/white" />
 
-
-    <TextView
-        android:id="@+id/textViewStartStop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start-Stop"
+    <LinearLayout
+        android:id="@+id/linearLayoutButtons"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_below="@id/toolbar"
-        android:textSize="33sp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"/>
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/textViewStartStop"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:backgroundTint="#FFFFFF"
+            android:onClick="onStartStopClicked"
+            android:text="Start-Stop"
+            android:textColor="@color/red"
+            android:textSize="17sp"
+            app:strokeColor="@color/red"
+            app:strokeWidth="2dp" />
+
+        <Button
+            android:id="@+id/textViewTreatments"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="onTreatmentsClicked"
+            android:text="Treatments"
+            android:backgroundTint="@color/white"
+            android:layout_weight="0.3"
+            android:textColor="@color/red"
+            android:textSize="17sp"
+            app:strokeColor="@color/red"
+            app:strokeWidth="2dp"/>
+
+        <Button
+            android:id="@+id/textViewRefuels"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="onRefuelsClicked"
+            android:text="Refuels"
+            android:backgroundTint="@color/white"
+            android:layout_weight="0.3"
+            android:textColor="@color/red"
+            android:textSize="17sp"
+            app:strokeColor="@color/red"
+            app:strokeWidth="2dp"/>
+
+    </LinearLayout>
+
 
     <ListView
         android:id="@+id/listViewStartStop"
         android:layout_width="wrap_content"
-        android:layout_height="130dp"
-        android:layout_below="@+id/textViewStartStop"
-        android:layout_centerHorizontal="true"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linearLayoutButtons"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="20dp"
-        android:scrollbars="vertical"/>
-
-    <TextView
-        android:id="@+id/textViewTreatments"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/listViewStartStop"
-        android:text="Treatments"
-        android:textSize="33sp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:scrollbars="vertical">
+
+    </ListView>
+
 
     <ListView
         android:id="@+id/listViewTreatments"
         android:layout_width="wrap_content"
-        android:layout_height="130dp"
-        android:layout_below="@+id/textViewTreatments"
-        android:layout_centerHorizontal="true"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linearLayoutButtons"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="20dp"
-        android:scrollbars="vertical"/>
-
-    <TextView
-        android:id="@+id/textViewRefuels"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/listViewTreatments"
-        android:text="Refuels"
-        android:textSize="33sp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:scrollbars="vertical"
+        android:visibility="gone" /> <!-- Initially hidden -->
 
     <ListView
         android:id="@+id/listViewRefuels"
         android:layout_width="wrap_content"
-        android:layout_height="130dp"
-        android:layout_below="@+id/textViewRefuels"
-        android:layout_centerHorizontal="true"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linearLayoutButtons"
         android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginTop="20dp"
-        android:scrollbars="vertical"/>
+        android:layout_marginEnd="10dp"
+        android:scrollbars="vertical"
+        android:visibility="gone" /> <!-- Initially hidden -->
 
 </RelativeLayout>
