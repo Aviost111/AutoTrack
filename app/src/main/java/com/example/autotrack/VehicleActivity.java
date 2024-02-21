@@ -108,7 +108,7 @@ public class VehicleActivity extends AppCompatActivity {
                         Log.e("Firestore", "Error getting document: ", task.getException());
                     }
 
-                    TextView textViewStartStop = btnStartStop.findViewById(R.id.textViewStartStop);
+                    TextView textViewStartStop = btnStartStop.findViewById(R.id.StartStopButton);
                     // See if last action was start or stop and set button string by that
                     db.collection("Companies")
                             .document(companyId).
@@ -215,7 +215,7 @@ public class VehicleActivity extends AppCompatActivity {
                 Map<String, Object> startStop = new HashMap<>();
                 Map<String, Object> startStopInfo = new HashMap<>();
 
-                TextView textViewStartStop = btnStartStop.findViewById(R.id.textViewStartStop);
+                TextView textViewStartStop = btnStartStop.findViewById(R.id.StartStopButton);
 
                 // Check current vehicle status (started or not)
                 if (textViewStartStop.getText().equals("Start")) {

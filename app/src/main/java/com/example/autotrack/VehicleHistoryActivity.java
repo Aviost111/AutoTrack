@@ -1,8 +1,10 @@
 package com.example.autotrack;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +33,9 @@ public class VehicleHistoryActivity extends AppCompatActivity {
     private ListView listViewTreatments;
     private ListView listViewRefuels;
 
+    private Button startStopButton;
+    private Button treatmentsButton;
+    private Button refuelsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +55,13 @@ public class VehicleHistoryActivity extends AppCompatActivity {
         listViewTreatments = findViewById(R.id.listViewTreatments);
         listViewRefuels = findViewById(R.id.listViewRefuels);
 
+        // Initialize Buttons
+        startStopButton = findViewById(R.id.StartStopButton);
+        treatmentsButton = findViewById(R.id.TreatmentButton);
+        refuelsButton = findViewById(R.id.RefuelsButton);
+
         // Set initial visibility to GONE
-        listViewStartStop.setVisibility(View.GONE);
+        listViewStartStop.setVisibility(View.VISIBLE);
         listViewTreatments.setVisibility(View.GONE);
         listViewRefuels.setVisibility(View.GONE);
 
@@ -87,25 +97,54 @@ public class VehicleHistoryActivity extends AppCompatActivity {
                     }
                 });
     }
-
+    // Click handler for Start-Stop TextView
     public void onStartStopClicked(View view) {
+        resetButtonColors(); // Reset all button colors
+        startStopButton.setBackgroundColor(ContextCompat.getColor(this, R.color.red)); // Change background color
+        startStopButton.setTextColor(Color.WHITE); // Change text color
         toggleListViewVisibility(listViewStartStop);
+
     }
 
+    // Click handler for Treatments TextView
     public void onTreatmentsClicked(View view) {
+        resetButtonColors(); // Reset all button colors
+        treatmentsButton.setBackgroundColor(ContextCompat.getColor(this, R.color.red)); // Change background color
+        treatmentsButton.setTextColor(Color.WHITE); // Change text color
         toggleListViewVisibility(listViewTreatments);
     }
 
+    // Click handler for Refuels TextView
     public void onRefuelsClicked(View view) {
+        resetButtonColors(); // Reset all button colors
+        refuelsButton.setBackgroundColor(ContextCompat.getColor(this, R.color.red)); // Change background color
+        refuelsButton.setTextColor(Color.WHITE); // Change text color
         toggleListViewVisibility(listViewRefuels);
     }
 
+    // Method to reset all button colors to default
+    private void resetButtonColors() {
+        startStopButton.setBackgroundColor(Color.WHITE);
+        startStopButton.setTextColor(Color.RED);
+        treatmentsButton.setBackgroundColor(Color.WHITE);
+        treatmentsButton.setTextColor(Color.RED);
+        refuelsButton.setBackgroundColor(Color.WHITE);
+        refuelsButton.setTextColor(Color.RED);
+    }
+
     private void toggleListViewVisibility(ListView listView) {
-        if (listView.getVisibility() == View.VISIBLE) {
-            listView.setVisibility(View.GONE);
-        } else {
-            listView.setVisibility(View.VISIBLE);
+        //set all listViews to GONE except the one that was clicked
+        if (listView != listViewStartStop) {
+            listViewStartStop.setVisibility(View.GONE);
         }
+        if (listView != listViewTreatments) {
+            listViewTreatments.setVisibility(View.GONE);
+        }
+        if (listView != listViewRefuels) {
+            listViewRefuels.setVisibility(View.GONE);
+        }
+        listView.setVisibility(View.VISIBLE);
+
     }
 
     private void retrieveAndPopulateData(String subcollectionName, ListView listView) {
