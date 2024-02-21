@@ -39,13 +39,14 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.3"
-            android:backgroundTint="#FFFFFF"
+            android:backgroundTint="@color/red"
             android:onClick="onStartStopClicked"
             android:text="Start-Stop"
-            android:textColor="@color/red"
+            android:textColor="@color/white"
             android:textSize="17sp"
             app:strokeColor="@color/red"
-            app:strokeWidth="2dp" />
+            app:strokeWidth="2dp"
+            />
 
         <Button
             android:id="@+id/textViewTreatments"

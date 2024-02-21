@@ -1,18 +1,23 @@
 package com.example.autotrack;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.checkerframework.common.subtyping.qual.Bottom;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +30,10 @@ public class EmployeeHistoryActivity extends AppCompatActivity {
 
     private String employeeId;
     private String companyId;
+
+    private Button startStopButton;
+    private Button treatmentsButton;
+    private Button refuelsButton;
 
     private ListView listViewStartStop;
     private ListView listViewTreatments;
@@ -57,6 +66,11 @@ public class EmployeeHistoryActivity extends AppCompatActivity {
         listViewTreatments = findViewById(R.id.listViewTreatments);
         listViewRefuels = findViewById(R.id.listViewRefuels);
 
+        // Initialize TextViews
+        startStopButton = findViewById(R.id.textViewStartStop);
+        treatmentsButton = findViewById(R.id.textViewTreatments);
+        refuelsButton = findViewById(R.id.textViewRefuels);
+
         // Set initial visibility to GONE
         listViewStartStop.setVisibility(View.VISIBLE);
         listViewTreatments.setVisibility(View.GONE);
@@ -72,17 +86,37 @@ public class EmployeeHistoryActivity extends AppCompatActivity {
 
     // Click handler for Start-Stop TextView
     public void onStartStopClicked(View view) {
+        resetButtonColors(); // Reset all button colors
+        startStopButton.setBackgroundColor(ContextCompat.getColor(this, R.color.red)); // Change background color
+        startStopButton.setTextColor(Color.WHITE); // Change text color
         toggleListViewVisibility(listViewStartStop);
+
     }
 
     // Click handler for Treatments TextView
     public void onTreatmentsClicked(View view) {
+        resetButtonColors(); // Reset all button colors
+        treatmentsButton.setBackgroundColor(ContextCompat.getColor(this, R.color.red)); // Change background color
+        treatmentsButton.setTextColor(Color.WHITE); // Change text color
         toggleListViewVisibility(listViewTreatments);
     }
 
     // Click handler for Refuels TextView
     public void onRefuelsClicked(View view) {
+        resetButtonColors(); // Reset all button colors
+        refuelsButton.setBackgroundColor(ContextCompat.getColor(this, R.color.red)); // Change background color
+        refuelsButton.setTextColor(Color.WHITE); // Change text color
         toggleListViewVisibility(listViewRefuels);
+    }
+
+    // Method to reset all button colors to default
+    private void resetButtonColors() {
+        startStopButton.setBackgroundColor(Color.WHITE);
+        startStopButton.setTextColor(Color.RED);
+        treatmentsButton.setBackgroundColor(Color.WHITE);
+        treatmentsButton.setTextColor(Color.RED);
+        refuelsButton.setBackgroundColor(Color.WHITE);
+        refuelsButton.setTextColor(Color.RED);
     }
 
     private void toggleListViewVisibility(ListView listView) {
@@ -145,9 +179,11 @@ public class EmployeeHistoryActivity extends AppCompatActivity {
                                 // Iterate over the entries of the inner map
                                 for (Map.Entry<String, Object> innerEntry : innerMap.entrySet()) {
                                     // Append the field and value with appropriate formatting
-                                    data.append(innerEntry.getKey()).append(": ").append(innerEntry.getValue()).append("\n");
+                                    data.append(innerEntry.getKey().substring(0, 1).toUpperCase() + innerEntry.getKey().substring(1).replace("_", " ")).append(": ").append(innerEntry.getValue()).append("\n");
                                 }
                                 dataList.add("Date: " + formattedDateTime + " \n" + data);
+                                //remove the last \n
+                                data.deleteCharAt(data.length() - 1); // TODO check if this is needed
                                 // Clear the StringBuilder for the next iteration
                                 data.setLength(0);
                             }
