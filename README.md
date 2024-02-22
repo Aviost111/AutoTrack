@@ -20,9 +20,9 @@ AutoTrack is an application designed to streamline the monitoring of treatments 
 - Provide access to comprehensive vehicle history for employees and managers.
 - View past treatments, refueling activities, and driving records for each vehicle.
 
-#### Screenshots
-<img src="Screenshots/First_screen.png" alt="Image" width="200px"> <img src="Screenshots/login_screen.png" alt="Image" width="200px"> <img src="Screenshots/Register_company_activity.png" alt="Image" width="200px">
-<img src="Screenshots/employee_activity.png" alt="Image" width="200px"> <img src="Screenshots/employees_list_activity.png" alt="Image" width="200px">
+####  Some screenshots
+<img src="Screenshots/First_screen.png" alt="Image" width="200px">     <img src="Screenshots/login_screen.png" alt="Image" width="200px">     <img src="Screenshots/Register_company_activity.png" alt="Image" width="200px">
+<img src="Screenshots/employee_activity.png" alt="Image" width="200px">     <img src="Screenshots/employees_list_activity.png" alt="Image" width="200px">
 <img src="Screenshots/VehiclePage.jpg" alt="Image" width="200px">
 
 ## Getting Started
