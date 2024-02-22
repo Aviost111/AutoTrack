@@ -1,4 +1,4 @@
-package com.example.autotrack;
+package com.example.autotrack.Model;
 
 import static android.content.ContentValues.TAG;
 
@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.autotrack.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -320,7 +321,6 @@ public class VehicleActivity extends AppCompatActivity {
                         Log.e(TAG, "Invalid number format: " + e.getMessage());
                         Toast.makeText(VehicleActivity.this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
                     }
-//                    Toast.makeText(VehicleActivity.this, name, Toast.LENGTH_LONG).show();
                     String now = String.valueOf(System.currentTimeMillis());
                     Map<String, Object> fuel = new HashMap<>();
                     Map<String, Object> fuelInfo = new HashMap<>();

@@ -1,4 +1,4 @@
-package com.example.autotrack;
+package com.example.autotrack.Model;
 
 import static android.content.ContentValues.TAG;
 
@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.autotrack.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -122,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void navigateToCompanyActivity() {
         Toast.makeText(LoginActivity.this, "Company", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LoginActivity.this, CompanyActivity.class);
+        Intent intent = new Intent(LoginActivity.this, EmployeesListActivity.CompanyActivity.class);
         intent.putExtra("company_uid", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
         editTextEmail.setText("");
         editTextPwd.setText("");
