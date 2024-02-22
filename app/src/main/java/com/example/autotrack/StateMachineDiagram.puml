@@ -1,0 +1,29 @@
+@startuml
+
+state Available {
+
+}
+
+state NeedTreatment {
+
+}
+
+state EngineOn {
+}
+
+state EngineOff {
+
+}
+
+Available --> NeedTreatment : Need treatment
+  Available --> EngineOn : Start Engine
+[*] --> Available : Massage for employee
+[*] --> NeedTreatment : Massage for employee
+EngineOn --> EngineOff : Turn Off Engine
+NeedTreatment --> Available : Treatment Completed
+EngineOff --> EngineOn : Start Engine
+EngineOff-->  NeedTreatment : if needTreatment
+EngineOff-->  Available : if not need Treatment yet
+note left of NeedTreatment : Vehicle needs treatment\nand is not available for use
+
+@enduml

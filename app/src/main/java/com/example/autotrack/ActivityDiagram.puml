@@ -1,0 +1,30 @@
+
+@startuml
+|Employee|
+:Initialize work;
+:enter to the vehicle page;
+|System|
+:(Massage if vehicle is available or not);
+  |Employee|
+while (Want to report treatment or refuel?) is (yes)
+    |Employee|
+    :Do report treatment or refuel;
+endwhile (no)
+    |Employee|
+    while (Need to start driving?) is (yes)
+        |Employee|
+        :Do "start driving";
+        |System|
+        :Insert to data "start";
+    endwhile (no)
+    |Employee|
+    :Do "End driving";
+    |System|
+    :Calculate the hours from "start",
+    Update the hours until next treatment;
+    |Employee|
+    :logout;
+    |System|
+
+|Employee|
+@enduml

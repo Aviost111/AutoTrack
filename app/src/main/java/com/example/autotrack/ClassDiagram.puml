@@ -84,14 +84,14 @@ class CompanyActivity {
     - tvProfileInfo: TextView
     - company_uid: String
 
-    + onCreate(savedInstanceState: Bundle): void
-    - setupClickListeners(): void
-    - retrieveCompanyInfo(uid: String): void
-    - displayManagerInfo(firstName: String, lastName: String): void
-    - handleTaskFailure(exception: Exception): void
-    - setupClickListener(buttonId: int, destinationClass: Class): void
-    - navigateToActivity(destinationClass: Class): void
-    - showDeleteDialog(type: String): void
+'    + onCreate(savedInstanceState: Bundle): void
+'    - setupClickListeners(): void
+'    - retrieveCompanyInfo(uid: String): void
+'    - displayManagerInfo(firstName: String, lastName: String): void
+'    - handleTaskFailure(exception: Exception): void
+'    - setupClickListener(buttonId: int, destinationClass: Class): void
+'    - navigateToActivity(destinationClass: Class): void
+'    - showDeleteDialog(type: String): void
 }
 
 class VehicleActivity {
@@ -106,12 +106,12 @@ class VehicleActivity {
     - popupWindow: PopupWindow
     - popupWindowT: PopupWindow
 
-    + onCreate(savedInstanceState: Bundle): void
-    - setupUIElements(): void
-    - updateHoursTillTreatment(now: String): void
-    - refuelWindow(): void
-    - treatmentWindow(): void
-    - dismissPopupWindow(): void
+'    + onCreate(savedInstanceState: Bundle): void
+'    - setupUIElements(): void
+'    - updateHoursTillTreatment(now: String): void
+'    - refuelWindow(): void
+'    - treatmentWindow(): void
+'    - dismissPopupWindow(): void
 }
 
 class LoginActivity extends AppCompatActivity {
@@ -120,18 +120,18 @@ class LoginActivity extends AppCompatActivity {
     - editTextPwd: EditText
     - db: FirebaseFirestore
 
-    + onCreate(savedInstanceState: Bundle): void
-    - attemptLogin(): void
-    - showErrorAndFocus(editText: EditText, errorMessage: String): void
-    - authenticateUser(email: String, pwd: String): void
-    - handleSuccessfulLogin(): void
-    - handleLoginFailure(task: Task<AuthResult>): void
-    - checkUserTypeAndNavigate(uid: String): void
-    - navigateToCompanyActivity(): void
-    - navigateToEmployeeActivity(): void
-    - underlineAndStartRegistration(): void
-    - startRegistrationActivity(): void
-    - underlineText(textView: TextView): void
+'    + onCreate(savedInstanceState: Bundle): void
+'    - attemptLogin(): void
+'    - showErrorAndFocus(editText: EditText, errorMessage: String): void
+'    - authenticateUser(email: String, pwd: String): void
+'    - handleSuccessfulLogin(): void
+'    - handleLoginFailure(task: Task<AuthResult>): void
+'    - checkUserTypeAndNavigate(uid: String): void
+'    - navigateToCompanyActivity(): void
+'    - navigateToEmployeeActivity(): void
+'    - underlineAndStartRegistration(): void
+'    - startRegistrationActivity(): void
+'    - underlineText(textView: TextView): void
 }
 
 class FirestoreAppData {
@@ -141,23 +141,23 @@ class FirestoreAppData {
     - companiesCollection: CollectionReference
     - current_company_id: String
 
-    {static} + getEmployeesCollection(): CollectionReference
-    {static} + getVehiclesCollection(): CollectionReference
-    {static} + getCompaniesCollection(): CollectionReference
-    {static} + handleCompanyUid(companyUid: String): void
-    + FirestoreAppData()
-    {static} + returnCompany(company_id: String): CompletableFuture<CompanyObj>
+'    {static} + getEmployeesCollection(): CollectionReference
+'    {static} + getVehiclesCollection(): CollectionReference
+'    {static} + getCompaniesCollection(): CollectionReference
+'    {static} + handleCompanyUid(companyUid: String): void
+'    + FirestoreAppData()
+'    {static} + returnCompany(company_id: String): CompletableFuture<CompanyObj>
 
-    {interface} OnGetDataListener<T> {
-        + onSuccess(data: T): void
-        + onFailure(e: Exception): void
+'    {interface} OnGetDataListener<T> {
+'        + onSuccess(data: T): void
+'        + onFailure(e: Exception): void
     }
 
 EmployeeHistoryActivity..> FirestoreAppData
 EmployeeHistoryActivity --|> AppCompatActivity
-EmployeeHistoryActivity ..> VehicleActivity
+'EmployeeHistoryActivity ..> VehicleActivity
 CompanyActivity --|> AppCompatActivity
-VehicleHistoryActivity ..> VehicleActivity
+'VehicleHistoryActivity ..> VehicleActivity
 VehicleHistoryActivity --|> AppCompatActivity
 VehicleActivity --|>  AppCompatActivity
 @enduml

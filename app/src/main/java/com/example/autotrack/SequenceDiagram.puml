@@ -1,0 +1,19 @@
+@startuml
+participant Manager
+participant System
+participant Employee
+
+activate System
+Manager -> System: request to see employees list.
+System --> Manager: Display employees list.
+Manager -> System: Request employee history for employee X
+activate System
+System -> System: Filter history by employee X
+System -> Employee: Retrieve employee history
+Employee --> System: Provide employee history
+System --> Manager: Display employee history to manager
+
+deactivate System
+
+@enduml
+
