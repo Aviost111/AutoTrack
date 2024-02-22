@@ -14,6 +14,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.autotrack.Controller.FirestoreAppData;
+import com.example.autotrack.Controller.FirestoreController;
 import com.example.autotrack.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -41,9 +42,9 @@ protected void onCreate(Bundle savedInstanceState) {
     // Get the company's ID for the manager name.
     companyId = getIntent().getStringExtra("company_uid");
     // send this company_uid also to the firestoreAppData class:
-    FirestoreAppData.handleCompanyUid(companyId);
+    FirestoreController.handleCompanyUid(companyId);
 
-    CompletableFuture<CompanyObj> managerFuture = FirestoreAppData.returnCompany(companyId);
+    CompletableFuture<CompanyObj> managerFuture = FirestoreController.returnCompany(companyId);
 
     // Set the text of textName when the manager data is retrieved
     managerFuture.thenAccept(company -> {
@@ -66,8 +67,8 @@ protected void onCreate(Bundle savedInstanceState) {
     Button backButton = findViewById(R.id.btnBack);
 
     // Get a reference to the Firestore database
-    new FirestoreAppData();
-    CollectionReference emp  = FirestoreAppData.getEmployeesCollection();
+    new FirestoreController(EmployeesListActivity.this);
+    CollectionReference emp  = FirestoreController.getEmployeesCollection();
     emp.get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
