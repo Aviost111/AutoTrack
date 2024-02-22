@@ -1,0 +1,251 @@
+@startuml
+
+
+class CompanyObj {
+    first_name: String
+    last_name: String
+    phone: String
+    email: String
+    company_id: String
+}
+
+class EmployeeObj {
+    first_name: String
+    last_name: String
+    phone: String
+    email: String
+    company_id: String
+}
+
+class VehicleObj {
+    ID: String
+   company_ID: String
+    engine_size : String
+    treatment_hours: int
+    hours_till_treatment: double
+    manufacture_year: int
+    type: String
+    version: String
+}
+class  EmployeeListActivity {
+
+   +listviewEmployees: ListView
+   +companyId: String
+   +textName: TextView
+
+    -OnCreate(): void
+    -UpdateListView() : void
+}
+
+class  VehicleListActivity {
+   +listViewFactoryVehicles: ListView
+   +userMail: String
+   +isManager: boolean
+
+    -OnCreate(): void
+    -UpdateListView() : void
+}
+
+EmployeeListActivity..> FirestoreAppData
+CompanyObj "1" -- "[0..*]   " EmployeeObj : has
+CompanyObj "1" -- "[0..*]   " VehicleObj : has
+EmployeeListActivity ..> EmployeeObj
+EmployeeObj ..> "use" VehicleObj
+VehicleListActivity ..> VehicleObj
+VehicleListActivity -->"*" VehicleObj : assosiation
+EmployeeListActivity --> "*" EmployeeObj: assosiation
+
+@enduml
+
+@startuml
+
+class AppCompatActivity
+
+class VehicleHistoryActivity {
+    - db: FirebaseFirestore
+    - vehicleId: String
+    - userMail: String
+    - companyId: String
+
+    + onCreate(): void
+    + retrieveAndPopulateData(): void
+}
+
+class EmployeeHistoryActivity {
+    - employeeId: String
+    - companyId: String
+
+    + onCreate(): void
+    + retrieveAndPopulateData(): void
+}
+
+class CompanyActivity {
+    - db: FirebaseFirestore
+    - tvProfileInfo: TextView
+    - company_uid: String
+
+    + onCreate(savedInstanceState: Bundle): void
+    - setupClickListeners(): void
+    - retrieveCompanyInfo(uid: String): void
+    - displayManagerInfo(firstName: String, lastName: String): void
+    - handleTaskFailure(exception: Exception): void
+    - setupClickListener(buttonId: int, destinationClass: Class): void
+    - navigateToActivity(destinationClass: Class): void
+    - showDeleteDialog(type: String): void
+}
+
+class VehicleActivity {
+    - db: FirebaseFirestore
+    - userMail: String
+    - companyId: String
+    - firstName: String
+    - lastName: String
+    - isManager: boolean
+    - vehicleId: String
+    - treatmentHours: int
+    - popupWindow: PopupWindow
+    - popupWindowT: PopupWindow
+
+    + onCreate(savedInstanceState: Bundle): void
+    - setupUIElements(): void
+    - updateHoursTillTreatment(now: String): void
+    - refuelWindow(): void
+    - treatmentWindow(): void
+    - dismissPopupWindow(): void
+}
+
+class LoginActivity extends AppCompatActivity {
+    - signUp: TextView
+    - editTextEmail: EditText
+    - editTextPwd: EditText
+    - db: FirebaseFirestore
+
+    + onCreate(savedInstanceState: Bundle): void
+    - attemptLogin(): void
+    - showErrorAndFocus(editText: EditText, errorMessage: String): void
+    - authenticateUser(email: String, pwd: String): void
+    - handleSuccessfulLogin(): void
+    - handleLoginFailure(task: Task<AuthResult>): void
+    - checkUserTypeAndNavigate(uid: String): void
+    - navigateToCompanyActivity(): void
+    - navigateToEmployeeActivity(): void
+    - underlineAndStartRegistration(): void
+    - startRegistrationActivity(): void
+    - underlineText(textView: TextView): void
+}
+
+class FirestoreAppData {
+    - firestore: FirebaseFirestore
+    - employeesCollection: CollectionReference
+    - vehiclesCollection: CollectionReference
+    - companiesCollection: CollectionReference
+    - current_company_id: String
+
+    {static} + getEmployeesCollection(): CollectionReference
+    {static} + getVehiclesCollection(): CollectionReference
+    {static} + getCompaniesCollection(): CollectionReference
+    {static} + handleCompanyUid(companyUid: String): void
+    + FirestoreAppData()
+    {static} + returnCompany(company_id: String): CompletableFuture<CompanyObj>
+
+    {interface} OnGetDataListener<T> {
+        + onSuccess(data: T): void
+        + onFailure(e: Exception): void
+    }
+
+EmployeeHistoryActivity..> FirestoreAppData
+EmployeeHistoryActivity --|> AppCompatActivity
+EmployeeHistoryActivity ..> VehicleActivity
+CompanyActivity --|> AppCompatActivity
+VehicleHistoryActivity ..> VehicleActivity
+VehicleHistoryActivity --|> AppCompatActivity
+VehicleActivity --|>  AppCompatActivity
+@enduml
+
+@startuml
+
+class InputValidator {
+    + areFieldsEmpty(fields: String...): boolean
+    + isValidPhoneNumber(number: String): boolean
+    + isValidEmail(email: String): boolean
+    + isValidName(name: String): boolean
+    + isValidManufactureYear(manufactureYearStr: String): boolean
+    + isValidTreatmentHours(treatmentHoursStr: String): boolean
+    + containsOnlyLettersAndNumbers(str: String): boolean
+    + isValidType(type: String): boolean
+    + isValidEngineSize(engineSize: String): boolean
+    + isValidVersion(version: String): boolean
+    + containsOnlyNumbers(str: String): boolean
+}
+
+
+class RegisterEmployeeActivity {
+    - TAG: String
+    - firestore: FirebaseFirestore
+    - etEmail: EditText
+    - etFirstName: EditText
+    - etLastName: EditText
+    - etPhone: EditText
+    - btnRegisterEmployee: Button
+    - company_uid: String
+
+    + onCreate(savedInstanceState: Bundle): void
+    - initializeViews(): void
+    - registerEmployee(): void
+    - createEmployeeDataMap(firstName: String, lastName: String, email: String, phone: String, companyId: String): Map<String, String>
+    - uploadDataToFirebase(data: Map<String, String>, email: String): void
+    - addToUsersDatabase(email: String): void
+    - handleRegistrationFailure(exception: Exception): void
+    - setErrorAndRequestFocus(editText: EditText, errorMessage: String): void
+    - setupClickListener(buttonId: int, destinationClass: Class<?>): void
+    - navigateToActivity(destinationClass: Class<?>): void
+    - validateInput(email: String, firstName: String, lastName: String, phone: String): boolean
+    - createHistorySubCollection(documentID: String): void
+}
+
+class RegisterVehicleActivity {
+    - TAG: String
+    - firestore: FirebaseFirestore
+    - etType: EditText
+    - etID: EditText
+    - etEngineSize: EditText
+    - etManufactureYear: EditText
+    - etTreatmentHours: EditText
+    - etVersion: EditText
+    - btnRegisterTool: Button
+    - company_uid: String
+
+    + onCreate(savedInstanceState: Bundle): void
+    - initializeViews(): void
+    - registerTool(): void
+    - createToolDataMap(type: String, ID: String, engineSize: String, manufactureYear: int, treatmentHours: double, version: String): Map<String, Object>
+    - uploadDataToFirebase(documentID: String, data: Map<String, Object>): void
+    - setupClickListener(buttonId: int, destinationClass: Class<?>): void
+    - navigateToActivity(destinationClass: Class<?>): void
+    - createHistorySubCollection(documentID: String): void
+    - validateInput(type: String, ID: String, engineSize: String, manufactureYearStr: String, treatmentHoursStr: String, version: String): boolean
+}
+
+RegisterVehicleActivity ..> InputValidator
+RegisterEmployeeActivity ..> InputValidator
+
+@enduml
+@startuml
+
+
+class RegisterCompanyActivity {
+    - editTextRegisterConfirmEmail: EditText
+    - editTextRegisterEmail: EditText
+    - editTextRegisterPwd: EditText
+    - editTextRegisterConfirmPwd: EditText
+    - editTextRegisterPhoneNumber: EditText
+    - editTextRegisterFirstName: EditText
+    - editTextRegisterLastName: EditText
+    - db: FirebaseFirestore
+
+    + onCreate(savedInstanceState: Bundle): void
+    - registerUser(textFirstName: String,textLastName: String,
+    textPhoneNumber: String,textEmail: String,textPwd: String): void
+    - PhoneNumberValidation(number: String): boolean
+}
+    @enduml

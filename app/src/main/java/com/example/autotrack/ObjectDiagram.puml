@@ -1,0 +1,77 @@
+@startuml
+
+object C1__Company {
+  First name = "avatar"
+  Last name = "ang"
+  Company id = 1234
+  Email = ang@g.com
+  Phone = 0505050505
+}
+
+object E1__Employee{
+First name = "katara"
+  Last name = "water"
+  Company id = 1234
+  Email = kt@g.com
+  Phone = 0503030303
+}
+
+
+
+object LV__VehiclesList{
+ListView Factory Vehicles = LV__VehiclesList
+UserMail =ang@g.com
+IsManager = true
+}
+
+
+object LE__EmployeesList{
+Listview Employees = LE__EmployeesList
+Commpany Id =1234
+Text Company Name ="avatar"
+}
+
+
+object V1__Vehicle{
+ID = 111222333
+engine_size= 620
+treatment_hours =  100
+hours_till_treatment =  100
+manufacture_year =  2024
+type =   Forklift
+version =  24-bmx
+}
+
+
+
+object VH1__VehicleHistory{
+vehicle Id = 111222333
+userMail = ang@g.com
+company Id = 1234
+}
+
+object EH1__EmployeeHistory{
+employee Id = kt@g.com
+company Id = 1234
+}
+
+
+object DataVH_VehicleActivity{
+userMail = ang@g.com
+companyId = 1234
+firstName = "avatar"
+lastName = "ang"
+isManager= true
+vehicleId= 111222333
+treatmentHours = 100
+}
+
+V1__Vehicle--> "update" DataVH_VehicleActivity
+DataVH_VehicleActivity <-- "gets data from" VH1__VehicleHistory
+DataVH_VehicleActivity <-- "gets data from" EH1__EmployeeHistory
+C1__Company *-- LE__EmployeesList : "has"
+C1__Company *-- LV__VehiclesList : "has"
+LE__EmployeesList *-- E1__Employee : "has"
+LV__VehiclesList *-- V1__Vehicle : "has"
+E1__Employee ..> "use" V1__Vehicle
+@enduml
