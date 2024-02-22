@@ -1,4 +1,7 @@
-package com.example.autotrack.Model;
+package com.example.autotrack.Controller;
+import com.example.autotrack.Model.CompanyObj;
+import com.example.autotrack.Model.EmployeeObj;
+import com.example.autotrack.Model.VehicleObj;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
