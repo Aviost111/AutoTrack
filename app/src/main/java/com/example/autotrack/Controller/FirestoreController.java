@@ -1,14 +1,10 @@
 package com.example.autotrack.Controller;
 
-import static androidx.fragment.app.FragmentManager.TAG;
-
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.autotrack.Model.CompanyObj;
 import com.example.autotrack.Model.EmployeeObj;
-import com.example.autotrack.Model.RegisterCompanyActivity;
 import com.example.autotrack.Model.VehicleObj;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,13 +45,7 @@ public class FirestoreController {
         this.firestore = FirebaseFirestore.getInstance();
         this.context = context;
         companiesCollection = firestore.collection("Companies");
-
-        //       get the current user's companies details
-//        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-//        String uid = currentUser.getUid();
-
         DocumentReference companyDocument = companiesCollection.document(current_company_id);
-
         //        get the "employees" and "vehicle" data of this company
         employeesCollection = companyDocument.collection("Employees");
         vehiclesCollection = companyDocument.collection("Vehicles");
@@ -216,6 +206,8 @@ public class FirestoreController {
 
         return future;
     }
+
+
 
 
     // Interface to handle callbacks for reading data
