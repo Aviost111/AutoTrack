@@ -1,14 +1,16 @@
-package com.example.autotrack.Model;
+package com.example.autotrack;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.autotrack.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -39,7 +41,7 @@ public class RegisterVehicleActivity extends AppCompatActivity {
         initializeViews();
 
         // Set up click listener for the "Back" button
-        setupClickListener(R.id.btnBack, EmployeesListActivity.CompanyActivity.class);
+        setupClickListener(R.id.btnBack, CompanyActivity.class);
 
         // Initialize Firebase Firestore
         firestore = FirebaseFirestore.getInstance();
@@ -120,7 +122,7 @@ public class RegisterVehicleActivity extends AppCompatActivity {
                     Toast.makeText(RegisterVehicleActivity.this, "Vehicle registered successfully", Toast.LENGTH_LONG).show();
 
                     // Navigate to ManagerActivity
-                    navigateToActivity(EmployeesListActivity.CompanyActivity.class);
+                    navigateToActivity(CompanyActivity.class);
                 })
                 .addOnFailureListener(e -> {
                     // Error uploading data

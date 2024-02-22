@@ -1,4 +1,4 @@
-package com.example.autotrack.Model;
+package com.example.autotrack;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.example.autotrack.R;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;

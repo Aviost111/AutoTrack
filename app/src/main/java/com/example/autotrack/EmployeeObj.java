@@ -1,6 +1,6 @@
-package com.example.autotrack.Model;
+package com.example.autotrack;
 
-public class EmployeeObj {
+class EmployeeObj {
     // Mandatory empty constructor
     // for use of FirebaseUI
 

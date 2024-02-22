@@ -1,4 +1,4 @@
-package com.example.autotrack.Model;
+package com.example.autotrack;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

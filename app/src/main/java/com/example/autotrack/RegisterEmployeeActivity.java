@@ -1,4 +1,4 @@
-package com.example.autotrack.Model;
+package com.example.autotrack;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +9,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.autotrack.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -39,7 +39,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register_employee);
 
         // Set up click listener for the "Back" button
-        setupClickListener(R.id.btnBack, EmployeesListActivity.CompanyActivity.class);
+        setupClickListener(R.id.btnBack, CompanyActivity.class);
 
         // Initialize Firebase Firestore
         firestore = FirebaseFirestore.getInstance();
@@ -118,7 +118,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
                                     addToUsersDatabase(email);
 
                                     // Navigate to the ManagerActivity
-                                    navigateToActivity(EmployeesListActivity.CompanyActivity.class);
+                                    navigateToActivity(CompanyActivity.class);
                                 })
                                 .addOnFailureListener(e -> {
                                     // Error uploading data

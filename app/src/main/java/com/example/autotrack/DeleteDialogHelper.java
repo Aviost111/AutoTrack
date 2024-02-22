@@ -1,4 +1,4 @@
-package com.example.autotrack.Model;
+package com.example.autotrack;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.autotrack.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
