@@ -1,10 +1,14 @@
-package com.example.autotrack.controler;
+package com.example.autotrack.Controller;
 
+import static androidx.fragment.app.FragmentManager.TAG;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.autotrack.Model.CompanyObj;
+import com.example.autotrack.Model.RegisterCompanyActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -14,7 +18,7 @@ import java.util.Objects;
 
 public class FirestoreController {
     final private FirebaseFirestore firestore;
-    private final Context context;
+    private Context context;
 
     public FirestoreController(Context context) {
         this.firestore = FirebaseFirestore.getInstance();
@@ -56,4 +60,3 @@ public class FirestoreController {
                 });
     }
 }
-

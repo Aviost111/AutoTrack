@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.autotrack.R;
-import com.example.autotrack.controler.FirestoreController;
+import com.example.autotrack.Controller.FirestoreController;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
