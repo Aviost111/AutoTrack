@@ -1,5 +1,5 @@
 
-package com.example.autotrack;
+package com.example.autotrack.Model;
 
 import static android.content.ContentValues.TAG;
 
@@ -16,9 +16,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.autotrack.R;
+import com.example.autotrack.controler.FirestoreController;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,10 +26,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
+
 import java.util.Objects;
 
 public class RegisterCompanyActivity extends AppCompatActivity {
@@ -37,7 +35,6 @@ public class RegisterCompanyActivity extends AppCompatActivity {
     private EditText editTextRegisterEmail, editTextRegisterConfirmEmail, editTextRegisterPwd,
             editTextRegisterConfirmPwd, editTextRegisterPhoneNumber, editTextRegisterFirstName,
             editTextRegisterLastName;
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +113,8 @@ public class RegisterCompanyActivity extends AppCompatActivity {
                 editTextRegisterPwd.clearComposingText();
             } else {
                 // If all checks pass, register the user
-                registerUser(textFirstname, textLastname, textPhoneNumber, textEmail, textPwd);
+                CompanyObj newCompany = new CompanyObj(textFirstname,textLastname,textEmail,textPhoneNumber);
+                registerUser(newCompany, textPwd);
             }
         });
 
@@ -126,11 +124,10 @@ public class RegisterCompanyActivity extends AppCompatActivity {
         });
     }
 
-    private void registerUser(String textFirstName, String textLastName, String textPhoneNumber,
-                              String textEmail, String textPwd) {
+    private void registerUser(CompanyObj newCompany, String textPwd) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         // Create user
-        auth.createUserWithEmailAndPassword(textEmail, textPwd).addOnCompleteListener(RegisterCompanyActivity.this,
+        auth.createUserWithEmailAndPassword(newCompany.getEmail(), textPwd).addOnCompleteListener(RegisterCompanyActivity.this,
                 new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -139,52 +136,9 @@ public class RegisterCompanyActivity extends AppCompatActivity {
                             Toast.makeText(RegisterCompanyActivity.this, "User Registered", Toast.LENGTH_SHORT).show();
                             FirebaseUser firebaseUser = auth.getCurrentUser();
                             assert firebaseUser != null;
-
-                            // Create a user data map company
-                            Map<String, Object> company = new HashMap<>();
-                            company.put("email", textEmail);
-                            company.put("first_name", textFirstName);
-                            company.put("last_name", textLastName);
-                            company.put("phone", textPhoneNumber);
-                            company.put("company_id", firebaseUser.getUid());
-
-                            //Create a user data map for user
-                            Map<String,Object> users =new HashMap<>();
-                            users.put("company_id",firebaseUser.getUid());
-                            users.put("first_name", textFirstName);
-                            users.put("last_name", textLastName);
-                            users.put("is_manager",true);
-
-                            // Save user data to FireStore
-                            db.collection("Companies").document(firebaseUser.getUid()).set(company)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Toast.makeText(RegisterCompanyActivity.this, "User saved", Toast.LENGTH_SHORT).show();
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            // Handle failure to save user data
-                                            Toast.makeText(RegisterCompanyActivity.this, "Error in company", Toast.LENGTH_SHORT).show();
-                                            Log.d(TAG, e.toString());
-                                        }
-                                    });
-                            db.collection("Users").document(Objects.requireNonNull(firebaseUser.getEmail())).set(users)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            // Handle failure to save user data
-                                            Toast.makeText(RegisterCompanyActivity.this, "Error in user", Toast.LENGTH_SHORT).show();
-                                            Log.d(TAG, e.toString());
-                                        }
-                                    });
+                            FirestoreController controller = new FirestoreController(RegisterCompanyActivity.this);
+                            controller.saveCompanyData(newCompany,firebaseUser);
+                            controller.saveUserData(newCompany,firebaseUser);
 
 
                             // Send email verification to the user

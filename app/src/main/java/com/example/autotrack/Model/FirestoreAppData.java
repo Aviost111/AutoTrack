@@ -1,4 +1,4 @@
-package com.example.autotrack;
+package com.example.autotrack.Model;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;

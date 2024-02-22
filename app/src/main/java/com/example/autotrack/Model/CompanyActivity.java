@@ -1,4 +1,4 @@
-package com.example.autotrack;
+package com.example.autotrack.Model;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.autotrack.R;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;

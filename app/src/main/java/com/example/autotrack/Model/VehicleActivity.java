@@ -1,4 +1,4 @@
-package com.example.autotrack;
+package com.example.autotrack.Model;
 
 import static android.content.ContentValues.TAG;
 
@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.autotrack.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
