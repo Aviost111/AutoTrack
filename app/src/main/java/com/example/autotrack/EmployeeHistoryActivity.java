@@ -17,8 +17,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.checkerframework.common.subtyping.qual.Bottom;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,9 +65,9 @@ public class EmployeeHistoryActivity extends AppCompatActivity {
         listViewRefuels = findViewById(R.id.listViewRefuels);
 
         // Initialize TextViews
-        startStopButton = findViewById(R.id.textViewStartStop);
-        treatmentsButton = findViewById(R.id.textViewTreatments);
-        refuelsButton = findViewById(R.id.textViewRefuels);
+        startStopButton = findViewById(R.id.StartStopButton);
+        treatmentsButton = findViewById(R.id.TreatmentButton);
+        refuelsButton = findViewById(R.id.RefuelsButton);
 
         // Set initial visibility to GONE
         listViewStartStop.setVisibility(View.VISIBLE);
@@ -184,6 +182,7 @@ public class EmployeeHistoryActivity extends AppCompatActivity {
                                 dataList.add("Date: " + formattedDateTime + " \n" + data);
                                 //remove the last \n
                                 data.deleteCharAt(data.length() - 1); // TODO check if this is needed
+
                                 // Clear the StringBuilder for the next iteration
                                 data.setLength(0);
                             }
