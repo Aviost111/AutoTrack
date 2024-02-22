@@ -21,10 +21,7 @@ AutoTrack is an application designed to streamline the monitoring of treatments 
 - View past treatments, refueling activities, and driving records for each vehicle.
 
 #### Screenshots
-![AutoTrack](https://github.com/Aviost111/AutoTrack/assets/99247120/a702a1ba-6eee-4e87-b3ec-5b3ef1458e7d)  ![Login](https://github.com/Aviost111/AutoTrack/assets/99247120/8caf7f95-f8b0-4b2a-95dc-7b9cb7bf55b0)![Register](https://github.com/Aviost111/AutoTrack/assets/99247120/62a95707-38bf-4aa5-802d-a8fde5d590ce)
-
-![VehicleList](https://github.com/Aviost111/AutoTrack/assets/99247120/36c49da1-e964-438b-8cc8-4d9f6bd44f68)![EmployeeList](https://github.com/Aviost111/AutoTrack/assets/99247120/576d4e7d-05be-48bf-baf3-a104f6944600)
-![VehiclePage](https://github.com/Aviost111/AutoTrack/assets/99247120/e5d70adb-534d-48c7-8877-8440b25675a7)
+<img src="Screenshots/First_screen.png" alt="Image" width="300px">
 
 ## Getting Started
 
