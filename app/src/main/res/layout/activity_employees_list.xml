@@ -60,7 +60,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="1dp"
+        android:listSelector="#ff7979"
+        />
 
 </RelativeLayout>
 

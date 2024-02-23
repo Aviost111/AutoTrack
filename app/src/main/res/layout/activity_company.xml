@@ -6,19 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".CompanyActivity">
 
-    <!-- Top Section with Buttons to Register New Employees and New Tool -->
+
+    <!-- Bottom Section with Delete Employee and Delete Vehicle Buttons -->
+
+
     <LinearLayout
-        android:id="@+id/topSection"
+        android:id="@+id/middleSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:padding="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomSection"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.979">
 
         <!-- Button to Register New Tool -->
         <Button
@@ -26,13 +29,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/red"
+            android:backgroundTint="@color/white"
             android:text="@string/add_vehicle"
+            android:textColor="@color/red"
+            android:textSize="18sp"
             app:icon="@drawable/ic_add_vehicle"
             app:iconPadding="0dp"
-            app:iconSize="30dp"
+            app:iconSize="40dp"
+            app:iconTint="@color/red"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+
+            app:strokeColor="#FF0000"
+            app:strokeWidth="1dp" />
 
         <!-- Button to Register New Employees -->
 
@@ -41,42 +50,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/red"
+            android:backgroundTint="@color/white"
             android:text="@string/add_employee"
-            app:icon="@drawable/ic_add_user"
+            android:textColor="@color/red"
+            android:textSize="18sp"
+            app:icon="@drawable/add_employee"
             app:iconPadding="0dp"
-            app:iconSize="27dp"
+            app:iconSize="40dp"
+            app:iconTint="#FF0000"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="@color/red"
+            app:strokeWidth="1dp" />
 
     </LinearLayout>
 
-
-    <!-- Middle Section with Buttons to View Tools and Employees -->
     <LinearLayout
-        android:id="@+id/middleSection"
+        android:id="@+id/topSection"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_below="@id/topSection"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/middleSection"
+        android:layout_marginTop="348dp"
         android:orientation="vertical"
         android:padding="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomSection"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topSection"
-        app:layout_constraintVertical_bias="0.254">
-
-        <!-- Text in the Middle Section -->
-        <TextView
-            android:id="@+id/tvProfileInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="Profile Info"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+        app:layout_constraintTop_toTopOf="@+id/toolbar">
 
         <!-- First Button in the Middle Section -->
         <Button
@@ -85,7 +85,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:backgroundTint="@color/red"
-            android:text="Vehicles" />
+            android:text="Vehicles"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <!-- Second Button in the Middle Section -->
         <Button
@@ -94,36 +96,25 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:backgroundTint="@color/red"
-            android:text="Employees" />
+            android:text="Employees"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
-    <!-- Bottom Section with Delete Employee and Delete Vehicle Buttons -->
     <LinearLayout
         android:id="@+id/bottomSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="336dp"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/btnLogout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent">
 
-        >
-
-        <!-- Delete Employee Button -->
-        <Button
-            android:id="@+id/btnDeleteEmployee"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/red"
-            android:text="Remove Employee"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Delete Vehicle Button -->
         <Button
@@ -131,14 +122,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/red"
+            android:backgroundTint="@color/white"
             android:text="Remove Vehicle"
+            android:textColor="@color/red"
+            android:textSize="18sp"
+            app:icon="@drawable/delete_car"
+            app:iconPadding="0dp"
+            app:iconSize="40dp"
+            app:iconTint="@color/red"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="#FF0000"
+            app:strokeWidth="1dp" />
 
+        <!-- Delete Employee Button -->
+        <Button
+            android:id="@+id/btnDeleteEmployee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:text="Remove Employee"
+            android:textColor="@color/red"
+            android:textSize="18sp"
+            app:icon="@drawable/delete_employee"
+            app:iconPadding="0dp"
+            app:iconSize="40dp"
+            app:iconTint="@color/red"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="#FF0000"
+            app:strokeWidth="1dp" />
 
     </LinearLayout>
-
 
     <Button
         android:id="@+id/btnLogout"
@@ -163,6 +179,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvProfileInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="108dp"
+        android:text="Profile Info"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

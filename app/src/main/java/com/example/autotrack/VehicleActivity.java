@@ -166,7 +166,7 @@ public class VehicleActivity extends AppCompatActivity {
         //Set text for availability
         if (hoursTillTreatment <= 0) {
             textViewAvailability.setText("Unavailable");
-            textViewAvailability.setTextColor(Color.GREEN);
+            textViewAvailability.setTextColor(Color.BLACK);
         } else {
             textViewAvailability.setText("Available");
             textViewAvailability.setTextColor(ContextCompat.getColor(VehicleActivity.this, R.color.white));
