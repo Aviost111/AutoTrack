@@ -1,4 +1,4 @@
-package com.example.autotrack.Model;
+package com.example.autotrack.Viewmodel;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.Intent;
@@ -12,9 +12,7 @@ import android.widget.TextView;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.autotrack.Controller.FirestoreAppData;
-import com.example.autotrack.Controller.FirestoreController;
+import com.example.autotrack.Model.FirestoreController;
 import com.example.autotrack.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;

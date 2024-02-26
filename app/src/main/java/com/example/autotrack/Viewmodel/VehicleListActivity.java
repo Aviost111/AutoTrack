@@ -1,4 +1,4 @@
-package com.example.autotrack.Model;
+package com.example.autotrack.Viewmodel;
 
 import androidx.appcompat.app.AppCompatActivity;
 

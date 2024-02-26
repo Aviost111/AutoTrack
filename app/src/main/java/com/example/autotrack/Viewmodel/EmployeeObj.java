@@ -1,4 +1,4 @@
-package com.example.autotrack.Model;
+package com.example.autotrack.Viewmodel;
 
 public class EmployeeObj {
     // Mandatory empty constructor

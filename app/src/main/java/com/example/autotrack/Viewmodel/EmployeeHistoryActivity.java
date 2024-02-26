@@ -1,4 +1,4 @@
-package com.example.autotrack.Model;
+package com.example.autotrack.Viewmodel;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,8 +17,6 @@ import com.example.autotrack.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import org.checkerframework.common.subtyping.qual.Bottom;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

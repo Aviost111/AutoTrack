@@ -1,4 +1,4 @@
-package com.example.autotrack.Model;
+package com.example.autotrack.Viewmodel;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;

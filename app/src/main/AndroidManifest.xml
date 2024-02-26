@@ -13,34 +13,34 @@
         android:theme="@style/Theme.AutoTrack"
         tools:targetApi="31">
         <activity
-            android:name=".Model.CompanyActivity"
+            android:name=".Viewmodel.CompanyActivity"
             android:exported="false"/>
         <activity
-            android:name=".Model.RegisterEmployeeActivity"
+            android:name=".Viewmodel.RegisterEmployeeActivity"
             android:exported="false"/>
         <activity
-            android:name=".Model.RegisterVehicleActivity"
+            android:name=".Viewmodel.RegisterVehicleActivity"
             android:exported="false"/>
         <activity
-            android:name=".Model.VehicleListActivity"
+            android:name=".Viewmodel.VehicleListActivity"
             android:exported="false"/>
         <activity
-            android:name=".Model.VehicleActivity"
+            android:name=".Viewmodel.VehicleActivity"
             android:exported="false"/>
         <activity
-            android:name=".Model.VehicleHistoryActivity"
+            android:name=".Viewmodel.VehicleHistoryActivity"
             android:exported="false"/>
         <activity
-            android:name=".Model.RegisterCompanyActivity"
+            android:name=".Viewmodel.RegisterCompanyActivity"
             android:exported="false" />
         <activity
-            android:name=".Model.EmployeesListActivity"
+            android:name=".Viewmodel.EmployeesListActivity"
             android:exported="false"/>
         <activity
-            android:name=".Model.EmployeeHistoryActivity"
+            android:name=".Viewmodel.EmployeeHistoryActivity"
             android:exported="false"/>
         <activity
-            android:name=".Model.LoginActivity"
+            android:name=".Viewmodel.LoginActivity"
             android:exported="true">
 
             <intent-filter>
