@@ -1,4 +1,4 @@
-package com.example.autotrack.Model;
+package com.example.autotrack.Viewmodel;
 
 import static android.content.ContentValues.TAG;
 

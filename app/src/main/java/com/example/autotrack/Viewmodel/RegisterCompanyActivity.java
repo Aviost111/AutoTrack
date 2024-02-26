@@ -1,5 +1,5 @@
 
-package com.example.autotrack.Model;
+package com.example.autotrack.Viewmodel;
 
 import static android.content.ContentValues.TAG;
 
@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.autotrack.R;
-import com.example.autotrack.Controller.FirestoreController;
+import com.example.autotrack.Model.FirestoreController;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

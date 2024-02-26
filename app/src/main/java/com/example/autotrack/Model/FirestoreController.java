@@ -1,11 +1,11 @@
-package com.example.autotrack.Controller;
+package com.example.autotrack.Model;
 
 import android.content.Context;
 import android.widget.Toast;
 
-import com.example.autotrack.Model.CompanyObj;
-import com.example.autotrack.Model.EmployeeObj;
-import com.example.autotrack.Model.VehicleObj;
+import com.example.autotrack.Viewmodel.CompanyObj;
+import com.example.autotrack.Viewmodel.EmployeeObj;
+import com.example.autotrack.Viewmodel.VehicleObj;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
