@@ -96,27 +96,6 @@ public class FirestoreController {
         }
     }
 
-    // Read Employee data from Firestore
-    public void readEmployee(final FirestoreAppData.OnGetDataListener<EmployeeObj> listener) {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            String uid = currentUser.getUid();
-            DocumentReference employeeDocument = employeesCollection.document(uid);
-            employeeDocument.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    EmployeeObj employee = task.getResult().toObject(EmployeeObj.class);
-                    if (listener != null) {
-                        listener.onSuccess(employee);
-                    }
-                } else {
-                    if (listener != null) {
-                        listener.onFailure(task.getException());
-                    }
-                }
-            });
-        }
-    }
-
 
 
     // Write Vehicle data to Firestore
@@ -126,27 +105,6 @@ public class FirestoreController {
             String uid = currentUser.getUid();
             DocumentReference vehicleDocument = vehiclesCollection.document(uid);
             vehicleDocument.set(vehicle);
-        }
-    }
-
-    // Read Vehicle data from Firestore
-    public void readVehicle(final FirestoreAppData.OnGetDataListener<VehicleObj> listener) {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            String uid = currentUser.getUid();
-            DocumentReference vehicleDocument = vehiclesCollection.document(uid);
-            vehicleDocument.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    VehicleObj vehicle = task.getResult().toObject(VehicleObj.class);
-                    if (listener != null) {
-                        listener.onSuccess(vehicle);
-                    }
-                } else {
-                    if (listener != null) {
-                        listener.onFailure(task.getException());
-                    }
-                }
-            });
         }
     }
 
